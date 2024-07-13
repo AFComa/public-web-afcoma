@@ -1,0 +1,38 @@
+<template>
+  <div class="row Navbar-home content-center">
+    <div class="col-xs-2 col-sm-4 col-md-8 content-center">
+      <q-img :src="url" style="width: 140px" />
+    </div>
+    <div class="col-xs-10 col-sm-8 col-md-4 navbar-content">
+      <q-avatar style="background-color: #244b5a; color: white">L</q-avatar>
+      &nbsp;&nbsp;
+      <q-btn-dropdown
+        no-caps
+        color="primary"
+        label="Luis Hernandez"
+        style="font-size: 10px"
+      >
+        <q-list>
+          <q-item clickable v-close-popup>
+            <q-item-section>
+              <q-item-label>
+                <router-link to="/">Salir</router-link></q-item-label
+              >
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-btn-dropdown>
+    </div>
+  </div>
+</template>
+<script setup lang="ts">
+import imgLogoNavbar from '../../assets/img/afcoma_color.png';
+
+defineOptions({
+  name: 'HeroComponent',
+});
+
+let url = imgLogoNavbar;
+</script>
+
+<style scoped src="./NavbarComponent.scss"></style>

@@ -2,8 +2,11 @@
   text-align: justify !important;
 
   .container-code_access {
-    width: 80%;
+    width: 50%;
     display: flex;
     margin: 40px auto 90px;
+    .q-field__native {
+      border-radius: 50px;
+    }
   }
 }

@@ -21,6 +21,14 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/dashboard',
     component: () => import('layouts/DashboardLayout.vue'),
+    children: [
+      // { path: '', component: () => import('pages/IndexPage.vue') },
+      {
+        path: '',
+        name: 'section',
+        component: () => import('pages/section/SectionPage.vue'),
+      },
+    ],
   },
   // Always leave this as last one,
   // but you can also remove it
