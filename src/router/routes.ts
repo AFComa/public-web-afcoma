@@ -28,6 +28,11 @@ const routes: RouteRecordRaw[] = [
         name: 'section',
         component: () => import('pages/section/SectionPage.vue'),
       },
+      {
+        path: 'usuarios',
+        name: 'Usuarios',
+        component: () => import('pages/user/UsersPage.vue'),
+      },
     ],
   },
   // Always leave this as last one,
