@@ -2,7 +2,7 @@
   <q-page class="sections q-pa-xl">
     <div class="q-col-gutter-md row text-center">
       <div class="col-xs-6 col-sm-6 col-md-4">
-        <router-link to="dashboard/usuarios">
+        <router-link to="dashboard/listar-usuarios">
           <q-img src="../../assets/img/usuarios.svg" width="40%" />
         </router-link>
         <p>Usuarios</p>

@@ -13,12 +13,14 @@ export default defineComponent({
       text6: '',
     });
 
+    const onSubmit = async () => {
+      router.push('dashboard');
+      console.log('Royuter: ', userForm.value);
+    };
+
     return {
       userForm,
-      onSubmit() {
-        router.push('dashboard');
-        console.log('Royuter: ', userForm.value);
-      },
+      onSubmit,
     };
   },
 });

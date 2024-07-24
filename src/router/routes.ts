@@ -29,9 +29,19 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/section/SectionPage.vue'),
       },
       {
+        path: 'usuarios/:id',
+        name: 'UsuariosId',
+        component: () => import('src/pages/user/UsersCreate/UsersPage.vue'),
+      },
+      {
         path: 'usuarios',
         name: 'Usuarios',
-        component: () => import('pages/user/UsersPage.vue'),
+        component: () => import('src/pages/user/UsersCreate/UsersPage.vue'),
+      },
+      {
+        path: 'listar-usuarios',
+        name: 'UsuariosList',
+        component: () => import('src/pages/user/UsersList/ListPage.vue'),
       },
     ],
   },

@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-px-lg">
+  <div class="q-px-lg">
     <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-sm q-pt-xl">
       <div class="justify-center q-col-gutter-md row">
         <div class="col-xs-12 col-sm-6 col-md-4">
@@ -59,12 +59,12 @@
         </div>
       </div>
     </q-form>
-  </q-page>
+  </div>
 </template>
 
 <script>
 import { ref } from 'vue';
-import GridComponent from '../../components/grid/GridComponent.vue';
+import GridComponent from '../../../components/grid/ActionsUsers/GridActionComponent.vue';
 export default {
   components: {
     GridComponent,
