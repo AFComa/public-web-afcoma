@@ -16,6 +16,16 @@ const routes: RouteRecordRaw[] = [
         name: 'code',
         component: () => import('pages/code/CodePage.vue'),
       },
+      {
+        path: 'validation-code',
+        name: 'validation_code',
+        component: () => import('pages/user/UsersCode/ValidationPage.vue'),
+      },
+      {
+        path: 'password',
+        name: 'password',
+        component: () => import('pages/user/UsersPassword/PasswordPage.vue'),
+      },
     ],
   },
   {

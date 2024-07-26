@@ -7,7 +7,10 @@
       >
         <q-img :src="url" width="50%" />
       </div>
-      <div class="col-xs-12 col-sm-12 col-md-7">
+      <div
+        class="col-xs-12 col-sm-12 col-md-7"
+        style="background-color: #f9f9f9"
+      >
         <q-page-container>
           <router-view />
         </q-page-container>

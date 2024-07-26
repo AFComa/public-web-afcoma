@@ -5,13 +5,24 @@ body {
   font-family: 'Poppins', sans-serif !important;
 }
 
-.font-afcoma-normal {
+.font-afcoma-regular {
   font-weight: 400;
-  font-style: normal;
+  font-style: regular;
 }
+
+.font-afcoma-medium {
+  font-weight: 500;
+  font-style: medium;
+}
+
+.font-afcoma-semibold {
+  font-weight: 600;
+  font-style: semibold;
+}
+
 .font-afcoma-bold {
   font-weight: 700;
-  font-style: normal;
+  font-style: bold;
 }
 
 .custom-button {

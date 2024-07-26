@@ -2,10 +2,10 @@
   <div class="q-px-lg">
     <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-sm q-pt-xl">
       <div class="justify-center q-col-gutter-md row">
-        <div class="col-xs-12 col-sm-6 col-md-4">
+        <div class="col-xs-12 col-sm-6 col-md-3">
           <q-input rounded outlined label="Nombre" lazy-rules no-error-icon />
         </div>
-        <div class="col-xs-12 col-sm-6 col-md-5">
+        <div class="col-xs-12 col-sm-6 col-md-3">
           <q-input
             rounded
             outlined
@@ -14,17 +14,8 @@
             no-error-icon
           />
         </div>
-        <div class="col-xs-12 col-sm-6 col-md-4">
+        <div class="col-xs-12 col-sm-6 col-md-3">
           <q-input rounded outlined label="Correo" lazy-rules no-error-icon />
-        </div>
-        <div class="col-xs-12 col-sm-6 col-md-5">
-          <q-select
-            rounded
-            outlined
-            v-model="model"
-            :options="options"
-            label="Perfil"
-          />
         </div>
 
         <div class="col-xs-12 col-sm-6 col-md-9">
@@ -47,15 +38,17 @@
           </q-list>
         </div>
         <div class="col-xs-12 col-sm-6 col-md-9 text-right">
-          <q-btn
-            class="custom-button"
-            no-caps
-            unelevated
-            rounded
-            size="lg"
-            label="Guardar"
-            type="submit"
-          />
+          <router-link to="/validation-code">
+            <q-btn
+              class="custom-button"
+              no-caps
+              unelevated
+              rounded
+              size="lg"
+              label="Guardar"
+              type="submit"
+            />
+          </router-link>
         </div>
       </div>
     </q-form>
@@ -84,7 +77,6 @@ export default {
         modulo4: '',
         modulo5: '',
       },
-      options: ['Administrador', 'Supervisor', 'Operador', 'Analista'],
     };
   },
   methods: {

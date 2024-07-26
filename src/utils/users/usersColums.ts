@@ -21,5 +21,11 @@ export const ListActionUser = () => {
       field: 'download',
       align: 'center',
     },
+    {
+      name: 'opera',
+      label: 'Operador',
+      field: 'opera',
+      align: 'center',
+    },
   ];
 };

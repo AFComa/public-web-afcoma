@@ -37,15 +37,7 @@ export default defineComponent({
         delete: false,
         view: false,
         download: false,
-      },
-      {
-        id: 2,
-        module: 'Configuración',
-        create: false,
-        edit: false,
-        delete: false,
-        view: false,
-        download: false,
+        opera: false,
       },
       // Añade más filas según sea necesario
     ]);
@@ -53,8 +45,6 @@ export default defineComponent({
     const columns = ref<ColumI[]>();
 
     const loadColums = () => {
-      console.log('users: ', ListActionUser());
-
       columns.value = ListActionUser();
     };
 
