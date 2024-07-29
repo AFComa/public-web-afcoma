@@ -1,26 +1,29 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import LoadingOverBasic from '../../components/Loading/LoadingBasicComponent.vue';
+import LoadingOver from '../../../components/Loading/LoadingComponent.vue';
+import GridComponent from '../../../components/grid/ActionsUsers/GridActionComponent.vue';
 
 export default {
-  name: 'HomePage',
+  name: 'UsersPage',
   components: {
-    LoadingOverBasic,
+    LoadingOver,
+    GridComponent,
   },
   setup() {
     const loading = ref(false);
     const isPwd = ref(true);
     const userForm = ref({
       email: '',
-      password: '',
+      nombre: '',
+      apellido: '',
     });
     const router = useRouter();
 
     const onSubmit = async () => {
       loading.value = true;
       try {
-        await new Promise((resolve) => setTimeout(resolve, 5000));
-        router.push('code');
+        await new Promise((resolve) => setTimeout(resolve, 10000));
+        router.push('/validation-code');
       } finally {
         loading.value = false;
       }
@@ -29,7 +32,8 @@ export default {
     const onReset = () => {
       userForm.value = {
         email: '',
-        password: '',
+        nombre: '',
+        apellido: '',
       };
     };
 

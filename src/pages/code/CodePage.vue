@@ -15,40 +15,28 @@
     </div>
     <div class="row justify-center">
       <q-form @submit="onSubmit" class="col-xs-12 col-sm-7 col-md-10">
-        <div class="container-code_access">
+        <div
+          class="q-px-lg q-mt-lg q-gutter-sm justify-center"
+          style="display: flex"
+        >
           <q-input
-            v-model="userForm.text1"
-            input-class="text-center"
+            v-for="(input, index) in securityCodeInputs"
+            :key="index"
+            v-model="securityCodeInputs[index]"
+            type="text"
             maxlength="1"
-            :rules="[(val) => val && val.length > 0]"
-          />&nbsp;&nbsp;
-          <q-input
-            v-model="userForm.text2"
+            class="text-input-code"
+            outlined
+            lazy-rules
+            no-error-icon
+            :rules="[(val: any) => val && val.length > 0]"
             input-class="text-center"
-            :rules="[(val) => val && val.length > 0]"
-          />&nbsp;&nbsp;
-          <q-input
-            v-model="userForm.text3"
-            input-class="text-center"
-            :rules="[(val) => val && val.length > 0]"
-          />&nbsp;&nbsp;
-          <q-input
-            v-model="userForm.text4"
-            input-class="text-center"
-            :rules="[(val) => val && val.length > 0]"
-          />&nbsp;&nbsp;
-          <q-input
-            v-model="userForm.text5"
-            input-class="text-center"
-            :rules="[(val) => val && val.length > 0]"
-          />&nbsp;&nbsp;
-          <q-input
-            v-model="userForm.text6"
-            input-class="text-center"
-            :rules="[(val) => val && val.length > 0]"
-          />&nbsp;&nbsp;
+            @keyup="focusNextInput(index)"
+            @keyup.backspace="focusPreviousInput(index, $event)"
+            :ref="(el: HTMLInputElement | null) => setInputRef(el, index)"
+          />
         </div>
-        <p>
+        <p class="q-mt-lg">
           Si el código no llegó al correo solicitado:
           <b>prueba@afcoma.com</b> o desea generar un nuevo código presione
           <a href="/?return=true">aquí</a>. <br /><br />
@@ -67,6 +55,7 @@
         </div>
       </q-form>
     </div>
+    <LoadingOverBasic v-if="loading" />
   </q-page>
 </template>
 <script src="./CodePage.ts" lang="ts"></script>

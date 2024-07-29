@@ -2,7 +2,7 @@
   <q-page class="validation-code flex flex-center">
     <q-card class="card-content">
       <q-card-section>
-        <div class="text-h5 text-center font-afcoma-medium">
+        <div class="text-h5 text-center font-afcoma-regular">
           Validar tu Cuenta
         </div>
         <div class="q-mt-lg text-center">

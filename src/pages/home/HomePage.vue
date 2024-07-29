@@ -1,11 +1,8 @@
 <template>
   <q-page class="home q-px-lg content-center">
-    <!-- <span class="text-h3">Forms</span>
-    <q-separator spaced /> -->
-
     <div class="row justify-center">
       <q-form
-        @submit="onSubmit"
+        @submit.prevent="onSubmit"
         @reset="onReset"
         class="q-gutter-sm col-xs-12 col-sm-7 col-md-7 q-pt-xl"
       >
@@ -21,7 +18,7 @@
           lazy-rules
           no-error-icon
           :rules="[
-            (val) => (val && val.length > 0) || 'Este campo es obligatorio',
+            (val: any) => (val && val.length > 0) || 'Este campo es obligatorio',
             isValidEmail,
           ]"
         />
@@ -35,7 +32,7 @@
           lazy-rules
           no-error-icon
           :rules="[
-            (val) => (val && val.length > 0) || 'Este campo es obligatorio',
+            (val: any) => (val && val.length > 0) || 'Este campo es obligatorio',
           ]"
         >
           <template v-slot:append>
@@ -60,6 +57,7 @@
         </div>
       </q-form>
     </div>
+    <LoadingOverBasic v-if="loading" />
   </q-page>
 </template>
 <script src="./HomePage.ts" lang="ts"></script>

@@ -1,12 +1,15 @@
 .code {
   text-align: justify !important;
-
-  .container-code_access {
-    width: 50%;
-    display: flex;
-    margin: 40px auto 90px;
-    .q-field__native {
-      border-radius: 50px;
+  .text-input-code {
+    width: 62px;
+    font-size: 15px;
+  }
+}
+@media (min-width: 768px) {
+  .code {
+    .text-input-code {
+      width: 62px;
+      font-size: 20px;
     }
   }
 }

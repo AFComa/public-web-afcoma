@@ -4,7 +4,7 @@
       <div class="col-xs-6 col-sm-6 col-md-5">
         <q-input
           v-model="search"
-          placeholder="Busqueda"
+          placeholder="Búsqueda"
           outlined
           dense
           debounce="300"
@@ -18,7 +18,6 @@
           no-caps
           unelevated
           rounded
-          dense
           size="lg"
           label="Crear usuario"
           @click="rouView"

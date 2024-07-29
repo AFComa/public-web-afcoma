@@ -3,7 +3,17 @@
     <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-sm q-pt-xl">
       <div class="justify-center q-col-gutter-md row">
         <div class="col-xs-12 col-sm-6 col-md-3">
-          <q-input rounded outlined label="Nombre" lazy-rules no-error-icon />
+          <q-input
+            rounded
+            outlined
+            label="Nombre"
+            lazy-rules
+            no-error-icon
+            v-model="userForm.nombre"
+            :rules="[
+      (val: any) => (val && val.length > 0) || 'Este campo es obligatorio',
+    ]"
+          />
         </div>
         <div class="col-xs-12 col-sm-6 col-md-3">
           <q-input
@@ -12,10 +22,24 @@
             label="Apellidos"
             lazy-rules
             no-error-icon
+            v-model="userForm.apellido"
+            :rules="[
+      (val: any) => (val && val.length > 0) || 'Este campo es obligatorio',
+    ]"
           />
         </div>
         <div class="col-xs-12 col-sm-6 col-md-3">
-          <q-input rounded outlined label="Correo" lazy-rules no-error-icon />
+          <q-input
+            rounded
+            outlined
+            label="Correo"
+            lazy-rules
+            v-model="userForm.email"
+            no-error-icon
+            :rules="[
+      (val: any) => (val && val.length > 0) || 'Este campo es obligatorio',
+    ]"
+          />
         </div>
 
         <div class="col-xs-12 col-sm-6 col-md-9">
@@ -38,70 +62,26 @@
           </q-list>
         </div>
         <div class="col-xs-12 col-sm-6 col-md-9 text-right">
-          <router-link to="/validation-code">
-            <q-btn
-              class="custom-button"
-              no-caps
-              unelevated
-              rounded
-              size="lg"
-              label="Guardar"
-              type="submit"
-            />
-          </router-link>
+          <q-btn
+            class="custom-button"
+            no-caps
+            unelevated
+            rounded
+            size="lg"
+            label="Guardar"
+            type="submit"
+          />
         </div>
       </div>
     </q-form>
+    <LoadingOver
+      v-if="loading"
+      :messageOne="'Espere un momento estamos validando la información...'"
+      :messageTwon="'La cuenta esta en proceso de validación, para continuar se le enviará una liga de acceso a su correo'"
+    />
   </div>
 </template>
-
-<script>
-import { ref } from 'vue';
-import GridComponent from '../../../components/grid/ActionsUsers/GridActionComponent.vue';
-export default {
-  components: {
-    GridComponent,
-  },
-  data() {
-    return {
-      model: ref(null),
-      user: {
-        nombre: '',
-        apellidos: '',
-        perfiles: '',
-        modulos: '',
-        correo: '',
-        modulo1: '',
-        modulo2: '',
-        modulo3: '',
-        modulo4: '',
-        modulo5: '',
-      },
-    };
-  },
-  methods: {
-    onSubmit() {
-      // Lógica de envío de formulario
-      console.log('Datos del formulario:', this.user);
-    },
-    onReset() {
-      this.user = {
-        nombre: '',
-        apellidos: '',
-        perfiles: '',
-        modulos: '',
-        correo: '',
-        modulo1: '',
-        modulo2: '',
-        modulo3: '',
-        modulo4: '',
-        modulo5: '',
-      };
-    },
-  },
-};
-</script>
-
+<script src="./UsersPage.ts" lang="ts"></script>
 <style scoped>
 .q-card {
   max-width: 600px;

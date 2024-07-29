@@ -16,7 +16,7 @@
           <q-item clickable v-close-popup>
             <q-item-section>
               <q-item-label>
-                <router-link to="/">Salir</router-link></q-item-label
+                <router-link to="/">Cerrar sesión</router-link></q-item-label
               >
             </q-item-section>
           </q-item>

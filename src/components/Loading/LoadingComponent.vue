@@ -3,7 +3,18 @@ import { useQuasar, QSpinnerGears } from 'quasar';
 import { onBeforeUnmount, onMounted } from 'vue';
 
 export default {
-  setup() {
+  props: {
+    messageOne: {
+      type: String,
+      default: '',
+    },
+    messageTwon: {
+      type: String,
+      default: '',
+    },
+  },
+
+  setup(props) {
     const $q = useQuasar();
     let timer;
 
@@ -16,7 +27,7 @@ export default {
 
     const showLoading = () => {
       $q.loading.show({
-        message: 'Espere un momento estamos validando los datos...',
+        message: props.messageOne,
       });
 
       timer = setTimeout(() => {
@@ -25,18 +36,19 @@ export default {
           spinnerColor: 'red',
           messageColor: '#f9f9f9',
           backgroundColor: '#244b5a;',
-          message:
-            'El usuario se esta creando, el sistema lo direccionará al login..',
+          message: props.messageTwon,
         });
       }, 4000);
     };
 
     onMounted(() => {
+      console.log('props: ', props);
       showLoading();
     });
 
     return {
       showLoading,
+      props,
     };
   },
 };

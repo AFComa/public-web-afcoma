@@ -2,7 +2,7 @@
   <q-page class="password-code flex flex-center">
     <q-card class="card-content">
       <q-card-section>
-        <div class="text-h5 text-center font-afcoma-medium">
+        <div class="text-h5 text-center font-afcoma-regular">
           Crea tu Contraseña
         </div>
         <div class="row justify-center">
@@ -58,7 +58,11 @@
         </q-form>
       </q-card-section>
     </q-card>
-    <LoadingOver v-if="loading" />
+    <LoadingOver
+      v-if="loading"
+      :messageOne="'Espere un momento estamos validando la información...'"
+      :messageTwon="'El usuario se esta creando, el sistema lo direccionará al login para su acceso..'"
+    />
   </q-page>
 </template>
 
