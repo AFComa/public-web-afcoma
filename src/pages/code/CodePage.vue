@@ -7,9 +7,7 @@
           <br /><br />
           Recibirás una notificación al correo electrónico registrado la cual
           contiene un código de 6 dígitos, el cuál debes ingresar en el
-          siguiente campo para completar tu proceso de autenticación, este
-          código es de uso personal y vence 10 minutos después de haber sido
-          enviado.
+          siguiente campo para completar tu proceso de autenticación.
         </p>
       </div>
     </div>
@@ -37,9 +35,8 @@
           />
         </div>
         <p class="q-mt-lg">
-          Si el código no llegó al correo solicitado:
-          <b>prueba@afcoma.com</b> o desea generar un nuevo código presione
-          <a href="/?return=true">aquí</a>. <br /><br />
+          Este código es de uso personal y vence 10 minutos después de haber
+          sido enviado.
         </p>
         <br /><br />
         <div class="row justify-center">

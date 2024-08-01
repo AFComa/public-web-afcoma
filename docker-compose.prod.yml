@@ -3,11 +3,21 @@ version: '3.6'
 services:
   public-afcoma-prod:
     container_name: public-afcoma-prod
-    image: public-afcoma-prod:v0.0.3-prod
+    image: public-afcoma-prod:v0.0.8-prod
     restart: always
     environment:
       - ENV=prod
     build:
       context: .
-    ports:
-      - '5059'
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.public-afcoma-prod-https.rule=Host(`uat-domiciliacion-zurich.banwire.com`)
+      - traefik.http.routers.public-afcoma-prod-https.entrypoints=https
+      - traefik.http.routers.public-afcoma-prod-https.tls=true
+      - traefik.http.services.public-afcoma-prod-https.loadbalancer.server.port=80
+    networks:
+      - traefik_admin
+
+networks:
+  traefik_admin:
+    external: true
