@@ -11,72 +11,65 @@
         />
       </div>
     </div>
-    <div
-      v-for="(sheet, sheetIndex) in transInfo"
-      :key="sheetIndex"
-      class="q-mb-md"
-    >
+    <q-select
+      v-model="selectedCategory"
+      :options="transInfo"
+      label="Seleccione una categoría"
+      option-label="name"
+      option-value="name"
+      filled
+      outlined
+      @update:model-value="handleSelection"
+    />
+
+    <div v-if="selectedData">
       <q-select
-        v-model="selectedFields[sheetIndex]"
-        :options="sheet.fieldNames"
-        label="Seleccione un campo"
+        v-model="selectedItem"
+        :options="selectedData.data"
+        label="Seleccione un elemento"
+        :option-label="dynamicLabel"
+        :option-value="dynamicValue"
         filled
         outlined
-        @update:model-value="(field) => handleFieldSelection(sheetIndex, field)"
       />
-    </div>
-    <q-tabs v-model="currentTab" class="text-teal">
-      <q-tab
-        v-for="(sheet, index) in transInfo"
-        :key="index"
-        :name="index"
-        :label="sheet.name"
-        class="q-px-md"
-      />
-    </q-tabs>
 
-    <q-tab-panels v-model="currentTab" animated>
-      <q-tab-panel
-        v-for="(sheet, sheetIndex) in transInfo"
-        :key="sheetIndex"
-        :name="sheetIndex"
-      >
-        <div
-          v-for="(item, index) in sheet.data"
-          :key="index"
-          class="row q-mb-md"
-        >
-          <div
-            v-for="(value, field) in item"
-            :key="field"
-            class="col-md-4 q-px-md q-mt-md q-gutter-md"
-          >
-            <q-input
-              v-model="transInfo[sheetIndex].data[index][field]"
-              :label="field"
-              filled
-              outlined
-            />
-          </div>
-        </div>
-      </q-tab-panel>
-    </q-tab-panels>
+      <div v-if="selectedItem" class="q-mt-md">
+        <q-card v-for="(value, key) in selectedItem" :key="key" class="q-mb-md">
+          <q-card-section>
+            <template v-if="isBoolean(value)">
+              <q-checkbox v-model="selectedItem[key]" :label="key" />
+            </template>
+            <template v-else>
+              <q-input
+                v-model="selectedItem[key]"
+                :label="key"
+                filled
+                outlined
+              />
+            </template>
+          </q-card-section>
+        </q-card>
+      </div>
+    </div>
   </q-page>
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import * as XLSX from 'xlsx';
-
 export default {
-  name: 'ExcelReader',
+  name: 'AutocompleteForm',
   setup() {
     const files = ref([]);
     const sheets = ref([]);
     const transInfo = ref([]);
     const ExtraInfoData = ref([]);
-    const currentSheetData = ref([]);
     const currentTab = ref(0);
+
+    const selectedCategory = ref(null);
+
+    const selectedData = ref(null);
+    const selectedItem = ref(null);
 
     const handleFile = async (fileList) => {
       if (fileList.length === 0) return;
@@ -95,12 +88,6 @@ export default {
           }),
         }));
 
-        // sheets.value.slice(1).map((row) => {
-        //   return dataArray.value[0].reduce((acc, field, index) => {
-        //     acc[field] = row[index];
-        //     return acc;
-        //   }, {});
-        // });
         ExtraInfoData.value = sheets.value.map((sheet) =>
           sheet.data.slice(1).map((row) => {
             return sheet.data[0].reduce((acc, field, index) => {
@@ -111,47 +98,68 @@ export default {
         );
 
         transInfo.value = sheets.value.map((sheet) => ({
-          name: sheet.name,
+          name: sheet.name.trim() !== 'Glosario_Opciones' ? sheet.name : null,
           data: sheet.data.slice(1).map((row) => {
             return sheet.data[0].reduce((acc, field, index) => {
-              acc[field] = row[index];
+              acc[field] =
+                row[index] === 'SI'
+                  ? true
+                  : row[index] === 'NO'
+                  ? false
+                  : row[index];
               return acc;
             }, {});
           }),
         }));
-
-        console.log('transInfo: ', transInfo);
       };
 
       reader.readAsArrayBuffer(file);
     };
 
-    const selectedFields = ref(new Array(transInfo.value.length).fill(null));
-    const handleFieldSelection = (sheetIndex, field) => {
-      selectedFields.value[sheetIndex] = field;
+    const handleSelection = () => {
+      selectedData.value = transInfo.value.find(
+        (category) => category.name === selectedCategory.value.name
+      );
+      selectedItem.value = null;
     };
 
-    const showSheet = (index) => {
-      console.log('formData: ', transInfo.value);
-      currentSheetData.value = sheets.value[index].data;
+    const firstKey = computed(() => {
+      if (selectedData.value && selectedData.value.data.length > 0) {
+        return Object.keys(selectedData.value.data[0])[0];
+      }
+      return '';
+    });
+
+    const dynamicLabel = computed(() => firstKey.value);
+    const dynamicValue = computed(() => firstKey.value);
+
+    const isBoolean = (value) => {
+      return value === true || value === false;
     };
 
     return {
+      selectedData,
+      selectedItem,
+      dynamicLabel,
+      dynamicValue,
+      selectedCategory,
+      firstKey,
       files,
       sheets,
       ExtraInfoData,
-      selectedFields,
-      handleFieldSelection,
       transInfo,
       currentTab,
-      currentSheetData,
       handleFile,
-      showSheet,
+      handleSelection,
+      isBoolean,
     };
   },
 };
 </script>
 
 <style scoped>
-/* Estilos opcionales */
+.q-card {
+  max-width: 500px;
+  margin: auto;
+}
 </style>
