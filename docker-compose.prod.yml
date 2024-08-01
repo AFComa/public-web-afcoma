@@ -1,0 +1,11 @@
+version: '3.6'
+
+services:
+  public-afcoma-prod:
+    container_name: public-afcoma-prod
+    image: public-afcoma-prod:v0.0.1-prod
+    restart: always
+    environment:
+      - ENV=prod
+    build:
+      context: .
