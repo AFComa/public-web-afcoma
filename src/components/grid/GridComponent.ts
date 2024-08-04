@@ -1,5 +1,5 @@
 import { defineComponent, computed, onMounted, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { useQuasar } from 'quasar';
 
 import { ListUsuario } from '../../utils/users/usersColums';
@@ -11,7 +11,6 @@ import type {
 export default defineComponent({
   name: 'GridComponent',
   setup() {
-    const route = useRoute();
     const router = useRouter();
 
     const showConfirmDialog = ref(false);
@@ -60,8 +59,6 @@ export default defineComponent({
     };
 
     const loadColums = () => {
-      console.log('route: ', route.query);
-
       columns.value = ListUsuario();
     };
 

@@ -1,54 +1,59 @@
 <template>
   <q-page padding>
-    <div class="row justify-center">
-      <div class="col-md-3">
-        <q-uploader
-          v-model="files"
-          label="Favor de cargar el archivo"
-          accept=".xlsx, .xls"
-          @added="handleFile"
-          :disable="files.length > 0"
+    <div class="row justify-center" v-if="!viewFile">
+      <q-uploader
+        v-model="files"
+        label="Favor de cargar el archivo"
+        accept=".xlsx, .xls"
+        @added="handleFile"
+        :disable="files.length > 0"
+      />
+    </div>
+    <div class="row justify-center q-col-gutter-lg">
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <q-select
+          v-if="viewFile"
+          v-model="selectedCategory"
+          :options="transInfo"
+          label="Seleccione una opción"
+          option-label="name"
+          option-value="name"
+          filled
+          outlined
+          @update:model-value="handleSelection"
+        />
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4" v-if="selectedData">
+        <q-select
+          v-model="selectedItem"
+          :options="selectedData.data"
+          label="Seleccione un elemento"
+          :option-label="dynamicLabel"
+          :option-value="dynamicValue"
+          filled
+          outlined
         />
       </div>
     </div>
-    <q-select
-      v-model="selectedCategory"
-      :options="transInfo"
-      label="Seleccione una categoría"
-      option-label="name"
-      option-value="name"
-      filled
-      outlined
-      @update:model-value="handleSelection"
-    />
 
     <div v-if="selectedData">
-      <q-select
-        v-model="selectedItem"
-        :options="selectedData.data"
-        label="Seleccione un elemento"
-        :option-label="dynamicLabel"
-        :option-value="dynamicValue"
-        filled
-        outlined
-      />
-
-      <div v-if="selectedItem" class="q-mt-md">
-        <q-card v-for="(value, key) in selectedItem" :key="key" class="q-mb-md">
-          <q-card-section>
-            <template v-if="isBoolean(value)">
-              <q-checkbox v-model="selectedItem[key]" :label="key" />
-            </template>
-            <template v-else>
-              <q-input
-                v-model="selectedItem[key]"
-                :label="key"
-                filled
-                outlined
-              />
-            </template>
-          </q-card-section>
-        </q-card>
+      <div v-if="selectedItem" class="row q-mt-md q-col-gutter-lg q-px-xl">
+        <div
+          v-for="(value, key) in selectedItem"
+          :key="key"
+          class="col-xs-12 col-sm-6 col-md-3 q-mb-xs"
+        >
+          <template v-if="isBoolean(value)">
+            <q-checkbox
+              v-model="selectedItem[key]"
+              :label="key"
+              class="adaptable-text"
+            />
+          </template>
+          <template v-else>
+            <q-input v-model="selectedItem[key]" :label="key" filled outlined />
+          </template>
+        </div>
       </div>
     </div>
   </q-page>
@@ -61,15 +66,41 @@ export default {
   name: 'AutocompleteForm',
   setup() {
     const files = ref([]);
+    const viewFile = ref(false);
     const sheets = ref([]);
     const transInfo = ref([]);
-    const ExtraInfoData = ref([]);
     const currentTab = ref(0);
 
     const selectedCategory = ref(null);
 
     const selectedData = ref(null);
     const selectedItem = ref(null);
+
+    // Función para determinar si un valor contiene "string" o "date"
+    const containsStringOrDate = (value) => {
+      if (typeof value === 'string') {
+        const lowerValue = value.toLowerCase();
+        return lowerValue === 'string' || lowerValue === 'date';
+      }
+      return false;
+    };
+
+    // Filtra los registros que contienen "string" o "date"
+    const filterOutStringOrDateRecords = (data) => {
+      return data.filter((row) => {
+        return !Object.values(row).some((value) => containsStringOrDate(value));
+      });
+    };
+
+    // Función para convertir "SI" y "NO" a booleanos
+    const convertSiNoToBoolean = (value) => {
+      if (typeof value === 'string') {
+        const lowerValue = value.toLowerCase();
+        if (lowerValue === 'si') return true;
+        if (lowerValue === 'no') return false;
+      }
+      return value;
+    };
 
     const handleFile = async (fileList) => {
       if (fileList.length === 0) return;
@@ -80,6 +111,7 @@ export default {
       reader.onload = (e) => {
         const data = new Uint8Array(e.target.result);
         const workbook = XLSX.read(data, { type: 'array' });
+
         sheets.value = workbook.SheetNames.map((sheetName) => ({
           name: sheetName,
           data: XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {
@@ -88,31 +120,20 @@ export default {
           }),
         }));
 
-        ExtraInfoData.value = sheets.value.map((sheet) =>
-          sheet.data.slice(1).map((row) => {
-            return sheet.data[0].reduce((acc, field, index) => {
-              acc[field] = row[index];
-              return acc;
-            }, {});
-          })
-        );
-
         transInfo.value = sheets.value.map((sheet) => ({
-          name: sheet.name.trim() !== 'Glosario_Opciones' ? sheet.name : null,
-          data: sheet.data.slice(1).map((row) => {
-            return sheet.data[0].reduce((acc, field, index) => {
-              acc[field] =
-                row[index] === 'SI'
-                  ? true
-                  : row[index] === 'NO'
-                  ? false
-                  : row[index];
-              return acc;
-            }, {});
-          }),
+          name: sheet.name !== 'Glosario_Opciones' ? sheet.name : null,
+          data: filterOutStringOrDateRecords(
+            sheet.data.slice(1).map((row) => {
+              return sheet.data[0].reduce((acc, field, index) => {
+                acc[field] = convertSiNoToBoolean(row[index]);
+                return acc;
+              }, {});
+            })
+          ),
         }));
       };
-
+      viewFile.value = true;
+      console.log('transInfo: ', transInfo);
       reader.readAsArrayBuffer(file);
     };
 
@@ -146,9 +167,9 @@ export default {
       firstKey,
       files,
       sheets,
-      ExtraInfoData,
       transInfo,
       currentTab,
+      viewFile,
       handleFile,
       handleSelection,
       isBoolean,

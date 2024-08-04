@@ -12,7 +12,7 @@
         <q-input
           rounded
           outlined
-          v-model="userForm.email"
+          v-model="userForm.usuario"
           label="Correo electrónico"
           type="email"
           lazy-rules

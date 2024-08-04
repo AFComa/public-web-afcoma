@@ -38,3 +38,11 @@ body {
   background-color: #244b5a;
   color: white;
 }
+.adaptable-text {
+  max-width: 100%;
+  font-size: 10px;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

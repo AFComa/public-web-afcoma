@@ -1,7 +1,12 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-
+import { useQuasar } from 'quasar';
+import { useAuth } from 'src/composables/userAuth';
 import LoadingOverBasic from '../../components/Loading/LoadingBasicComponent.vue';
+import type {
+  LoginSuccess,
+  LoginError,
+} from '../../interfaces/auth/Acces.interfaces';
 
 export default {
   name: 'CodePage',
@@ -11,16 +16,10 @@ export default {
   setup() {
     const router = useRouter();
     const loading = ref(false);
+    const { validCode } = useAuth();
+    const $q = useQuasar();
     const securityCodeInputs = ref<string[]>(Array(6).fill(''));
     const inputRefs = ref<(HTMLInputElement | null)[]>([]);
-    const userForm = ref({
-      text1: '',
-      text2: '',
-      text3: '',
-      text4: '',
-      text5: '',
-      text6: '',
-    });
 
     const setInputRef = (el: HTMLInputElement | null, index: number) => {
       inputRefs.value[index] = el;
@@ -47,13 +46,19 @@ export default {
 
     const onSubmit = async () => {
       loading.value = true;
-      try {
-        await new Promise((resolve) => setTimeout(resolve, 5000));
+      const concatenatedCode = securityCodeInputs.value.join('');
+      const data: LoginSuccess | LoginError = await validCode(concatenatedCode);
+
+      if (data.ok) {
         router.push('dashboard');
-      } finally {
-        loading.value = false;
+      } else {
+        $q.notify({
+          type: 'negative',
+          message: data.message,
+        });
       }
-      console.log('Royuter: ', userForm.value);
+
+      loading.value = false;
     };
 
     return {
@@ -61,7 +66,6 @@ export default {
       setInputRef,
       focusNextInput,
       focusPreviousInput,
-      userForm,
       loading,
       onSubmit,
     };

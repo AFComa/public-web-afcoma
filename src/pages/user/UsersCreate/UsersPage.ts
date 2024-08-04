@@ -27,7 +27,50 @@ export default {
       } finally {
         loading.value = false;
       }
-      console.log('Royuter: ', userForm.value);
+      const data = {
+        user: userForm.value,
+        configUser: {
+          usersPermissions: [
+            {
+              id: 1,
+              module: 'Administración',
+              create: false,
+              edit: false,
+              delete: false,
+              view: false,
+              download: false,
+              opera: false,
+            },
+          ],
+
+          sysadocPermission: [
+            {
+              id: 1,
+              module: 'Administración',
+              create: false,
+              edit: false,
+              delete: false,
+              view: false,
+              download: false,
+              opera: false,
+            },
+          ],
+
+          mandatosPermissions: [
+            {
+              id: 1,
+              module: 'Administración',
+              create: false,
+              edit: false,
+              delete: false,
+              view: false,
+              download: false,
+              opera: false,
+            },
+          ],
+        },
+      };
+      console.log('Royuter: ', data);
     };
     const onReset = () => {
       userForm.value = {

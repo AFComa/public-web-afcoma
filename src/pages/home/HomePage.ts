@@ -1,6 +1,12 @@
 import { ref } from 'vue';
+import { useQuasar } from 'quasar';
 import { useRouter } from 'vue-router';
+import type {
+  LoginSuccess,
+  LoginError,
+} from '../../interfaces/auth/Acces.interfaces';
 import LoadingOverBasic from '../../components/Loading/LoadingBasicComponent.vue';
+import { useAuth } from 'src/composables/userAuth';
 
 export default {
   name: 'HomePage',
@@ -10,26 +16,34 @@ export default {
   setup() {
     const loading = ref(false);
     const isPwd = ref(true);
+    const { saveUser } = useAuth();
+    const $q = useQuasar();
+
     const userForm = ref({
-      email: '',
+      usuario: '',
       password: '',
+      ip: '205.345.34.23',
     });
     const router = useRouter();
 
     const onSubmit = async () => {
       loading.value = true;
-      try {
-        await new Promise((resolve) => setTimeout(resolve, 5000));
+      const data: LoginSuccess | LoginError = await saveUser(userForm.value);
+      if (data.ok) {
         router.push('code');
-      } finally {
-        loading.value = false;
+      } else {
+        $q.notify({
+          type: 'negative',
+          message: data.message,
+        });
       }
-      console.log('Royuter: ', userForm.value);
+      loading.value = false;
     };
     const onReset = () => {
       userForm.value = {
-        email: '',
+        usuario: '',
         password: '',
+        ip: '205.345.34.23',
       };
     };
 
