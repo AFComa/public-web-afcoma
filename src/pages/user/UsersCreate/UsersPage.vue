@@ -1,7 +1,7 @@
 <template>
-  <div class="q-px-lg">
+  <div class="q-px-xl">
     <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-sm q-pt-xl">
-      <div class="justify-center q-col-gutter-md row">
+      <div class="justify-center q-col-gutter-md q-px-xl row">
         <div class="col-xs-12 col-sm-6 col-md-3">
           <q-input
             rounded
@@ -41,8 +41,21 @@
     ]"
           />
         </div>
+        <div class="col-xs-12 col-sm-6 col-md-3">
+          <q-input
+            rounded
+            outlined
+            label="Telefono"
+            lazy-rules
+            v-model="userForm.phone"
+            no-error-icon
+            :rules="[
+      (val: any) => (val && val.length > 0) || 'Este campo es obligatorio',
+    ]"
+          />
+        </div>
 
-        <div class="col-xs-12 col-sm-6 col-md-9">
+        <div class="col-xs-12 col-sm-6 col-md-12">
           <q-list bordered class="rounded-borders">
             <q-expansion-item
               expand-separator
@@ -61,7 +74,7 @@
             </q-expansion-item>
           </q-list>
         </div>
-        <div class="col-xs-12 col-sm-6 col-md-9 text-right">
+        <div class="col-xs-12 col-sm-6 col-md-12 text-right">
           <q-btn
             class="custom-button"
             no-caps

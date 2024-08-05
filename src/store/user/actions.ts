@@ -46,4 +46,36 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
       };
     }
   },
+  async createUser({ commit }, user) {
+    console.log('ser: ', user);
+
+    try {
+      const response = await api.post('/user/new', user);
+      commit('SET_ACCES_PERMIS', response.data);
+      return {
+        ok: true,
+        token: response.data,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        message: 'Ocurrio un error al crear el registro',
+      };
+    }
+  },
+  async resetPassword({ commit }, pass) {
+    try {
+      const response = await api.post('/user/resetpass', { id: pass });
+      commit(response.data);
+      return {
+        ok: true,
+        token: response.data,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        message: 'Ocurrio un error al crear el registro',
+      };
+    }
+  },
 };

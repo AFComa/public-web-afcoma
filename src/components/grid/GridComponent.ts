@@ -2,6 +2,7 @@ import { defineComponent, computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useQuasar } from 'quasar';
 
+import { useAuth } from 'src/composables/userAuth';
 import { ListUsuario } from '../../utils/users/usersColums';
 import type {
   ListUserI,
@@ -14,6 +15,7 @@ export default defineComponent({
     const router = useRouter();
 
     const showConfirmDialog = ref(false);
+    const { resetPass } = useAuth();
     const $q = useQuasar();
 
     const search = ref('');
@@ -72,8 +74,15 @@ export default defineComponent({
       console.log('Delete', row);
       showConfirmDialog.value = true;
     };
-
-    const deleteRecord = () => {
+    const blockUser = async (row: ListUserI) => {
+      // Aquí se maneja la lógica de bloqueo
+      console.log('Delete', row.id);
+      // Por ejemplo, llamar a una API para actualizar el estado de bloqueo en el servidor
+      // axios.post('/api/block-user', { userId: user.id, blocked: user.blocked });
+      const response = await resetPass(row.id);
+      console.log(response);
+    };
+    const deleteRecord = async () => {
       showConfirmDialog.value = false;
       $q.notify({
         type: 'positive',
@@ -96,6 +105,7 @@ export default defineComponent({
       viewRow,
       editRow,
       deleteRow,
+      blockUser,
       deleteRecord,
     };
   },

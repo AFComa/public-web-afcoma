@@ -57,6 +57,14 @@
             color="negative"
             @click="deleteRow(props.row)"
           />
+          <q-btn
+            flat
+            round
+            dense
+            icon="lock"
+            color="purple"
+            @click="blockUser(props.row)"
+          />
         </q-td>
       </template>
     </q-table>

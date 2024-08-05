@@ -19,3 +19,10 @@ export interface LoginSuccess {
   ok: true;
   token: string;
 }
+
+export interface UserCreateI {
+  email: string;
+  nombre: string;
+  apellido: string;
+  phone: string;
+}

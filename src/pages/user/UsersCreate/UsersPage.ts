@@ -1,8 +1,9 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useQuasar } from 'quasar';
 import LoadingOver from '../../../components/Loading/LoadingComponent.vue';
 import GridComponent from '../../../components/grid/ActionsUsers/GridActionComponent.vue';
-
+import { useAuth } from 'src/composables/userAuth';
 export default {
   name: 'UsersPage',
   components: {
@@ -12,21 +13,18 @@ export default {
   setup() {
     const loading = ref(false);
     const isPwd = ref(true);
+    const $q = useQuasar();
+    const { createUsers } = useAuth();
     const userForm = ref({
       email: '',
       nombre: '',
       apellido: '',
+      phone: '',
     });
     const router = useRouter();
 
     const onSubmit = async () => {
       loading.value = true;
-      try {
-        await new Promise((resolve) => setTimeout(resolve, 10000));
-        router.push('/validation-code');
-      } finally {
-        loading.value = false;
-      }
       const data = {
         user: userForm.value,
         configUser: {
@@ -70,13 +68,23 @@ export default {
           ],
         },
       };
-      console.log('Royuter: ', data);
+      const response = await createUsers(data);
+      if (response.ok) {
+        router.push('code');
+      } else {
+        $q.notify({
+          type: 'negative',
+          message: response.message,
+        });
+      }
+      loading.value = false;
     };
     const onReset = () => {
       userForm.value = {
         email: '',
         nombre: '',
         apellido: '',
+        phone: '',
       };
     };
 
