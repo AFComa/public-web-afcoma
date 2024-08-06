@@ -6,6 +6,7 @@
           <q-checkbox
             v-if="props.col.field !== 'module'"
             v-model="props.row[props.col.field]"
+            @click="getDataGrid()"
           />
           <span v-else>{{ props.row.module }}</span>
         </q-td>
@@ -19,7 +20,11 @@ import { defineComponent, onMounted, ref } from 'vue';
 import { QTable, QTd, QCheckbox } from 'quasar';
 
 import { ListActionUser } from '../../../utils/users/usersColums';
-import type { ColumI } from '../../../interfaces/components/Grid.interfaces';
+import type {
+  ColumCreateUserI,
+  ColumI,
+} from '../../../interfaces/components/Grid.interfaces';
+import { useAuth } from 'src/composables/userAuth';
 
 export default defineComponent({
   components: {
@@ -27,8 +32,14 @@ export default defineComponent({
     QTd,
     QCheckbox,
   },
-  setup() {
-    const rows = ref([
+  props: {
+    section: {
+      type: Number,
+      default: 1,
+    },
+  },
+  setup(props) {
+    const rows = ref<ColumCreateUserI[]>([
       {
         id: 1,
         module: 'Administración',
@@ -39,13 +50,24 @@ export default defineComponent({
         download: false,
         opera: false,
       },
-      // Añade más filas según sea necesario
     ]);
 
     const columns = ref<ColumI[]>();
+    const { setPermissionUser, setPermissionSysad, setPermissionMandat } =
+      useAuth();
 
     const loadColums = () => {
       columns.value = ListActionUser();
+    };
+
+    const getDataGrid = () => {
+      if (props.section == 1) {
+        setPermissionUser(rows.value);
+      } else if (props.section == 2) {
+        setPermissionSysad(rows.value);
+      } else {
+        setPermissionMandat(rows.value);
+      }
     };
 
     onMounted(() => {
@@ -57,6 +79,7 @@ export default defineComponent({
       columns,
       loadColums,
       onMounted,
+      getDataGrid,
     };
   },
 });

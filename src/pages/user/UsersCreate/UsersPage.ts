@@ -1,9 +1,14 @@
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+// import { useRouter } from 'vue-router';
 import { useQuasar } from 'quasar';
 import LoadingOver from '../../../components/Loading/LoadingComponent.vue';
 import GridComponent from '../../../components/grid/ActionsUsers/GridActionComponent.vue';
 import { useAuth } from 'src/composables/userAuth';
+import {
+  isValidEmail,
+  onlyNumeric,
+  onlyAlphabetic,
+} from '../../../utils/validations/validationInputs';
 export default {
   name: 'UsersPage',
   components: {
@@ -14,70 +19,59 @@ export default {
     const loading = ref(false);
     const isPwd = ref(true);
     const $q = useQuasar();
-    const { createUsers } = useAuth();
+    const {
+      createUsers,
+      isUserPermission,
+      isSysadocPermission,
+      isMandatosPermission,
+    } = useAuth();
     const userForm = ref({
       email: '',
       nombre: '',
       apellido: '',
       phone: '',
     });
-    const router = useRouter();
+    // const router = useRouter();
 
     const onSubmit = async () => {
+      // Validar que las configuraciones de permiso no sean nulas
+      if (
+        !isUserPermission.value ||
+        !isSysadocPermission.value ||
+        !isMandatosPermission.value
+      ) {
+        $q.notify({
+          type: 'warning',
+          message: 'Debe asignar permisos antes de continuar.',
+        });
+        return;
+      }
       loading.value = true;
       const data = {
         user: userForm.value,
         configUser: {
-          usersPermissions: [
-            {
-              id: 1,
-              module: 'Administración',
-              create: false,
-              edit: false,
-              delete: false,
-              view: false,
-              download: false,
-              opera: false,
-            },
-          ],
-
-          sysadocPermission: [
-            {
-              id: 1,
-              module: 'Administración',
-              create: false,
-              edit: false,
-              delete: false,
-              view: false,
-              download: false,
-              opera: false,
-            },
-          ],
-
-          mandatosPermissions: [
-            {
-              id: 1,
-              module: 'Administración',
-              create: false,
-              edit: false,
-              delete: false,
-              view: false,
-              download: false,
-              opera: false,
-            },
-          ],
+          usersPermissions: isUserPermission.value,
+          sysadocPermission: isSysadocPermission.value,
+          mandatosPermissions: isMandatosPermission.value,
         },
       };
-      const response = await createUsers(data);
-      if (response.ok) {
-        router.push('code');
-      } else {
-        $q.notify({
-          type: 'negative',
-          message: response.message,
-        });
-      }
-      loading.value = false;
+
+      setTimeout(async () => {
+        const response = await createUsers(data);
+        if (response.ok) {
+          $q.notify({
+            type: 'positive',
+            message:
+              'La liga de acceso se genero exitosamente, favor de revisar su cuenta de correo electronico.',
+          });
+        } else {
+          $q.notify({
+            type: 'negative',
+            message: response.message,
+          });
+        }
+        loading.value = false;
+      }, 10000);
     };
     const onReset = () => {
       userForm.value = {
@@ -88,12 +82,6 @@ export default {
       };
     };
 
-    const isValidEmail = (val: string) => {
-      const emailPattern =
-        /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/;
-      return emailPattern.test(val) || 'El correo no parece ser válido';
-    };
-
     return {
       userForm,
       isPwd,
@@ -101,6 +89,8 @@ export default {
       onSubmit,
       onReset,
       isValidEmail,
+      onlyNumeric,
+      onlyAlphabetic,
     };
   },
 };

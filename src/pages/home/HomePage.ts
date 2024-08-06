@@ -1,4 +1,4 @@
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useQuasar } from 'quasar';
 import { useRouter } from 'vue-router';
 import type {
@@ -7,6 +7,10 @@ import type {
 } from '../../interfaces/auth/Acces.interfaces';
 import LoadingOverBasic from '../../components/Loading/LoadingBasicComponent.vue';
 import { useAuth } from 'src/composables/userAuth';
+import {
+  isValidEmail,
+  isPassword,
+} from '../../utils/validations/validationInputs';
 
 export default {
   name: 'HomePage',
@@ -16,13 +20,13 @@ export default {
   setup() {
     const loading = ref(false);
     const isPwd = ref(true);
-    const { saveUser } = useAuth();
+    const { saveUser, getIp } = useAuth();
     const $q = useQuasar();
 
     const userForm = ref({
       usuario: '',
       password: '',
-      ip: '205.345.34.23',
+      ip: '',
     });
     const router = useRouter();
 
@@ -43,15 +47,13 @@ export default {
       userForm.value = {
         usuario: '',
         password: '',
-        ip: '205.345.34.23',
+        ip: '',
       };
     };
 
-    const isValidEmail = (val: string) => {
-      const emailPattern =
-        /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/;
-      return emailPattern.test(val) || 'El correo no parece ser válido';
-    };
+    onMounted(async () => {
+      userForm.value.ip = await getIp();
+    });
 
     return {
       userForm,
@@ -60,6 +62,7 @@ export default {
       onSubmit,
       onReset,
       isValidEmail,
+      isPassword,
     };
   },
 };

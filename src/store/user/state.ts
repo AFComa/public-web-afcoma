@@ -1,5 +1,8 @@
 // src/store/modules/auth/state.ts
-import { CreateGUI } from 'src/interfaces/components/Grid.interfaces';
+import {
+  ColumCreateUserI,
+  CreateGUI,
+} from 'src/interfaces/components/Grid.interfaces';
 import type {
   LoginSuccess,
   AccesUserI,
@@ -9,10 +12,16 @@ export interface State {
   data: LoginSuccess | null;
   infoAcces: AccesUserI | null;
   permission: CreateGUI | null;
+  permissionUser: ColumCreateUserI[] | null;
+  permissionSysadoc: ColumCreateUserI[] | null;
+  permissionMandatos: ColumCreateUserI[] | null;
 }
 
 export const state: State = {
   data: null,
   infoAcces: {},
   permission: null,
+  permissionUser: null,
+  permissionSysadoc: null,
+  permissionMandatos: null,
 };

@@ -7,6 +7,7 @@
             rounded
             outlined
             label="Nombre"
+            @keypress="onlyAlphabetic"
             lazy-rules
             no-error-icon
             v-model="userForm.nombre"
@@ -20,6 +21,7 @@
             rounded
             outlined
             label="Apellidos"
+            @keypress="onlyAlphabetic"
             lazy-rules
             no-error-icon
             v-model="userForm.apellido"
@@ -37,8 +39,9 @@
             v-model="userForm.email"
             no-error-icon
             :rules="[
-      (val: any) => (val && val.length > 0) || 'Este campo es obligatorio',
-    ]"
+            (val: any) => (val && val.length > 0) || 'Este campo es obligatorio',
+            isValidEmail,
+          ]"
           />
         </div>
         <div class="col-xs-12 col-sm-6 col-md-3">
@@ -47,7 +50,9 @@
             outlined
             label="Telefono"
             lazy-rules
+            maxlength="10"
             v-model="userForm.phone"
+            @keypress="onlyNumeric"
             no-error-icon
             :rules="[
       (val: any) => (val && val.length > 0) || 'Este campo es obligatorio',
@@ -62,15 +67,15 @@
               icon="perm_identity"
               label="Usuarios"
             >
-              <GridComponent></GridComponent>
+              <GridComponent :section="1"></GridComponent>
             </q-expansion-item>
 
             <q-expansion-item expand-separator icon="receipt" label="Sys@doc">
-              <GridComponent></GridComponent>
+              <GridComponent :section="2"></GridComponent>
             </q-expansion-item>
 
             <q-expansion-item expand-separator icon="drafts" label="Mandatos">
-              <GridComponent></GridComponent>
+              <GridComponent :section="3"></GridComponent>
             </q-expansion-item>
           </q-list>
         </div>

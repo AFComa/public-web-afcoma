@@ -1,5 +1,6 @@
 // src/store/modules/auth/actions.ts
 import { ActionTree } from 'vuex';
+import axios from 'axios';
 import { api } from '../../boot/axios';
 import type {
   LoginSuccess,
@@ -33,11 +34,15 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
 
   async accesLogin({ commit }, otp) {
     try {
-      const response = await api.post<AccesUserI>('/login/otp', { otp });
-      commit('SET_ACCES_DATA', response.data);
+      const { headers, data } = await api.post<AccesUserI>('/login/otp', {
+        otp,
+      });
+      localStorage.clear();
+      localStorage.setItem('token', headers.token);
+      commit('SET_ACCES_DATA', data);
       return {
         ok: true,
-        token: response.data,
+        token: data,
       };
     } catch (error) {
       return {
@@ -47,8 +52,6 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
     }
   },
   async createUser({ commit }, user) {
-    console.log('ser: ', user);
-
     try {
       const response = await api.post('/user/new', user);
       commit('SET_ACCES_PERMIS', response.data);
@@ -76,6 +79,29 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
         ok: false,
         message: 'Ocurrio un error al crear el registro',
       };
+    }
+  },
+  async createPassword({ commit }, data) {
+    try {
+      const response = await api.post('/user/setPassnewuser', data);
+      commit(response.data);
+      return {
+        ok: true,
+        token: response.data,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        message: 'Ocurrio un error al crear su contraseña',
+      };
+    }
+  },
+  async fetchIp() {
+    try {
+      const response = await axios.get('https://api.ipify.org?format=json');
+      return response.data.ip;
+    } catch (error) {
+      console.error('Error fetching IP:', error);
     }
   },
 };

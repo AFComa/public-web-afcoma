@@ -28,11 +28,12 @@
           outlined
           :type="isPwd ? 'password' : 'text'"
           v-model="userForm.password"
+          maxlength="9"
           label="Contraseña"
           lazy-rules
           no-error-icon
           :rules="[
-            (val: any) => (val && val.length > 0) || 'Este campo es obligatorio',
+            (val: any) => (val && val.length > 0) || 'Este campo es obligatorio',isPassword
           ]"
         >
           <template v-slot:append>
@@ -44,7 +45,7 @@
           </template>
         </q-input>
 
-        <div class="row">
+        <div class="row q-pt-sm">
           <q-btn
             class="custom-button"
             no-caps

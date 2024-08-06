@@ -2,12 +2,24 @@
   <q-page class="password-code flex flex-center">
     <q-card class="card-content">
       <q-card-section>
-        <div class="text-h5 text-center font-afcoma-regular">
+        <div
+          class="text-h5 text-center font-afcoma-regular"
+          v-if="!passChange()"
+        >
           Crea tu Contraseña
         </div>
+        <div
+          class="text-h5 text-center font-afcoma-regular"
+          v-if="passChange()"
+        >
+          Desbloquear Contraseña
+        </div>
         <div class="row justify-center">
-          <div class="q-mt-lg col-xs-10 col-sm-9 col-md-9">
+          <div class="q-mt-lg col-xs-10 col-sm-9 col-md-9" v-if="!passChange()">
             Para el uso del sistema favor de crear su contraseña.
+          </div>
+          <div class="q-mt-lg col-xs-10 col-sm-9 col-md-9" v-if="passChange()">
+            Para desbloquear su cuenta favor de actualizar su contraseña.
           </div>
         </div>
       </q-card-section>
@@ -16,30 +28,40 @@
           <div class="col-xs-10 col-sm-9 col-md-9">
             <q-input
               v-model="password"
-              type="password"
+              :type="isPwd ? 'password' : 'text'"
               label="Contraseña"
               :rules="passwordRules"
+              maxlength="8"
               rounded
               outlined
               lazy-rules
             >
               <template v-slot:append>
-                <q-icon name="lock" />
+                <q-icon
+                  :name="isPwd ? 'visibility_off' : 'visibility'"
+                  class="cursor-pointer"
+                  @click="isPwd = !isPwd"
+                />
               </template>
             </q-input>
           </div>
           <div class="q-mt-md col-xs-10 col-sm-9 col-md-9">
             <q-input
               v-model="confirmPassword"
-              type="password"
+              :type="isPwd2 ? 'password' : 'text'"
               label="Confirmar Contraseña"
               :rules="confirmPasswordRules"
               rounded
               outlined
               lazy-rules
+              maxlength="8"
             >
               <template v-slot:append>
-                <q-icon name="lock" />
+                <q-icon
+                  :name="isPwd2 ? 'visibility_off' : 'visibility'"
+                  class="cursor-pointer"
+                  @click="isPwd2 = !isPwd2"
+                />
               </template>
             </q-input>
           </div>
@@ -67,8 +89,11 @@
 </template>
 
 <script>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, onMounted } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { useQuasar } from 'quasar';
+
+import { useAuth } from 'src/composables/userAuth';
 import LoadingOver from '../../../components/Loading/LoadingComponent.vue';
 
 export default {
@@ -79,11 +104,17 @@ export default {
   setup() {
     const password = ref('');
     const confirmPassword = ref('');
+    const isPwd = ref(true);
+    const isPwd2 = ref(true);
+    const urlParams = ref('');
     const loading = ref(false);
+    const $q = useQuasar();
+    const { CreatePass } = useAuth();
     const passwordRegex =
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
 
     const router = useRouter();
+    const route = useRoute();
     const passwordRules = [
       (val) => !!val || 'La contraseña es requerida.',
       (val) =>
@@ -98,13 +129,35 @@ export default {
 
     const onSubmit = async () => {
       loading.value = true;
-      try {
-        await new Promise((resolve) => setTimeout(resolve, 10000));
-        router.push('/');
-      } finally {
+      setTimeout(async () => {
+        const response = await CreatePass({
+          token: urlParams.value.get('token'),
+          password: password.value,
+        });
+        if (response.ok) {
+          router.push('/');
+        } else {
+          $q.notify({
+            type: 'negative',
+            message: response.message,
+          });
+        }
         loading.value = false;
+      }, 10000);
+    };
+
+    const passChange = () => {
+      if (route.path === '/reset-password') {
+        return true;
+      } else {
+        return false;
       }
     };
+
+    onMounted(async () => {
+      passChange();
+      urlParams.value = new URLSearchParams(window.location.search);
+    });
 
     return {
       password,
@@ -113,6 +166,10 @@ export default {
       confirmPasswordRules,
       onSubmit,
       loading,
+      urlParams,
+      isPwd,
+      isPwd2,
+      passChange,
     };
   },
 };

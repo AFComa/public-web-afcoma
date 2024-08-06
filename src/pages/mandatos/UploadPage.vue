@@ -76,23 +76,20 @@ export default {
     const selectedData = ref(null);
     const selectedItem = ref(null);
 
-    // Función para determinar si un valor contiene "string" o "date"
-    const containsStringOrDate = (value) => {
-      if (typeof value === 'string') {
-        const lowerValue = value.toLowerCase();
-        return lowerValue === 'string' || lowerValue === 'date';
-      }
-      return false;
-    };
+    // const containsStringOrDate = (value) => {
+    //   if (typeof value === 'string') {
+    //     const lowerValue = value.toLowerCase();
+    //     return lowerValue === 'string' || lowerValue === 'date';
+    //   }
+    //   return false;
+    // };
 
-    // Filtra los registros que contienen "string" o "date"
-    const filterOutStringOrDateRecords = (data) => {
-      return data.filter((row) => {
-        return !Object.values(row).some((value) => containsStringOrDate(value));
-      });
-    };
+    // const filterOutStringOrDateRecords = (data) => {
+    //   return data.filter((row) => {
+    //     return !Object.values(row).some((value) => containsStringOrDate(value));
+    //   });
+    // };
 
-    // Función para convertir "SI" y "NO" a booleanos
     const convertSiNoToBoolean = (value) => {
       if (typeof value === 'string') {
         const lowerValue = value.toLowerCase();
@@ -120,17 +117,17 @@ export default {
           }),
         }));
 
-        transInfo.value = sheets.value.map((sheet) => ({
-          name: sheet.name !== 'Glosario_Opciones' ? sheet.name : null,
-          data: filterOutStringOrDateRecords(
-            sheet.data.slice(1).map((row) => {
+        transInfo.value = sheets.value
+          .filter((item) => item.name !== 'Glosario_Opciones')
+          .map((sheet) => ({
+            name: sheet.name,
+            data: sheet.data.slice(1).map((row) => {
               return sheet.data[0].reduce((acc, field, index) => {
                 acc[field] = convertSiNoToBoolean(row[index]);
                 return acc;
               }, {});
-            })
-          ),
-        }));
+            }),
+          }));
       };
       viewFile.value = true;
       console.log('transInfo: ', transInfo);

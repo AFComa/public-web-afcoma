@@ -4,7 +4,10 @@ import type {
   LoginSuccess,
   AccesUserI,
 } from '../../interfaces/auth/Acces.interfaces';
-import { CreateGUI } from 'src/interfaces/components/Grid.interfaces';
+import {
+  ColumCreateUserI,
+  CreateGUI,
+} from 'src/interfaces/components/Grid.interfaces';
 
 export const mutations: MutationTree<State> = {
   SET_LOGIN_DATA(state, payload: LoginSuccess) {
@@ -15,5 +18,14 @@ export const mutations: MutationTree<State> = {
   },
   SET_ACCES_PERMIS(state, payload: CreateGUI) {
     state.permission = payload;
+  },
+  SET_USERS_PERMIS(state, payload: ColumCreateUserI[]) {
+    state.permissionUser = payload;
+  },
+  SET_SYSAD_PERMIS(state, payload: ColumCreateUserI[]) {
+    state.permissionSysadoc = payload;
+  },
+  SET_MANDAT_PERMIS(state, payload: ColumCreateUserI[]) {
+    state.permissionMandatos = payload;
   },
 };
