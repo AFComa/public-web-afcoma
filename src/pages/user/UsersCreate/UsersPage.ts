@@ -48,7 +48,10 @@ export default {
       }
       loading.value = true;
       const data = {
-        user: userForm.value,
+        email: userForm.value.email,
+        nombre: userForm.value.nombre,
+        apellido: userForm.value.apellido,
+        phone: userForm.value.phone,
         configUser: {
           usersPermissions: isUserPermission.value,
           sysadocPermission: isSysadocPermission.value,
@@ -71,7 +74,7 @@ export default {
           });
         }
         loading.value = false;
-      }, 10000);
+      }, 5000);
     };
     const onReset = () => {
       userForm.value = {

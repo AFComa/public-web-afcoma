@@ -81,9 +81,26 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
       };
     }
   },
+  async getValidToken({ commit }, result) {
+    try {
+      const response = await api.post('/user/pingtokennewuser', {
+        token: result,
+      });
+      commit('data');
+      return {
+        ok: true,
+        token: response.data,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        message: 'Ocurrio un error al crear el registro',
+      };
+    }
+  },
   async createPassword({ commit }, data) {
     try {
-      const response = await api.post('/user/setPassnewuser', data);
+      const response = await api.post('/user/completenewuser', data);
       commit(response.data);
       return {
         ok: true,

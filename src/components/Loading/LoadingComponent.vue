@@ -38,7 +38,7 @@ export default {
           backgroundColor: '#244b5a;',
           message: props.messageTwon,
         });
-      }, 4000);
+      }, 2000);
     };
 
     onMounted(() => {

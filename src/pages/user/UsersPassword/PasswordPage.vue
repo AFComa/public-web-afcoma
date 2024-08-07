@@ -109,7 +109,7 @@ export default {
     const urlParams = ref('');
     const loading = ref(false);
     const $q = useQuasar();
-    const { CreatePass } = useAuth();
+    const { CreatePass, ValidToken } = useAuth();
     const passwordRegex =
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
 
@@ -135,6 +135,11 @@ export default {
           password: password.value,
         });
         if (response.ok) {
+          $q.notify({
+            type: 'positive',
+            message:
+              'Tu cuenta se ha validado correctamente, favor de iniciar sesión.',
+          });
           router.push('/');
         } else {
           $q.notify({
@@ -143,7 +148,7 @@ export default {
           });
         }
         loading.value = false;
-      }, 10000);
+      }, 5000);
     };
 
     const passChange = () => {
@@ -156,7 +161,20 @@ export default {
 
     onMounted(async () => {
       passChange();
-      urlParams.value = new URLSearchParams(window.location.search);
+      urlParams.value = await new URLSearchParams(window.location.search);
+      const resultToken = await ValidToken(urlParams.value.get('token'));
+      if (resultToken.ok) {
+        $q.notify({
+          type: 'positive',
+          message: 'Token exitoso favor de colocar tu contraseña.',
+        });
+      } else {
+        $q.notify({
+          type: 'negative',
+          message: resultToken.message,
+        });
+        router.push('/');
+      }
     });
 
     return {

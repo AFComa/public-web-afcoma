@@ -1,5 +1,3 @@
-import { UserCreateI } from '../auth/Acces.interfaces';
-
 export interface ListUserI {
   id?: number;
   name?: string;
@@ -31,6 +29,9 @@ export interface UnionColumnI {
 }
 
 export interface CreateGUI {
-  user: UserCreateI;
+  email: string;
+  nombre: string;
+  apellido: string;
+  phone: string;
   configUser: UnionColumnI;
 }

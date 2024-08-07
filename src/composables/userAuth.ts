@@ -35,5 +35,6 @@ export const useAuth = () => {
     resetPass: (id: number | undefined) =>
       store.dispatch('auth/resetPassword', id),
     CreatePass: (data: string) => store.dispatch('auth/createPassword', data),
+    ValidToken: (data: string) => store.dispatch('auth/getValidToken', data),
   };
 };

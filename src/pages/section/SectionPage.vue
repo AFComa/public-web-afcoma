@@ -13,7 +13,7 @@
         <p>Sys@Doc</p>
       </div>
       <div class="col-xs-6 col-sm-6 col-md-4">
-        <router-link to="dashboard/upload-mandatos">
+        <router-link to="dashboard/validar-information">
           <q-img src="../../assets/img/mandatos.svg" width="30%" />
         </router-link>
         <p>Mandatos</p>

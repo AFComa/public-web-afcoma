@@ -33,6 +33,14 @@ body {
     background-color: #244b5a;
   }
 }
+.custom-button-se {
+  background-color: #244b5a;
+  color: white;
+
+  &:hover {
+    background-color: #f5c80e;
+  }
+}
 
 .header-bg-green {
   background-color: #244b5a;

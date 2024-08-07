@@ -62,7 +62,7 @@
         </div>
       </div>
     </div>
-    <div class="row q-pt-lg justify-center" v-if="selectedData">
+    <!-- <div class="row q-pt-lg justify-center" v-if="selectedData">
       <q-btn
         class="custom-button"
         no-caps
@@ -72,7 +72,7 @@
         label="Guardar"
         @click="saveInfo"
       />
-    </div>
+    </div> -->
     <LoadingOver
       v-if="loading"
       :messageOne="'Espere un momento estamos cargando la información...'"
@@ -94,7 +94,7 @@ import LoadingOver from '../../components/Loading/LoadingComponent.vue';
 import DialogComponent from '../../components/Dialog/DialogComponent.vue';
 import * as XLSX from 'xlsx';
 export default {
-  name: 'AutocompleteForm',
+  name: 'FileComponent',
   components: {
     LoadingOver,
     DialogComponent,
