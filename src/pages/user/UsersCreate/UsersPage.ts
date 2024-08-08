@@ -1,6 +1,6 @@
-import { ref } from 'vue';
-// import { useRouter } from 'vue-router';
+import { ref, onMounted } from 'vue';
 import { useQuasar } from 'quasar';
+import { useRoute, useRouter } from 'vue-router';
 import LoadingOver from '../../../components/Loading/LoadingComponent.vue';
 import GridComponent from '../../../components/grid/ActionsUsers/GridActionComponent.vue';
 import { useAuth } from 'src/composables/userAuth';
@@ -18,12 +18,16 @@ export default {
   setup() {
     const loading = ref(false);
     const isPwd = ref(true);
+    const actionBoton = ref();
     const $q = useQuasar();
+    const router = useRoute();
     const {
       createUsers,
       isUserPermission,
       isSysadocPermission,
       isMandatosPermission,
+      isTablePermission,
+      updateUsers,
     } = useAuth();
     const userForm = ref({
       email: '',
@@ -31,10 +35,10 @@ export default {
       apellido: '',
       phone: '',
     });
-    // const router = useRouter();
+    const routers = useRouter();
 
     const onSubmit = async () => {
-      // Validar que las configuraciones de permiso no sean nulas
+      // Validar que las configUuraciones de permiso no sean nulas
       if (
         !isUserPermission.value ||
         !isSysadocPermission.value ||
@@ -46,6 +50,14 @@ export default {
         });
         return;
       }
+      actionBoton.value === 'view'
+        ? routers.push('/dashboard')
+        : actionBoton.value === 'edit'
+        ? editUser()
+        : save();
+    };
+
+    const save = () => {
       loading.value = true;
       const data = {
         email: userForm.value.email,
@@ -76,6 +88,38 @@ export default {
         loading.value = false;
       }, 5000);
     };
+    const editUser = () => {
+      loading.value = true;
+      const data = {
+        _id: router.params.id,
+        email: userForm.value.email,
+        nombre: userForm.value.nombre,
+        apellido: userForm.value.apellido,
+        phone: userForm.value.phone,
+        configUser: {
+          usersPermissions: isUserPermission.value,
+          sysadocPermission: isSysadocPermission.value,
+          mandatosPermissions: isMandatosPermission.value,
+        },
+      };
+
+      setTimeout(async () => {
+        const response = await updateUsers(data);
+        if (response.ok) {
+          routers.push('/dashboard');
+          $q.notify({
+            type: 'positive',
+            message: 'El usuario se actualizo correctamente.',
+          });
+        } else {
+          $q.notify({
+            type: 'negative',
+            message: response.message,
+          });
+        }
+        loading.value = false;
+      }, 5000);
+    };
     const onReset = () => {
       userForm.value = {
         email: '',
@@ -85,9 +129,22 @@ export default {
       };
     };
 
+    onMounted(() => {
+      actionBoton.value = localStorage.getItem('actionuser');
+      if (router.params.id) {
+        userForm.value.nombre = isTablePermission.value.user;
+        userForm.value.apellido = isTablePermission.value.apellidos;
+        userForm.value.email = isTablePermission.value.email;
+        userForm.value.phone = isTablePermission.value.phone;
+      }
+    });
+
     return {
       userForm,
       isPwd,
+      actionBoton,
+      save,
+      editUser,
       loading,
       onSubmit,
       onReset,

@@ -4,12 +4,14 @@
       <q-img :src="url" style="width: 140px" />
     </div>
     <div class="col-xs-10 col-sm-8 col-md-4 navbar-content">
-      <q-avatar style="background-color: #244b5a; color: white">L</q-avatar>
+      <q-avatar style="background-color: #244b5a; color: white">{{
+        avatar
+      }}</q-avatar>
       &nbsp;&nbsp;
       <q-btn-dropdown
         no-caps
         color="primary"
-        label="Luis Hernandez"
+        :label="nombre"
         style="font-size: 10px"
       >
         <q-list>
@@ -26,12 +28,20 @@
   </div>
 </template>
 <script setup lang="ts">
+import { onMounted, ref } from 'vue';
 import imgLogoNavbar from '../../assets/img/afcoma_color.png';
+import { useAuth } from 'src/composables/userAuth';
 
 defineOptions({
   name: 'HeroComponent',
 });
-
+const avatar = ref('');
+const nombre = ref('');
+const { isAcces } = useAuth();
+onMounted(async () => {
+  avatar.value = isAcces.value.avatar;
+  nombre.value = `${isAcces.value.username} ${isAcces.value.apellidos}`;
+});
 let url = imgLogoNavbar;
 </script>
 

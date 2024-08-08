@@ -1,5 +1,6 @@
 // src/store/index.ts
 import { createStore } from 'vuex';
+import createPersistedState from 'vuex-persistedstate';
 import authModule from './user';
 
 export interface StateInterface {
@@ -14,4 +15,10 @@ export default createStore({
     auth: authModule,
     // Otros módulos...
   },
+  plugins: [
+    createPersistedState({
+      key: 'my-app', // Puedes cambiar el nombre de la clave si lo deseas
+      paths: ['auth'], // Especifica los módulos que deseas persistir
+    }),
+  ],
 });

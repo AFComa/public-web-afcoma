@@ -64,7 +64,6 @@ import {
   QCardSection,
   QCardActions,
 } from 'quasar';
-import mammoth from 'mammoth';
 
 const files = ref([]);
 const displayedFiles = ref([]);
@@ -87,23 +86,6 @@ const handleFileUpload = async (uploadedFiles) => {
         });
       };
       reader.readAsDataURL(file);
-    } else if (
-      fileType ===
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
-      fileType === 'application/msword'
-    ) {
-      const reader = new FileReader();
-      reader.onload = async function (event) {
-        const arrayBuffer = event.target.result;
-        const result = await mammoth.convertToHtml({ arrayBuffer });
-        displayedFiles.value.push({
-          type: 'word',
-          content: result.value,
-          name: fileName,
-          icon: 'description',
-        });
-      };
-      reader.readAsArrayBuffer(file);
     }
   }
 };

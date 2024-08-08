@@ -3,7 +3,7 @@
     <div class="q-col-gutter-md row text-center">
       <div class="col-xs-6 col-sm-6 col-md-4">
         <router-link to="dashboard/listar-usuarios">
-          <q-img src="../../assets/img/usuarios.svg" width="30%" />
+          <q-img src="../../assets/img/Users.png" width="30%" />
         </router-link>
         <p>Usuarios</p>
       </div>
@@ -19,6 +19,8 @@
         <p>Mandatos</p>
       </div>
     </div>
+    <LoadingOverBasic v-if="loading" />
   </q-page>
 </template>
 <style scoped src="./Sections.scss"></style>
+<script src="./SectionPage.ts" lang="ts"></script>

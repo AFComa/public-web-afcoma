@@ -11,6 +11,7 @@
             lazy-rules
             no-error-icon
             v-model="userForm.nombre"
+            :disable="actionBoton === 'view'"
             :rules="[
       (val: any) => (val && val.length > 0) || 'Este campo es obligatorio',
     ]"
@@ -25,6 +26,7 @@
             lazy-rules
             no-error-icon
             v-model="userForm.apellido"
+            :disable="actionBoton === 'view'"
             :rules="[
       (val: any) => (val && val.length > 0) || 'Este campo es obligatorio',
     ]"
@@ -37,6 +39,7 @@
             label="Correo"
             lazy-rules
             v-model="userForm.email"
+            :disable="actionBoton === 'view'"
             no-error-icon
             :rules="[
             (val: any) => (val && val.length > 0) || 'Este campo es obligatorio',
@@ -52,6 +55,7 @@
             lazy-rules
             maxlength="10"
             v-model="userForm.phone"
+            :disable="actionBoton === 'view'"
             @keypress="onlyNumeric"
             no-error-icon
             :rules="[
@@ -86,7 +90,7 @@
             unelevated
             rounded
             size="lg"
-            label="Guardar"
+            label="Continuar"
             type="submit"
           />
         </div>

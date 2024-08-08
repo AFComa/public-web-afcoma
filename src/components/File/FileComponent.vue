@@ -52,6 +52,7 @@
           </template>
           <template v-else>
             <q-input
+              size="large"
               v-model="selectedItem[key]"
               @change="updateInput()"
               :label="key"

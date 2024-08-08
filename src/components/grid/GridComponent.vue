@@ -92,6 +92,7 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+    <LoadingComponentBasic v-if="loading" />
   </div>
 </template>
 

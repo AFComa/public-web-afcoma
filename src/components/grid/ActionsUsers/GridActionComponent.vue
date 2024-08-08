@@ -7,6 +7,7 @@
             v-if="props.col.field !== 'module'"
             v-model="props.row[props.col.field]"
             @click="getDataGrid()"
+            :disable="actionBotonGrid === 'view'"
           />
           <span v-else>{{ props.row.module }}</span>
         </q-td>
@@ -18,8 +19,11 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue';
 import { QTable, QTd, QCheckbox } from 'quasar';
-
-import { ListActionUser } from '../../../utils/users/usersColums';
+import { useRoute } from 'vue-router';
+import {
+  ListActionUser,
+  ListPermision,
+} from '../../../utils/users/usersColums';
 import type {
   ColumCreateUserI,
   ColumI,
@@ -39,22 +43,16 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const rows = ref<ColumCreateUserI[]>([
-      {
-        id: 1,
-        module: 'Administración',
-        create: false,
-        edit: false,
-        delete: false,
-        view: false,
-        download: false,
-        opera: false,
-      },
-    ]);
-
+    const rows = ref<ColumCreateUserI[]>(ListPermision());
+    const route = useRoute();
     const columns = ref<ColumI[]>();
-    const { setPermissionUser, setPermissionSysad, setPermissionMandat } =
-      useAuth();
+    const actionBotonGrid = ref();
+    const {
+      setPermissionUser,
+      setPermissionSysad,
+      setPermissionMandat,
+      isTablePermission,
+    } = useAuth();
 
     const loadColums = () => {
       columns.value = ListActionUser();
@@ -70,8 +68,26 @@ export default defineComponent({
       }
     };
 
-    onMounted(() => {
-      loadColums();
+    onMounted(async () => {
+      await loadColums();
+      actionBotonGrid.value = localStorage.getItem('actionuser');
+      if (route.params.id) {
+        if (props.section == 1) {
+          rows.value = await isTablePermission.value.configUser
+            .usersPermissions;
+          setPermissionUser(rows.value);
+        } else if (props.section == 2) {
+          rows.value = await isTablePermission.value.configUser
+            .sysadocPermission;
+          setPermissionSysad(rows.value);
+        } else {
+          rows.value = await isTablePermission.value.configUser
+            .mandatosPermissions;
+          setPermissionMandat(rows.value);
+        }
+      } else {
+        rows.value = await ref(await ListPermision()).value;
+      }
     });
 
     return {
@@ -79,6 +95,7 @@ export default defineComponent({
       columns,
       loadColums,
       onMounted,
+      actionBotonGrid,
       getDataGrid,
     };
   },

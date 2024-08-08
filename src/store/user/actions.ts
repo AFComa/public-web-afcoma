@@ -39,6 +39,8 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
       });
       localStorage.clear();
       localStorage.setItem('token', headers.token);
+      console.log('dataS: ', data);
+
       commit('SET_ACCES_DATA', data);
       return {
         ok: true,
@@ -54,7 +56,7 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
   async createUser({ commit }, user) {
     try {
       const response = await api.post('/user/new', user);
-      commit('SET_ACCES_PERMIS', response.data);
+      commit('data');
       return {
         ok: true,
         token: response.data,
@@ -63,6 +65,21 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
       return {
         ok: false,
         message: 'Ocurrio un error al crear el registro',
+      };
+    }
+  },
+  async UpdateUser({ commit }, user) {
+    try {
+      const response = await api.post('user/edituserbyid', user);
+      commit('data');
+      return {
+        ok: true,
+        token: response.data,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        message: 'Ocurrio un error al actualizar el registro',
       };
     }
   },
@@ -94,7 +111,8 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
     } catch (error) {
       return {
         ok: false,
-        message: 'Ocurrio un error al crear el registro',
+        message:
+          'Tóken expirado / Inválido favor de contactar a su Administrador',
       };
     }
   },
@@ -110,6 +128,42 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
       return {
         ok: false,
         message: 'Ocurrio un error al crear su contraseña',
+      };
+    }
+  },
+  async AllUser({ commit }) {
+    try {
+      const response = await api.get('/user/infousers');
+      commit('data');
+      return {
+        ok: true,
+        resultado: response.data,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        message: 'Ocurrio un error al obtener los usuarios',
+      };
+    }
+  },
+  async ByIdUser({ commit }, item) {
+    try {
+      const { data } = await api.post('/user/infobyid', { _id: item.id });
+      console.log('response: ', data);
+      if (item.opc === 1) {
+        commit('SET_ACCES_PERMIS', data);
+      } else {
+        commit('SET_ACCES_PERMIS_TABLE', data);
+      }
+
+      return {
+        ok: true,
+        resultado: data,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        message: 'Ocurrio un error al obtener los usuarios',
       };
     }
   },

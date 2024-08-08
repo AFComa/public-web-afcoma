@@ -1,8 +1,10 @@
 export interface ListUserI {
-  id?: number;
-  name?: string;
+  apellidos: string;
   email?: string;
-  profile?: string;
+  last_access?: string;
+  phone?: string;
+  user: string;
+  _id?: string;
 }
 
 export interface ColumI {
@@ -20,6 +22,11 @@ export interface ColumCreateUserI {
   view: boolean;
   download: boolean;
   opera: boolean;
+}
+
+export interface OpcGridI {
+  id: string | undefined;
+  opc: number;
 }
 
 export interface UnionColumnI {

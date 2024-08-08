@@ -1,9 +1,15 @@
 export const ListUsuario = () => {
   return [
-    { name: 'id', label: 'ID', align: 'left', field: 'id' },
-    { name: 'name', label: 'Nombre', align: 'left', field: 'name' },
+    { name: '_id', label: 'ID', align: 'left', field: '_id' },
+    { name: 'user', label: 'Nombre', align: 'left', field: 'user' },
+    {
+      name: 'apellidos',
+      label: 'Apellidos',
+      align: 'left',
+      field: 'apellidos',
+    },
     { name: 'email', label: 'Correo', align: 'left', field: 'email' },
-    { name: 'profile', label: 'Perfil', align: 'left', field: 'profile' },
+    { name: 'phone', label: 'Telefono', align: 'left', field: 'phone' },
     { name: 'actions', label: 'Acciones', align: 'center', field: 'actions' },
   ];
 };
@@ -26,6 +32,21 @@ export const ListActionUser = () => {
       label: 'Operador',
       field: 'opera',
       align: 'center',
+    },
+  ];
+};
+
+export const ListPermision = () => {
+  return [
+    {
+      id: 1,
+      module: 'Administración',
+      create: false,
+      edit: false,
+      delete: false,
+      view: false,
+      download: false,
+      opera: false,
     },
   ];
 };

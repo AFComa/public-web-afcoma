@@ -14,12 +14,10 @@
           outlined
           v-model="userForm.usuario"
           label="Correo electrónico"
-          type="email"
           lazy-rules
           no-error-icon
           :rules="[
-            (val: any) => (val && val.length > 0) || 'Este campo es obligatorio',
-            isValidEmail,
+            (val: any) => (val && val.length > 0) || 'Este campo es obligatorio'
           ]"
         />
 
@@ -28,7 +26,7 @@
           outlined
           :type="isPwd ? 'password' : 'text'"
           v-model="userForm.password"
-          maxlength="9"
+          maxlength="8"
           label="Contraseña"
           lazy-rules
           no-error-icon

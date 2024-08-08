@@ -19,7 +19,7 @@
 
       <q-step
         :name="2"
-        title="Carga de Archivos Mandatos"
+        title="Carga de contratos Mandatos"
         icon="create_new_folder"
         :done="step > 2"
       >
