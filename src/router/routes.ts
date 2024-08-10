@@ -5,7 +5,6 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      // { path: '', component: () => import('pages/IndexPage.vue') },
       {
         path: '',
         name: 'login',
@@ -15,11 +14,6 @@ const routes: RouteRecordRaw[] = [
         path: 'code',
         name: 'code',
         component: () => import('pages/code/CodePage.vue'),
-      },
-      {
-        path: 'validation-code',
-        name: 'validation_code',
-        component: () => import('pages/user/UsersCode/ValidationPage.vue'),
       },
       {
         path: 'password',
