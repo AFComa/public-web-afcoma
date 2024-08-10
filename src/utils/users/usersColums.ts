@@ -1,6 +1,5 @@
 export const ListUsuario = () => {
   return [
-    { name: '_id', label: 'ID', align: 'left', field: '_id' },
     { name: 'user', label: 'Nombre', align: 'left', field: 'user' },
     {
       name: 'apellidos',
@@ -10,6 +9,13 @@ export const ListUsuario = () => {
     },
     { name: 'email', label: 'Correo', align: 'left', field: 'email' },
     { name: 'phone', label: 'Telefono', align: 'left', field: 'phone' },
+    {
+      name: 'last_access',
+      label: 'Fecha Ingreso',
+      align: 'left',
+      field: 'last_access',
+    },
+    { name: 'estatus', label: 'Estatus', align: 'center', field: 'estatus' },
     { name: 'actions', label: 'Acciones', align: 'center', field: 'actions' },
   ];
 };

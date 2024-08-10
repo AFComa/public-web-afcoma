@@ -1,5 +1,6 @@
 export interface ListUserI {
   apellidos: string;
+  estatus: string;
   email?: string;
   last_access?: string;
   phone?: string;
@@ -27,6 +28,10 @@ export interface ColumCreateUserI {
 export interface OpcGridI {
   id: string | undefined;
   opc: number;
+}
+export interface EstatusI {
+  _id: string | undefined;
+  estatus: number;
 }
 
 export interface UnionColumnI {

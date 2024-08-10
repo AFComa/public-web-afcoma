@@ -31,20 +31,6 @@
       </q-card-actions>
     </q-card>
   </q-dialog>
-  <!-- <section class="modal-general">
-      <div class="modal-content-sesion">
-        <img src="../../assets/img/alert.svg" width="100px" height="100px" />
-        <p>{{ props.title }}</p>
-        <br />
-        <div class="content-info">
-          <span>{{ props.message }}</span>
-        </div>
-        <div class="container_button_modal">
-          <button z-button="primary:l" @click="cancel">Aceptar</button>
-          <button z-button="primary:l" @click="accept">Aceptar</button>
-        </div>
-      </div>
-    </section> -->
 </template>
 <style scoped src="./DialogComponent.scss"></style>
 <script setup>

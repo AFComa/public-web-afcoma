@@ -4,6 +4,7 @@ import type { UserI } from '../interfaces/auth/Acces.interfaces';
 import {
   ColumCreateUserI,
   CreateGUI,
+  EstatusI,
   OpcGridI,
 } from 'src/interfaces/components/Grid.interfaces';
 // import { CreateGUI } from 'src/interfaces/components/Grid.interfaces';
@@ -18,6 +19,7 @@ export const useAuth = () => {
     isSysadocPermission: computed(() => store.state.auth.permissionSysadoc),
     isMandatosPermission: computed(() => store.state.auth.permissionMandatos),
     isTablePermission: computed(() => store.state.auth.TablePermission),
+    isPermission: computed(() => store.state.auth.permission),
 
     // Mutations
     setPermissionUser: (item: ColumCreateUserI[]) =>
@@ -42,5 +44,6 @@ export const useAuth = () => {
     ValidToken: (data: string) => store.dispatch('auth/getValidToken', data),
     getUser: () => store.dispatch('auth/AllUser'),
     getUserId: (item: OpcGridI) => store.dispatch('auth/ByIdUser', item),
+    UpdateStatus: (item: EstatusI) => store.dispatch('auth/updateStatus', item),
   };
 };

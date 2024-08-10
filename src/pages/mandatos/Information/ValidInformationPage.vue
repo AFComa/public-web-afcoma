@@ -98,19 +98,15 @@ export default {
     };
 
     function onConfirm() {
-      // Lógica cuando se confirma
       warningDialog.value = false;
       loading.value = true;
       setTimeout(async () => {
         loading.value = false;
       }, 2000);
-      console.log('Confirmado');
     }
 
     function onCancel() {
-      // Lógica cuando se cancela
       warningDialog.value = false;
-      console.log('Cancelado');
     }
 
     return {

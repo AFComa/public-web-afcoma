@@ -39,8 +39,6 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
       });
       localStorage.clear();
       localStorage.setItem('token', headers.token);
-      console.log('dataS: ', data);
-
       commit('SET_ACCES_DATA', data);
       return {
         ok: true,
@@ -85,8 +83,8 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
   },
   async resetPassword({ commit }, pass) {
     try {
-      const response = await api.post('/user/resetpass', { id: pass });
-      commit(response.data);
+      const response = await api.post('/user/resetpass', { _id: pass });
+      commit('data');
       return {
         ok: true,
         token: response.data,
@@ -94,7 +92,7 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
     } catch (error) {
       return {
         ok: false,
-        message: 'Ocurrio un error al crear el registro',
+        message: 'Ocurrio un error al enviar el correo',
       };
     }
   },
@@ -149,7 +147,6 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
   async ByIdUser({ commit }, item) {
     try {
       const { data } = await api.post('/user/infobyid', { _id: item.id });
-      console.log('response: ', data);
       if (item.opc === 1) {
         commit('SET_ACCES_PERMIS', data);
       } else {
@@ -164,6 +161,21 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
       return {
         ok: false,
         message: 'Ocurrio un error al obtener los usuarios',
+      };
+    }
+  },
+  async updateStatus({ commit }, item) {
+    try {
+      const { data } = await api.post('/user/activatedisactivate', item);
+      commit('data');
+      return {
+        ok: true,
+        resultado: data,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        message: 'Ocurrio un error al actualizar el estatus',
       };
     }
   },

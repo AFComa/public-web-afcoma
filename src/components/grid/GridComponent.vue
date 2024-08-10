@@ -14,6 +14,7 @@
       </div>
       <div class="col-xs-6 col-sm-6 col-md-7 q-mb-md text-right">
         <q-btn
+          v-if="validuser.create"
           class="custom-button"
           no-caps
           unelevated
@@ -31,10 +32,31 @@
       row-key="id"
       :rows-per-page-options="[5, 10, 15]"
     >
+      <template v-slot:body-cell-estatus="props">
+        <q-td :props="props" align="center">
+          <q-btn
+            flat
+            :color="props.row.estatus === 'Activo' ? 'green' : 'red'"
+            round
+            dense
+            :icon="props.row.estatus === 'Activo' ? 'check' : 'close'"
+            @click="active(props.row)"
+          >
+            <q-tooltip
+              :class="props.row.estatus === 'Activo' ? 'bg-green' : 'bg-red'"
+              transition-show="flip-right"
+              transition-hide="flip-left"
+            >
+              {{ props.row.estatus === 'Activo' ? 'Activo' : 'Inactivo' }}
+            </q-tooltip>
+          </q-btn>
+        </q-td>
+      </template>
       <template v-slot:body-cell-actions="props">
         <q-td :props="props">
           <q-btn
             flat
+            v-if="validuser.view"
             color="blue"
             round
             dense
@@ -42,20 +64,13 @@
             @click="viewRow(props.row)"
           />
           <q-btn
+            v-if="validuser.edit"
             flat
             round
             dense
             icon="edit"
             color="green"
             @click="editRow(props.row)"
-          />
-          <q-btn
-            flat
-            round
-            dense
-            icon="delete"
-            color="negative"
-            @click="deleteRow(props.row)"
           />
           <q-btn
             flat
@@ -68,31 +83,14 @@
         </q-td>
       </template>
     </q-table>
-    <q-dialog v-model="showConfirmDialog">
-      <q-card class="q-pa-md">
-        <q-card-section class="row items-center no-wrap">
-          <q-avatar icon="warning" color="red" text-color="white" size="76px" />
-          <div class="q-ml-md">
-            <div class="text-h6">Atención</div>
-            <div class="text-subtitle2">
-              ¿Esta seguro que desea eliminar este registro?
-            </div>
-          </div>
-        </q-card-section>
-
-        <q-card-actions align="right">
-          <q-btn no-caps flat label="Cancelar" color="primary" v-close-popup />
-          <q-btn
-            no-caps
-            flat
-            label="Confirmar"
-            color="negative"
-            @click="deleteRecord"
-          />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
     <LoadingComponentBasic v-if="loading" />
+    <DialogComponent
+      v-if="warningDialog"
+      :title="'¡Atención!'"
+      :message="MessageDialog"
+      @confirm="onConfirm"
+      @cancel="onCancel"
+    />
   </div>
 </template>
 

@@ -178,7 +178,7 @@ export default {
       selectedData.value = transInfo.value.find(
         (category) => category.name === selectedCategory.value.name
       );
-      console.log('selectedData: ', selectedData);
+
       selectedItem.value = null;
     };
 
@@ -191,8 +191,6 @@ export default {
 
     const saveInfo = () => {
       warningDialog.value = true;
-      console.log('transInfo.value: ', transInfo.value);
-      console.log('selectedDatasss: ', selectedData);
     };
 
     function onConfirm() {
@@ -204,7 +202,6 @@ export default {
     function onCancel() {
       // Lógica cuando se cancela
       warningDialog.value = false;
-      console.log('Cancelado');
     }
 
     const dynamicLabel = computed(() => firstKey.value);

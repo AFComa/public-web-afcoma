@@ -166,7 +166,7 @@ export default {
       if (resultToken.ok) {
         $q.notify({
           type: 'positive',
-          message: 'Token exitoso favor de colocar tu contraseña.',
+          message: 'Favor de colocar tu contraseña.',
         });
       } else {
         $q.notify({

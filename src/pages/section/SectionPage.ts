@@ -13,11 +13,10 @@ export default {
 
     const onGetUser = async () => {
       loading.value = true;
-      const response = await getUserId({
+      await getUserId({
         id: isAcces.value.ID,
         opc: 1,
       });
-      console.log('response: ', response);
       loading.value = false;
     };
 

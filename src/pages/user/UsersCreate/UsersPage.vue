@@ -99,7 +99,11 @@
     <LoadingOver
       v-if="loading"
       :messageOne="'Espere un momento estamos validando la información...'"
-      :messageTwon="'La cuenta esta en proceso de validación, para continuar se le enviará una liga de acceso a su correo'"
+      :messageTwon="
+        actionBoton === 'edit'
+          ? 'La cuenta se esta actualizando, favor de esperar un momento..'
+          : 'La cuenta esta en proceso de validación, para continuar se le enviará una liga de acceso a su correo'
+      "
     />
   </div>
 </template>
