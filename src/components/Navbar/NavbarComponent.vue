@@ -29,7 +29,7 @@
 </template>
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import imgLogoNavbar from '../../assets/img/afcoma_color.png';
+import imgLogoNavbar from '../../assets/img/logo/1.png';
 import { useAuth } from 'src/composables/userAuth';
 
 defineOptions({

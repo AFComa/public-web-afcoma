@@ -14,6 +14,7 @@
         <q-select
           v-if="viewFile"
           v-model="selectedCategory"
+          :dense="dense"
           :options="transInfo"
           label="Seleccione una opción"
           option-label="name"
@@ -24,7 +25,9 @@
         />
       </div>
       <div class="col-xs-12 col-sm-6 col-md-4" v-if="selectedData">
+        <!-- {{ dynamicLabel }} {{ dynamicValue }} -->
         <q-select
+          :dense="dense"
           v-model="selectedItem"
           :options="selectedData.data"
           label="Seleccione un elemento"
@@ -52,12 +55,15 @@
           </template>
           <template v-else>
             <q-input
+              class="input-border"
+              :dense="dense"
               size="large"
-              v-model="selectedItem[key]"
+              v-model="selectedItem[key].value"
               @change="updateInput()"
               :label="key"
               filled
               outlined
+              :hint="selectedItem[key].isValid ? selectedItem[key].isValid : ''"
             />
           </template>
         </div>
@@ -111,6 +117,7 @@ export default {
     const warningDialog = ref(false);
     const selectedData = ref(null);
     const selectedItem = ref(null);
+    const dense = ref(true);
 
     // const containsStringOrDate = (value) => {
     //   if (typeof value === 'string') {
@@ -143,7 +150,6 @@ export default {
 
         const file = fileList[0];
         const reader = new FileReader();
-
         reader.onload = (e) => {
           const data = new Uint8Array(e.target.result);
           const workbook = XLSX.read(data, { type: 'array' });
@@ -168,6 +174,54 @@ export default {
               }),
             }));
         };
+
+        // reader.onload = (e) => {
+        //   const data = new Uint8Array(e.target.result);
+        //   const workbook = XLSX.read(data, { type: 'array' });
+
+        //   sheets.value = workbook.SheetNames.map((sheetName) => ({
+        //     name: sheetName,
+        //     data: XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {
+        //       header: 1,
+        //       defval: '',
+        //     }),
+        //   }));
+
+        //   transInfo.value = [
+        //     {
+        //       name: 'Participantes',
+        //       data: [
+        //         {
+        //           Tipo_de_Fideicomisario: {
+        //             value: 'Institución Financiera',
+        //             isValid: 'chupala',
+        //           },
+        //           Razon_Social_Fideicomisario: {
+        //             value: 'Consubanco, S.A.',
+        //             isValid: 'asdasdasdsad',
+        //           },
+        //         },
+        //       ],
+        //     },
+        //     {
+        //       name: 'Tipo_Mandato',
+        //       data: [
+        //         {
+        //           Tipo_de_Activo: {
+        //             value: 'Crédito con descuento en nómina -  gobierno',
+        //             isValid: 'prueba final',
+        //           },
+        //           Tipo_de_Mandato: {
+        //             value: 'Fideicomiso de Fondeo Privado',
+        //             isValid: 'prueba dos',
+        //           },
+        //         },
+        //       ],
+        //     },
+        //   ];
+        // };
+
+        console.log('transInfo: ', transInfo);
         viewFile.value = true;
         reader.readAsArrayBuffer(file);
         loading.value = false;
@@ -178,11 +232,13 @@ export default {
       selectedData.value = transInfo.value.find(
         (category) => category.name === selectedCategory.value.name
       );
+      console.log('sdasd: ', selectedData);
       selectedItem.value = null;
     };
 
     const firstKey = computed(() => {
       if (selectedData.value && selectedData.value.data.length > 0) {
+        console.log('selectedData: ', Object.keys(selectedData.value.data[0]));
         return Object.keys(selectedData.value.data[0])[0];
       }
       return '';
@@ -236,6 +292,7 @@ export default {
       saveInfo,
       onCancel,
       loading,
+      dense,
     };
   },
 };

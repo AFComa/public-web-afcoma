@@ -8,7 +8,7 @@ export const isPassword = (val: string): boolean | string => {
     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&.])[A-Za-z\d@$!%*#?&.]{8,}$/;
   return (
     passwordRegex.test(val) ||
-    'La contraseña debe contener 9 characteres, letras, números y carácter especial.'
+    'La contraseña debe contener 8 characteres, letras, números y carácter especial.'
   );
 };
 /**

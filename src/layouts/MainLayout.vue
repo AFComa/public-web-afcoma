@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import imgLogo from '../assets/img/afcoma_blanco.webp';
+import imgLogo from '../assets/img/logo/6.png';
 
 defineOptions({
   name: 'MainLayout',

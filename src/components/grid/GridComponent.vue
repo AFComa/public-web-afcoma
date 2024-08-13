@@ -12,7 +12,10 @@
         >
         </q-input>
       </div>
-      <div class="col-xs-6 col-sm-6 col-md-7 q-mb-md text-right">
+      <div
+        class="col-xs-6 col-sm-6 col-md-7 q-mb-md text-right"
+        v-if="!viewGrid"
+      >
         <q-btn
           v-if="validuser.create"
           class="custom-button"
@@ -23,6 +26,30 @@
           label="Crear usuario"
           @click="rouView"
         />
+      </div>
+      <div
+        class="col-xs-6 col-sm-6 col-md-7 q-mb-md text-right"
+        v-if="viewGrid"
+      >
+        <q-btn
+          class="custom-button"
+          no-caps
+          unelevated
+          rounded
+          size="lg"
+          label="Acciones"
+        >
+          <q-menu transition-show="rotate" transition-hide="rotate">
+            <q-list style="min-width: 100px">
+              <q-item clickable @click="rouViewPage('1')">
+                <q-item-section>Creación Mandatos</q-item-section>
+              </q-item>
+              <q-item clickable>
+                <q-item-section>Asignación de Mandatos</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
       </div>
     </div>
 

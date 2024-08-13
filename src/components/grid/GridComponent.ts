@@ -1,5 +1,5 @@
 import { computed, onMounted, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { useQuasar } from 'quasar';
 
 import DialogComponent from '../../components/Dialog/DialogComponent.vue';
@@ -19,11 +19,13 @@ export default {
   },
   setup() {
     const router = useRouter();
+    const route = useRoute();
     const loading = ref(false);
     const { resetPass, getUser, getUserId, UpdateStatus, isPermission } =
       useAuth();
     const $q = useQuasar();
     const warningDialog = ref(false);
+    const viewGrid = ref(false);
     const MessageDialog = ref('');
     const estatus = ref();
     const uid = ref();
@@ -66,6 +68,12 @@ export default {
     const rouView = () => {
       localStorage.removeItem('actionuser');
       router.push('/dashboard/usuarios');
+    };
+
+    const rouViewPage = (item: string) => {
+      console.log('item: ', item);
+
+      router.push('/dashboard/validar-information');
     };
 
     const active = (rows: ListUserI) => {
@@ -148,6 +156,12 @@ export default {
     };
 
     onMounted(async () => {
+      if (route.path === '/dashboard/listar-mandatos') {
+        viewGrid.value = true;
+      } else {
+        viewGrid.value = false;
+      }
+
       validuser.value = isPermission.value.configUser.usersPermissions[0];
       await loadColums();
       await orderGrid();
@@ -162,6 +176,8 @@ export default {
       search,
       warningDialog,
       MessageDialog,
+      viewGrid,
+      rouViewPage,
       onConfirm,
       onCancel,
       active,

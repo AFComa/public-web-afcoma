@@ -7,7 +7,6 @@ import {
   EstatusI,
   OpcGridI,
 } from 'src/interfaces/components/Grid.interfaces';
-// import { CreateGUI } from 'src/interfaces/components/Grid.interfaces';
 
 export const useAuth = () => {
   const store = useStore();

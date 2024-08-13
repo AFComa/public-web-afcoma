@@ -63,6 +63,11 @@ const routes: RouteRecordRaw[] = [
         component: () =>
           import('src/pages/mandatos/Information/ValidInformationPage.vue'),
       },
+      {
+        path: 'listar-mandatos',
+        name: 'MandatosList',
+        component: () => import('src/pages/mandatos/MandatosList/ListPage.vue'),
+      },
     ],
   },
   // Always leave this as last one,
