@@ -221,7 +221,6 @@ export default {
         //   ];
         // };
 
-        console.log('transInfo: ', transInfo);
         viewFile.value = true;
         reader.readAsArrayBuffer(file);
         loading.value = false;
@@ -232,13 +231,11 @@ export default {
       selectedData.value = transInfo.value.find(
         (category) => category.name === selectedCategory.value.name
       );
-      console.log('sdasd: ', selectedData);
       selectedItem.value = null;
     };
 
     const firstKey = computed(() => {
       if (selectedData.value && selectedData.value.data.length > 0) {
-        console.log('selectedData: ', Object.keys(selectedData.value.data[0]));
         return Object.keys(selectedData.value.data[0])[0];
       }
       return '';
@@ -251,13 +248,11 @@ export default {
     function onConfirm() {
       // Lógica cuando se confirma
       warningDialog.value = false;
-      console.log('Confirmado');
     }
 
     function onCancel() {
       // Lógica cuando se cancela
       warningDialog.value = false;
-      console.log('Cancelado');
     }
 
     const dynamicLabel = computed(() => firstKey.value);

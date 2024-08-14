@@ -6,6 +6,7 @@ import {
 import type {
   LoginSuccess,
   AccesUserI,
+  UserListAssingI,
 } from '../../interfaces/auth/Acces.interfaces';
 
 export interface State {
@@ -16,6 +17,7 @@ export interface State {
   permissionUser: ColumCreateUserI[] | null;
   permissionSysadoc: ColumCreateUserI[] | null;
   permissionMandatos: ColumCreateUserI[] | null;
+  assingUser: UserListAssingI[] | null;
 }
 
 export const state: State = {
@@ -26,4 +28,5 @@ export const state: State = {
   permissionUser: null,
   permissionSysadoc: null,
   permissionMandatos: null,
+  assingUser: null,
 };

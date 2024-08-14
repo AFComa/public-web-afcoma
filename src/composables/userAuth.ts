@@ -19,6 +19,7 @@ export const useAuth = () => {
     isMandatosPermission: computed(() => store.state.auth.permissionMandatos),
     isTablePermission: computed(() => store.state.auth.TablePermission),
     isPermission: computed(() => store.state.auth.permission),
+    isAssingUser: computed(() => store.state.auth.assingUser),
 
     // Mutations
     setPermissionUser: (item: ColumCreateUserI[]) =>

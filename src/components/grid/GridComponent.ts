@@ -3,19 +3,23 @@ import { useRouter, useRoute } from 'vue-router';
 import { useQuasar } from 'quasar';
 
 import DialogComponent from '../../components/Dialog/DialogComponent.vue';
+import DialogAssingComponent from '../../components/Dialog/DialogAssingComponent.vue';
 import { useAuth } from 'src/composables/userAuth';
-import { ListUsuario } from '../../utils/users/usersColums';
+import { mandatosAuth } from 'src/composables/mandatosAuth';
+import { ListMandatos, ListUsuario } from '../../utils/users/usersColums';
 import type {
   ListUserI,
   ColumI,
 } from '../../interfaces/components/Grid.interfaces';
 import LoadingComponentBasic from '../../components/Loading/LoadingBasicComponent.vue';
+import { filterSelectI } from 'src/interfaces/auth/Acces.interfaces';
 
 export default {
   name: 'GridComponent',
   components: {
     LoadingComponentBasic,
     DialogComponent,
+    DialogAssingComponent,
   },
   setup() {
     const router = useRouter();
@@ -23,9 +27,12 @@ export default {
     const loading = ref(false);
     const { resetPass, getUser, getUserId, UpdateStatus, isPermission } =
       useAuth();
+    const { allMandatos, mandatoId } = mandatosAuth();
+    const { asignMandatos } = mandatosAuth();
     const $q = useQuasar();
     const warningDialog = ref(false);
     const viewGrid = ref(false);
+    const dialogVisible = ref(false);
     const MessageDialog = ref('');
     const estatus = ref();
     const uid = ref();
@@ -71,9 +78,11 @@ export default {
     };
 
     const rouViewPage = (item: string) => {
-      console.log('item: ', item);
-
-      router.push('/dashboard/validar-information');
+      if (item === '1') {
+        router.push('/dashboard/validar-information');
+      } else {
+        dialogVisible.value = true;
+      }
     };
 
     const active = (rows: ListUserI) => {
@@ -87,19 +96,52 @@ export default {
       warningDialog.value = true;
     };
 
-    const loadColums = () => {
-      columns.value = ListUsuario();
+    const directOptionsValue = async () => {
+      if (route.path === '/dashboard/listar-mandatos') {
+        viewGrid.value = true;
+        columns.value = ListMandatos();
+        await orderGridMandatos();
+      } else {
+        viewGrid.value = false;
+        columns.value = ListUsuario();
+        await orderGrid();
+      }
+    };
+
+    const orderGridMandatos = async () => {
+      loading.value = true;
+      const mandatAll = {
+        is_operator: isPermission.value.configUser.mandatosPermissions[0].opera,
+        userid: isPermission.value._id,
+      };
+      const resultado = await allMandatos(mandatAll);
+      if (resultado.ok) {
+        rows.value = resultado.resultado;
+      }
+      loading.value = false;
     };
 
     const viewRow = async (row: ListUserI) => {
-      localStorage.setItem('actionuser', 'view');
-      await getUserId({ id: row._id, opc: 2 });
-      router.push({ name: 'UsuariosId', params: { id: row._id } });
+      if (viewGrid.value) {
+        await mandatoId(row._id);
+        localStorage.setItem('actionuser', 'view');
+        router.push({ name: 'MandatosView', params: { id: row._id } });
+      } else {
+        localStorage.setItem('actionuser', 'view');
+        await getUserId({ id: row._id, opc: 2 });
+        router.push({ name: 'UsuariosId', params: { id: row._id } });
+      }
     };
     const editRow = async (row: ListUserI) => {
-      localStorage.setItem('actionuser', 'edit');
-      await getUserId({ id: row._id, opc: 2 });
-      router.push({ name: 'UsuariosId', params: { id: row._id } });
+      if (viewGrid.value) {
+        await mandatoId(row._id);
+        localStorage.setItem('actionuser', 'edit');
+        router.push({ name: 'MandatosView', params: { id: row._id } });
+      } else {
+        localStorage.setItem('actionuser', 'edit');
+        await getUserId({ id: row._id, opc: 2 });
+        router.push({ name: 'UsuariosId', params: { id: row._id } });
+      }
     };
     const blockUser = async (row: ListUserI) => {
       const response = await resetPass(row._id);
@@ -118,9 +160,8 @@ export default {
     };
 
     const onConfirm = async () => {
-      warningDialog.value = false;
       loading.value = true;
-
+      warningDialog.value = false;
       const response = await UpdateStatus({
         _id: uid.value,
         estatus: estatus.value,
@@ -142,6 +183,7 @@ export default {
 
     function onCancel() {
       warningDialog.value = false;
+      dialogVisible.value = false;
     }
 
     const orderGrid = async () => {
@@ -156,19 +198,39 @@ export default {
     };
 
     onMounted(async () => {
-      if (route.path === '/dashboard/listar-mandatos') {
-        viewGrid.value = true;
-      } else {
-        viewGrid.value = false;
-      }
-
+      await directOptionsValue();
       validuser.value = isPermission.value.configUser.usersPermissions[0];
-      await loadColums();
-      await orderGrid();
     });
+
+    const handleSelect = async (
+      selectedValue: filterSelectI,
+      mandatosValue: filterSelectI
+    ) => {
+      loading.value = true;
+      const data = {
+        idmandato: mandatosValue.value,
+        userid: selectedValue.value,
+      };
+
+      const response = await asignMandatos(data);
+      if (response.ok) {
+        $q.notify({
+          type: 'positive',
+          message: 'La asignación del mandato al usuario fue correctamente.',
+        });
+      } else {
+        $q.notify({
+          type: 'negative',
+          message: response.message,
+        });
+      }
+      loading.value = false;
+      await orderGridMandatos();
+    };
 
     return {
       columns,
+      directOptionsValue,
       validuser,
       loading,
       rows,
@@ -176,12 +238,13 @@ export default {
       search,
       warningDialog,
       MessageDialog,
+      handleSelect,
       viewGrid,
+      dialogVisible,
       rouViewPage,
       onConfirm,
       onCancel,
       active,
-      loadColums,
       orderGrid,
       rouView,
       viewRow,

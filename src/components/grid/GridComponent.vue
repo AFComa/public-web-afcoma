@@ -44,7 +44,7 @@
               <q-item clickable @click="rouViewPage('1')">
                 <q-item-section>Creación Mandatos</q-item-section>
               </q-item>
-              <q-item clickable>
+              <q-item clickable @click="rouViewPage('2')">
                 <q-item-section>Asignación de Mandatos</q-item-section>
               </q-item>
             </q-list>
@@ -100,6 +100,7 @@
             @click="editRow(props.row)"
           />
           <q-btn
+            v-if="!viewGrid"
             flat
             round
             dense
@@ -116,6 +117,14 @@
       :title="'¡Atención!'"
       :message="MessageDialog"
       @confirm="onConfirm"
+      @cancel="onCancel"
+    />
+    <DialogAssingComponent
+      v-if="dialogVisible"
+      :title="'Asignación de Mandatos'"
+      :options1="rows"
+      :options2="rows"
+      @select="handleSelect"
       @cancel="onCancel"
     />
   </div>

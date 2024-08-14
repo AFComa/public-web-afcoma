@@ -1,25 +1,32 @@
 import { computed } from 'vue';
 import { useStore } from 'vuex';
-import type { UserI } from '../interfaces/auth/Acces.interfaces';
-import { ColumCreateUserI } from 'src/interfaces/components/Grid.interfaces';
+import type {
+  UserI,
+  GetAllMandatoI,
+  opcionAssingI,
+} from '../interfaces/auth/Acces.interfaces';
 
 export const mandatosAuth = () => {
   const store = useStore();
 
   return {
-    isToken: computed(() => store.state.auth.data),
+    isAssingMandatos: computed(() => store.state.mandatos.assingMandatos),
+    isViewMandatos: computed(() => store.state.mandatos.viewMandatos),
 
     // Mutations
-    setPermissionUser: (item: ColumCreateUserI[]) =>
-      store.commit('auth/SET_USERS_PERMIS', item),
 
     // Getters
 
     // Actions
     saveMandatos: (data: UserI) =>
       store.dispatch('mandatos/createMandato', data),
-    allMandatos: (data: UserI) => store.dispatch('mandatos/allMandato', data),
-    asignMandatos: (data: UserI) =>
+    allMandatos: (data: GetAllMandatoI) =>
+      store.dispatch('mandatos/allMandato', data),
+    asignMandatos: (data: opcionAssingI) =>
       store.dispatch('mandatos/asignMandato', data),
+    mandatoId: (data: string | undefined) =>
+      store.dispatch('mandatos/getMandatoId', data),
+    updateMandato: (data: GetAllMandatoI) =>
+      store.dispatch('mandatos/byMandatoUpdate', data),
   };
 };

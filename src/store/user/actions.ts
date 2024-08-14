@@ -132,7 +132,7 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
   async AllUser({ commit }) {
     try {
       const response = await api.get('/user/infousers');
-      commit('data');
+      commit('SET_ASSING_USER', response.data);
       return {
         ok: true,
         resultado: response.data,

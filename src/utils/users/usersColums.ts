@@ -20,6 +20,36 @@ export const ListUsuario = () => {
   ];
 };
 
+export const ListMandatos = () => {
+  return [
+    {
+      name: 'Nombre',
+      label: 'Nombre',
+      align: 'left',
+      field: 'idmandato',
+    },
+    {
+      name: 'Asignado a',
+      label: 'Asignado a',
+      align: 'left',
+      field: 'asignado_a',
+    },
+    {
+      name: 'created_at',
+      label: 'Fecha Creación',
+      align: 'left',
+      field: 'created_at',
+    },
+    {
+      name: 'updated_at',
+      label: 'Fecha Actualización',
+      align: 'left',
+      field: 'updated_at',
+    },
+    { name: 'actions', label: 'Acciones', align: 'center', field: 'actions' },
+  ];
+};
+
 export const ListActionUser = () => {
   return [
     { name: 'module', label: 'Módulo', field: 'module', align: 'left' },
