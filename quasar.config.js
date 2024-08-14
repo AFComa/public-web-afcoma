@@ -51,7 +51,7 @@ module.exports = configure(function (/* ctx */) {
 
       // rebuildCache: true, // rebuilds Vite/linter/etc cache on startup
 
-      // publicPath: 'https://afcoma.github.io/public-web-afcoma/',
+      publicPath: '/login',
       // analyze: true,
       // env: {},
       // rawDefine: {}
