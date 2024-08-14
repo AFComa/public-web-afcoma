@@ -3,7 +3,7 @@ version: '3.6'
 services:
   public-afcoma-prod:
     container_name: public-afcoma-prod
-    image: public-afcoma-prod:v0.0.13-prod
+    image: public-afcoma-prod:v0.0.14-prod
     restart: always
     environment:
       - ENV=prod
@@ -11,7 +11,7 @@ services:
       context: .
     labels:
       - traefik.enable=true
-      - traefik.http.routers.public-afcoma-prod-https.rule=Host(`apolo.afcoma.com.mx`)
+      - traefik.http.routers.public-afcoma-prod-https.rule=Host(`920C111.online-server.cloud`)
       - traefik.http.routers.public-afcoma-prod-https.entrypoints=https
       - traefik.http.routers.public-afcoma-prod-https.tls=true
       - traefik.http.services.public-afcoma-prod-https.loadbalancer.server.port=80
