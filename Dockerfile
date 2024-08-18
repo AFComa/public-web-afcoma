@@ -14,11 +14,11 @@ RUN npm run build
 # etapa de producción
 FROM nginx:stable-alpine as production-stage
 
-#COPY ./.nginx/nginx.conf /etc/nginx/nginx.conf
+COPY ./.nginx/nginx.conf /etc/nginx/nginx.conf
 
 RUN rm -rf /usr/share/nginx/html/*
 
-COPY --from=build-stage /app/dist /usr/share/nginx/html
+COPY --from=build-stage /app/dist/spa /usr/share/nginx/html
 
 EXPOSE 80
 
