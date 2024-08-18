@@ -1,9 +1,17 @@
 <template>
-  <div class="q-px-xl">
-    <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-sm q-pt-xl">
-      <div class="justify-center q-col-gutter-md q-px-xl row">
+  <div class="q-pt-lg q-pa-md">
+    <q-form @submit="onSubmit" @reset="onReset" dense>
+      <div class="justify-center q-col-gutter-md row">
+        <div class="col-xs-12 col-sm-6 col-md-11">
+          <BreadCrumb :routes="breadcrumbRoutes" />
+        </div>
+      </div>
+
+      <div class="justify-center q-col-gutter-md row">
+        <!-- <div class="col-xs-12 col-sm-6 col-md-12"> -->
         <div class="col-xs-12 col-sm-6 col-md-3">
           <q-input
+            dense
             rounded
             outlined
             label="Nombre"
@@ -20,6 +28,7 @@
         <div class="col-xs-12 col-sm-6 col-md-3">
           <q-input
             rounded
+            dense
             outlined
             label="Apellidos"
             @keypress="onlyAlphabetic"
@@ -35,6 +44,7 @@
         <div class="col-xs-12 col-sm-6 col-md-3">
           <q-input
             rounded
+            dense
             outlined
             label="Correo"
             lazy-rules
@@ -47,8 +57,9 @@
           ]"
           />
         </div>
-        <div class="col-xs-12 col-sm-6 col-md-3">
+        <div class="col-xs-12 col-sm-6 col-md-2">
           <q-input
+            dense
             rounded
             outlined
             label="Telefono"
@@ -64,7 +75,7 @@
           />
         </div>
 
-        <div class="col-xs-12 col-sm-6 col-md-12">
+        <div class="col-xs-12 col-sm-6 col-md-11">
           <q-list bordered class="rounded-borders">
             <q-expansion-item
               expand-separator
@@ -83,7 +94,7 @@
             </q-expansion-item>
           </q-list>
         </div>
-        <div class="col-xs-12 col-sm-6 col-md-12 text-right">
+        <div class="col-xs-12 col-sm-6 col-md-11 text-right">
           <q-btn
             class="custom-button"
             no-caps
@@ -94,6 +105,7 @@
             type="submit"
           />
         </div>
+        <!-- </div> -->
       </div>
     </q-form>
     <LoadingOver

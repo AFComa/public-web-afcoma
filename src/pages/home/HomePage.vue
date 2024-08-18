@@ -26,13 +26,9 @@
           outlined
           :type="isPwd ? 'password' : 'text'"
           v-model="userForm.password"
-          maxlength="8"
           label="Contraseña"
           lazy-rules
           no-error-icon
-          :rules="[
-            (val: any) => (val && val.length > 0) || 'Este campo es obligatorio',isPassword
-          ]"
         >
           <template v-slot:append>
             <q-icon

@@ -1,5 +1,5 @@
 <template>
-  <div class="q-px-lg">
+  <div class="q-mb-xl">
     <div class="justify-center row">
       <div class="col-xs-6 col-sm-6 col-md-5">
         <q-input

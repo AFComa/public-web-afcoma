@@ -3,6 +3,7 @@ import { useQuasar } from 'quasar';
 import { useRoute, useRouter } from 'vue-router';
 import LoadingOver from '../../../components/Loading/LoadingComponent.vue';
 import GridComponent from '../../../components/grid/ActionsUsers/GridActionComponent.vue';
+import BreadCrumb from '../../../components/breadcrumb/integretView.vue';
 import { useAuth } from 'src/composables/userAuth';
 import {
   isValidEmail,
@@ -14,6 +15,7 @@ export default {
   components: {
     LoadingOver,
     GridComponent,
+    BreadCrumb,
   },
   setup() {
     const loading = ref(false);
@@ -21,6 +23,10 @@ export default {
     const actionBoton = ref();
     const $q = useQuasar();
     const router = useRoute();
+    const breadcrumbRoutes = ref([
+      { label: 'Listar Usuario', path: '/dashboard/listar-usuarios' },
+      { label: 'Usuario', path: '/dashboard/usuarios' },
+    ]);
     const {
       createUsers,
       isUserPermission,
@@ -151,6 +157,7 @@ export default {
       isValidEmail,
       onlyNumeric,
       onlyAlphabetic,
+      breadcrumbRoutes,
     };
   },
 };

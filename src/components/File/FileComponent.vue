@@ -25,7 +25,6 @@
         />
       </div>
       <div class="col-xs-12 col-sm-6 col-md-4" v-if="selectedData">
-        <!-- {{ dynamicLabel }} {{ dynamicValue }} -->
         <q-select
           :dense="dense"
           v-model="selectedItem"
@@ -153,7 +152,6 @@ export default {
         reader.onload = (e) => {
           const data = new Uint8Array(e.target.result);
           const workbook = XLSX.read(data, { type: 'array' });
-
           sheets.value = workbook.SheetNames.map((sheetName) => ({
             name: sheetName,
             data: XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {
@@ -161,7 +159,6 @@ export default {
               defval: '',
             }),
           }));
-
           transInfo.value = sheets.value
             .filter((item) => item.name !== 'Glosario_Opciones')
             .map((sheet) => ({
@@ -175,52 +172,6 @@ export default {
             }));
         };
 
-        // reader.onload = (e) => {
-        //   const data = new Uint8Array(e.target.result);
-        //   const workbook = XLSX.read(data, { type: 'array' });
-
-        //   sheets.value = workbook.SheetNames.map((sheetName) => ({
-        //     name: sheetName,
-        //     data: XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {
-        //       header: 1,
-        //       defval: '',
-        //     }),
-        //   }));
-
-        //   transInfo.value = [
-        //     {
-        //       name: 'Participantes',
-        //       data: [
-        //         {
-        //           Tipo_de_Fideicomisario: {
-        //             value: 'Institución Financiera',
-        //             isValid: 'chupala',
-        //           },
-        //           Razon_Social_Fideicomisario: {
-        //             value: 'Consubanco, S.A.',
-        //             isValid: 'asdasdasdsad',
-        //           },
-        //         },
-        //       ],
-        //     },
-        //     {
-        //       name: 'Tipo_Mandato',
-        //       data: [
-        //         {
-        //           Tipo_de_Activo: {
-        //             value: 'Crédito con descuento en nómina -  gobierno',
-        //             isValid: 'prueba final',
-        //           },
-        //           Tipo_de_Mandato: {
-        //             value: 'Fideicomiso de Fondeo Privado',
-        //             isValid: 'prueba dos',
-        //           },
-        //         },
-        //       ],
-        //     },
-        //   ];
-        // };
-
         viewFile.value = true;
         reader.readAsArrayBuffer(file);
         loading.value = false;
@@ -231,8 +182,18 @@ export default {
       selectedData.value = transInfo.value.find(
         (category) => category.name === selectedCategory.value.name
       );
+      console.log('selectedData.value: ', selectedData.value);
+      console.log('selectedItem.value: ', selectedItem.value);
       selectedItem.value = null;
     };
+
+    // Computed para filtrar el array excluyendo la última posición
+    // const filteredData = computed(() => {
+    //   if (!selectedData.value || !selectedData.value.data) {
+    //     return [];
+    //   }
+    //   return selectedData.value.data.slice(0, -1);
+    // });
 
     const firstKey = computed(() => {
       if (selectedData.value && selectedData.value.data.length > 0) {
@@ -255,15 +216,30 @@ export default {
       warningDialog.value = false;
     }
 
-    const dynamicLabel = computed(() => firstKey.value);
-    const dynamicValue = computed(() => firstKey.value);
+    // const dynamicLabel = computed(() => firstKey.value);
+    // const dynamicValue = computed(() => firstKey.value);
+
+    // `dynamicLabel` y `dynamicValue` ahora son dinámicos
+    const dynamicLabel = computed(() => {
+      return (option) => {
+        const key = firstKey.value;
+        return option[key]?.value || '';
+      };
+    });
+
+    const dynamicValue = computed(() => {
+      return (option) => {
+        const key = firstKey.value;
+        return option[key]?.value || '';
+      };
+    });
 
     const isBoolean = (value) => {
       return value === true || value === false;
     };
 
     const updateInput = () => {
-      console.log('selectedData: ', selectedData);
+      console.log('selectedData: ', transInfo.value);
     };
 
     return {
@@ -286,6 +262,7 @@ export default {
       updateInput,
       saveInfo,
       onCancel,
+      // filteredData,
       loading,
       dense,
     };

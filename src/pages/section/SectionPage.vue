@@ -14,7 +14,7 @@
       </div>
       <div class="col-xs-6 col-sm-6 col-md-4">
         <router-link to="dashboard/listar-mandatos">
-          <q-img src="../../assets/img/mandatos.svg" width="30%" />
+          <q-img src="../../assets/img/mandatos4.png" width="30%" />
         </router-link>
         <p>Mandatos</p>
       </div>

@@ -1,7 +1,8 @@
 <template>
-  <div class="q-pt-xl">
+  <div class="q-pt-lg q-pa-md">
     <div class="justify-center row">
-      <div class="col-xs-12 col-sm-10 col-md-10">
+      <div class="col-xs-12 col-sm-10 col-md-11">
+        <BreadCrumb :routes="breadcrumbRoutes" />
         <GridComponent></GridComponent>
       </div>
     </div>
