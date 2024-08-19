@@ -41,6 +41,8 @@ export const useAuth = () => {
     resetPass: (id: string | undefined) =>
       store.dispatch('auth/resetPassword', id),
     CreatePass: (data: string) => store.dispatch('auth/createPassword', data),
+    ResetPassComplete: (data: string) =>
+      store.dispatch('auth/resetPasswordComplete', data),
     ValidToken: (data: string) => store.dispatch('auth/getValidToken', data),
     getUser: () => store.dispatch('auth/AllUser'),
     getUserId: (item: OpcGridI) => store.dispatch('auth/ByIdUser', item),

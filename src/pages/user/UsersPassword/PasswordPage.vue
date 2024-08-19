@@ -109,7 +109,7 @@ export default {
     const urlParams = ref('');
     const loading = ref(false);
     const $q = useQuasar();
-    const { CreatePass, ValidToken } = useAuth();
+    const { CreatePass, ValidToken, ResetPassComplete } = useAuth();
     const passwordRegex =
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
 
@@ -130,10 +130,15 @@ export default {
     const onSubmit = async () => {
       loading.value = true;
       setTimeout(async () => {
-        const response = await CreatePass({
-          token: urlParams.value.get('token'),
-          password: password.value,
-        });
+        const response = passChange()
+          ? await ResetPassComplete({
+              token: urlParams.value.get('token'),
+              password: password.value,
+            })
+          : await CreatePass({
+              token: urlParams.value.get('token'),
+              password: password.value,
+            });
         if (response.ok) {
           $q.notify({
             type: 'positive',

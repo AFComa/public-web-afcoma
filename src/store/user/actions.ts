@@ -117,7 +117,7 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
   async createPassword({ commit }, data) {
     try {
       const response = await api.post('/user/completenewuser', data);
-      commit(response.data);
+      commit('data');
       return {
         ok: true,
         token: response.data,
@@ -126,6 +126,21 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
       return {
         ok: false,
         message: 'Ocurrio un error al crear su contraseña',
+      };
+    }
+  },
+  async resetPasswordComplete({ commit }, data) {
+    try {
+      const response = await api.post('/user/resetpasscomplete', data);
+      commit('data');
+      return {
+        ok: true,
+        token: response.data,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        message: 'Ocurrio un error al resetear su contraseña',
       };
     }
   },
