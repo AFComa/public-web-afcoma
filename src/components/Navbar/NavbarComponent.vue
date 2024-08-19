@@ -4,9 +4,16 @@
       <q-img :src="url" style="width: 140px" />
     </div>
     <div class="col-xs-10 col-sm-8 col-md-4 navbar-content">
-      <q-avatar style="background-color: #244b5a; color: white">{{
-        avatar
-      }}</q-avatar>
+      <q-avatar
+        style="
+          background-color: #244b5a;
+          width: 45px;
+          height: 45px;
+          color: white;
+          font-size: 30px;
+        "
+        >{{ avatar }}</q-avatar
+      >
       &nbsp;&nbsp;
       <q-btn-dropdown
         no-caps
@@ -18,7 +25,9 @@
           <q-item clickable v-close-popup>
             <q-item-section>
               <q-item-label>
-                <router-link to="/">Cerrar sesión</router-link></q-item-label
+                <router-link to="/" @click="cerrar"
+                  >Cerrar sesión</router-link
+                ></q-item-label
               >
             </q-item-section>
           </q-item>
@@ -38,6 +47,11 @@ defineOptions({
 const avatar = ref('');
 const nombre = ref('');
 const { isAcces } = useAuth();
+
+const cerrar = () => {
+  localStorage.clear();
+};
+
 onMounted(async () => {
   avatar.value = isAcces.value.avatar;
   nombre.value = `${isAcces.value.username} ${isAcces.value.apellidos}`;

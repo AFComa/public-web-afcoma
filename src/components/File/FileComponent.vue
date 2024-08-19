@@ -28,7 +28,7 @@
         <q-select
           :dense="dense"
           v-model="selectedItem"
-          :options="selectedData.data"
+          :options="filteredData"
           label="Seleccione un elemento"
           :option-label="dynamicLabel"
           :option-value="dynamicValue"
@@ -57,8 +57,7 @@
               class="input-border"
               :dense="dense"
               size="large"
-              v-model="selectedItem[key].value"
-              @change="updateInput()"
+              v-model="selectedItem[key]"
               :label="key"
               filled
               outlined
@@ -96,10 +95,10 @@
 
 <script>
 import { ref, computed } from 'vue';
+import * as XLSX from 'xlsx';
 import LoadingOver from '../../components/Loading/LoadingComponent.vue';
 import DialogComponent from '../../components/Dialog/DialogComponent.vue';
 import { mandatosAuth } from 'src/composables/mandatosAuth';
-import * as XLSX from 'xlsx';
 export default {
   name: 'FileComponent',
   components: {
@@ -108,7 +107,6 @@ export default {
   },
   setup() {
     const files = ref([]);
-    const { validMandato } = mandatosAuth();
     const viewFile = ref(false);
     const sheets = ref([]);
     const transInfo = ref([]);
@@ -119,6 +117,7 @@ export default {
     const selectedData = ref(null);
     const selectedItem = ref(null);
     const dense = ref(true);
+    const { setMandatosValid } = mandatosAuth();
 
     // const containsStringOrDate = (value) => {
     //   if (typeof value === 'string') {
@@ -145,7 +144,6 @@ export default {
 
     const handleFile = async (fileList) => {
       loading.value = true;
-
       setTimeout(async () => {
         if (fileList.length === 0) return;
 
@@ -173,10 +171,7 @@ export default {
               }),
             }));
 
-          const result = await validMandato({
-            idmandato: '',
-            datosmandato: transInfo.value,
-          });
+          setMandatosValid(transInfo.value);
         };
 
         viewFile.value = true;
@@ -193,13 +188,13 @@ export default {
       selectedItem.value = null;
     };
 
-    // Computed para filtrar el array excluyendo la última posición
-    // const filteredData = computed(() => {
-    //   if (!selectedData.value || !selectedData.value.data) {
-    //     return [];
-    //   }
-    //   return selectedData.value.data.slice(0, -1);
-    // });
+    //Computed para filtrar el array excluyendo la última posición
+    const filteredData = computed(() => {
+      if (!selectedData.value || !selectedData.value.data) {
+        return [];
+      }
+      return selectedData.value.data.slice(0, -1);
+    });
 
     const firstKey = computed(() => {
       if (selectedData.value && selectedData.value.data.length > 0) {
@@ -222,30 +217,26 @@ export default {
       warningDialog.value = false;
     }
 
-    // const dynamicLabel = computed(() => firstKey.value);
-    // const dynamicValue = computed(() => firstKey.value);
+    const dynamicLabel = computed(() => firstKey.value);
+    const dynamicValue = computed(() => firstKey.value);
 
     // `dynamicLabel` y `dynamicValue` ahora son dinámicos
-    const dynamicLabel = computed(() => {
-      return (option) => {
-        const key = firstKey.value;
-        return option[key]?.value || '';
-      };
-    });
+    // const dynamicLabel = computed(() => {
+    //   return (option) => {
+    //     const key = firstKey.value;
+    //     return option[key]?.value || '';
+    //   };
+    // });
 
-    const dynamicValue = computed(() => {
-      return (option) => {
-        const key = firstKey.value;
-        return option[key]?.value || '';
-      };
-    });
+    // const dynamicValue = computed(() => {
+    //   return (option) => {
+    //     const key = firstKey.value;
+    //     return option[key]?.value || '';
+    //   };
+    // });
 
     const isBoolean = (value) => {
       return value === true || value === false;
-    };
-
-    const updateInput = () => {
-      console.log('selectedData: ', transInfo.value);
     };
 
     return {
@@ -265,10 +256,9 @@ export default {
       warningDialog,
       handleSelection,
       isBoolean,
-      updateInput,
       saveInfo,
       onCancel,
-      // filteredData,
+      filteredData,
       loading,
       dense,
     };

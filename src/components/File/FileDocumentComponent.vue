@@ -92,6 +92,7 @@ const handleFileUpload = async (uploadedFiles) => {
     }
   }
   uploadFiles();
+  localStorage.setItem('fileView', true);
 };
 
 const uploadFiles = async () => {

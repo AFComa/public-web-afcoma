@@ -9,4 +9,7 @@ export const mutations: MutationTree<State> = {
   SET_VIEW_MANDATOS(state, payload: MandatosAssingI) {
     state.viewMandatos = payload;
   },
+  SET_VALID_MANDATOS(state, payload: MandatosAssingI[]) {
+    state.validMandatos = payload;
+  },
 };

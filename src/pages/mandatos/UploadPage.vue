@@ -59,7 +59,6 @@
               :disable="actionBoton === 'view'"
               dense
               v-model="selectedItem[key]"
-              @change="updateInput()"
               :label="key"
               filled
               outlined
@@ -214,9 +213,6 @@ export default {
       nameMandato.value = await isViewMandatos.value.idmandato;
       transInfo.value = await isViewMandatos.value.datosmandato;
     });
-    const updateInput = () => {
-      console.log('selectedData: ', transInfo.value);
-    };
 
     return {
       selectedData,
@@ -236,7 +232,6 @@ export default {
       warningDialog,
       handleSelection,
       isBoolean,
-      updateInput,
       saveInfo,
       onCancel,
       loading,

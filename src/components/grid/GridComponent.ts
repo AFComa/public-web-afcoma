@@ -150,7 +150,7 @@ export default {
         $q.notify({
           type: 'positive',
           message:
-            'La liga para desbloquear el usuario se envio correctamente a su cuenta de correo.',
+            'La liga para desbloquear el usuario se envio correctamente.',
         });
       } else {
         $q.notify({

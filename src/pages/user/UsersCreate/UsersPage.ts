@@ -83,8 +83,9 @@ export default {
           $q.notify({
             type: 'positive',
             message:
-              'La liga de acceso se genero exitosamente, favor de revisar su cuenta de correo electronico.',
+              'La liga de acceso se genero exitosamente, favor de revisar su cuenta de correo electrónico.',
           });
+          routers.push('/dashboard/listar-usuarios');
         } else {
           $q.notify({
             type: 'negative',
@@ -112,7 +113,7 @@ export default {
       setTimeout(async () => {
         const response = await updateUsers(data);
         if (response.ok) {
-          routers.push('/dashboard');
+          routers.push('/dashboard/listar-usuarios');
           $q.notify({
             type: 'positive',
             message: 'El usuario se actualizo correctamente.',

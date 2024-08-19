@@ -12,9 +12,11 @@ export const mandatosAuth = () => {
   return {
     isAssingMandatos: computed(() => store.state.mandatos.assingMandatos),
     isViewMandatos: computed(() => store.state.mandatos.viewMandatos),
+    isValidMandatos: computed(() => store.state.mandatos.validMandatos),
 
     // Mutations
-
+    setMandatosValid: (item: GetAllMandatoI[]) =>
+      store.commit('mandatos/SET_VALID_MANDATOS', item),
     // Getters
 
     // Actions
