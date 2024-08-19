@@ -88,10 +88,6 @@ const props = defineProps({
     type: String,
     default: 'Mi Diálogo',
   },
-  options1: {
-    type: Array,
-    default: () => [],
-  },
 });
 
 const visible = ref(true);
@@ -110,7 +106,7 @@ const options = ref(
 );
 
 const options2 = ref(
-  isAssingMandatos.value.map((item) => ({
+  isAssingMandatos?.value?.map((item) => ({
     label: item.idmandato, // Concatenar user y apellidos
     value: item._id, // Usar _id como value
   }))

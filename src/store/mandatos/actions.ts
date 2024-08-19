@@ -87,4 +87,19 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
       };
     }
   },
+  async validMandatos({ commit }, item) {
+    try {
+      const { data } = await api.post('mandato/validate', item);
+      commit('data');
+      return {
+        ok: true,
+        resultado: data,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        message: 'Ocurrio un error al actualizar el mandato.',
+      };
+    }
+  },
 };

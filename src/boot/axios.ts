@@ -4,7 +4,7 @@ const api = axios.create({
   baseURL: 'https://apolo.afcoma.com.mx/v1/',
   headers: {
     'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': 'https://920c111.online-server.cloud',
+    'Access-Control-Allow-Origin': 'https://apolo.afcoma.com.mx',
   },
 });
 

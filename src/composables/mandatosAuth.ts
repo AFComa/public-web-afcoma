@@ -28,5 +28,7 @@ export const mandatosAuth = () => {
       store.dispatch('mandatos/getMandatoId', data),
     updateMandato: (data: GetAllMandatoI) =>
       store.dispatch('mandatos/byMandatoUpdate', data),
+    validMandato: (data: string) =>
+      store.dispatch('mandatos/validMandatos', data),
   };
 };

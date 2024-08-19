@@ -115,8 +115,9 @@ export default {
         userid: isPermission.value._id,
       };
       const resultado = await allMandatos(mandatAll);
+
       if (resultado.ok) {
-        rows.value = resultado.resultado;
+        rows.value = resultado.resultado ? resultado.resultado : [];
       }
       loading.value = false;
     };

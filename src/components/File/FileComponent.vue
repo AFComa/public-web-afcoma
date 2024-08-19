@@ -98,6 +98,7 @@
 import { ref, computed } from 'vue';
 import LoadingOver from '../../components/Loading/LoadingComponent.vue';
 import DialogComponent from '../../components/Dialog/DialogComponent.vue';
+import { mandatosAuth } from 'src/composables/mandatosAuth';
 import * as XLSX from 'xlsx';
 export default {
   name: 'FileComponent',
@@ -107,6 +108,7 @@ export default {
   },
   setup() {
     const files = ref([]);
+    const { validMandato } = mandatosAuth();
     const viewFile = ref(false);
     const sheets = ref([]);
     const transInfo = ref([]);
@@ -149,7 +151,7 @@ export default {
 
         const file = fileList[0];
         const reader = new FileReader();
-        reader.onload = (e) => {
+        reader.onload = async (e) => {
           const data = new Uint8Array(e.target.result);
           const workbook = XLSX.read(data, { type: 'array' });
           sheets.value = workbook.SheetNames.map((sheetName) => ({
@@ -170,10 +172,16 @@ export default {
                 }, {});
               }),
             }));
+
+          const result = await validMandato({
+            idmandato: '',
+            datosmandato: transInfo.value,
+          });
         };
 
         viewFile.value = true;
         reader.readAsArrayBuffer(file);
+
         loading.value = false;
       }, 5000);
     };
@@ -182,8 +190,6 @@ export default {
       selectedData.value = transInfo.value.find(
         (category) => category.name === selectedCategory.value.name
       );
-      console.log('selectedData.value: ', selectedData.value);
-      console.log('selectedItem.value: ', selectedItem.value);
       selectedItem.value = null;
     };
 

@@ -122,8 +122,6 @@
     <DialogAssingComponent
       v-if="dialogVisible"
       :title="'Asignación de Mandatos'"
-      :options1="rows"
-      :options2="rows"
       @select="handleSelect"
       @cancel="onCancel"
     />

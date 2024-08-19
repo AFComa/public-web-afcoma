@@ -55,6 +55,7 @@
 
 <script setup>
 import { ref } from 'vue';
+import axios from 'axios';
 import {
   QBtn,
   QUploader,
@@ -66,11 +67,13 @@ import {
 } from 'quasar';
 
 const files = ref([]);
+const filesAdd = ref([]);
 const displayedFiles = ref([]);
 const dialog = ref(false);
 const currentFile = ref({});
 
 const handleFileUpload = async (uploadedFiles) => {
+  filesAdd.value = uploadedFiles;
   for (const file of uploadedFiles) {
     const fileType = file.type;
     const fileName = file.name;
@@ -87,6 +90,30 @@ const handleFileUpload = async (uploadedFiles) => {
       };
       reader.readAsDataURL(file);
     }
+  }
+  uploadFiles();
+};
+
+const uploadFiles = async () => {
+  const formData = new FormData();
+  filesAdd.value.forEach((file) => {
+    formData.append('files', file);
+  });
+  const token = localStorage.getItem('token');
+  try {
+    const response = await axios.post(
+      'https://apolo.afcoma.com.mx/v1/mandato/newFiles',
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log('Archivos subidos con éxito:', response.data);
+  } catch (error) {
+    console.error('Error al subir archivos:', error);
   }
 };
 
