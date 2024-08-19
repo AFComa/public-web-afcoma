@@ -8,7 +8,7 @@ export const ListUsuario = () => {
       field: 'apellidos',
     },
     { name: 'email', label: 'Correo', align: 'left', field: 'email' },
-    { name: 'phone', label: 'Telefono', align: 'left', field: 'phone' },
+    { name: 'phone', label: 'Teléfono', align: 'left', field: 'phone' },
     {
       name: 'last_access',
       label: 'Fecha Ingreso',

@@ -4,7 +4,7 @@
       <q-card-section class="modal-content-sesion">
         <p>{{ props.title }}</p>
         <div class="row q-pt-md justify-center">
-          <div class="col-lg-5">
+          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-5">
             <label for="user">Selecciona un Usuario:</label>
             <q-select
               class="q-pt-md"
@@ -27,7 +27,7 @@
               </template>
             </q-select>
           </div>
-          <div class="col-lg-5">
+          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-5">
             <label for="user">Selecciona un Mandato:</label>
             <q-select
               class="q-pt-md"

@@ -62,7 +62,7 @@
             dense
             rounded
             outlined
-            label="Telefono"
+            label="Teléfono"
             lazy-rules
             maxlength="10"
             v-model="userForm.phone"
