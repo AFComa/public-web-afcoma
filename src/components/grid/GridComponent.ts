@@ -81,7 +81,7 @@ export default {
       if (item === '1') {
         router.push('/dashboard/validar-information');
       } else {
-        await orderGridMandatos();
+        await orderGrid();
         dialogVisible.value = true;
       }
     };
@@ -194,9 +194,11 @@ export default {
       loading.value = true;
       const result = await getUser();
       if (result.ok) {
-        rows.value = result.resultado.map((item: ListUserI) =>
-          capitalizeUserData(item)
-        );
+        if (route.path === '/dashboard/listar-usuarios') {
+          rows.value = result.resultado.map((item: ListUserI) =>
+            capitalizeUserData(item)
+          );
+        }
       }
       loading.value = false;
     };
