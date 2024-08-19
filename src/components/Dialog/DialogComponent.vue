@@ -1,6 +1,6 @@
 <template>
-  <q-dialog v-model="show" persistent>
-    <q-card class="q-pa-md modal-general" style="width: 700px; max-width: 80vw">
+  <q-dialog v-model="show" persistent class="modal-general">
+    <q-card class="q-pa-md tam-moda">
       <q-card-section class="modal-content-sesion">
         <img src="../../assets/img/alert.svg" width="100px" height="100px" />
         <p>{{ props.title }}</p>

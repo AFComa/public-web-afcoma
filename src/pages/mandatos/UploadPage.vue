@@ -1,6 +1,9 @@
 <template>
-  <div class="q-pt-xl q-pb-xl">
-    <div class="row q-col-gutter-lg q-px-xl q-mb-xs">
+  <div class="q-pt-lg q-pa-md">
+    <div class="justify-center q-col-gutter-md row">
+      <div class="col-xs-12 col-sm-6 col-md-11">
+        <BreadCrumb :routes="breadcrumbRoutes" />
+      </div>
       <div class="col-xs-12 col-sm-4 col-md-3">
         <q-input
           :disable="actionBoton === 'view'"
@@ -99,12 +102,14 @@ import { useQuasar } from 'quasar';
 import { useRouter } from 'vue-router';
 import LoadingOver from '../../components/Loading/LoadingComponent.vue';
 import DialogComponent from '../../components/Dialog/DialogComponent.vue';
+import BreadCrumb from '../../components/breadcrumb/integretView.vue';
 import { mandatosAuth } from 'src/composables/mandatosAuth';
 export default {
   name: 'AutocompleteForm',
   components: {
     LoadingOver,
     DialogComponent,
+    BreadCrumb,
   },
   setup() {
     const { isViewMandatos, updateMandato } = mandatosAuth();
@@ -122,7 +127,9 @@ export default {
     const selectedData = ref(null);
     const selectedItem = ref(null);
     const nameMandato = ref();
-
+    const breadcrumbRoutes = ref([
+      { label: 'Listar Mandatos', path: '/dashboard/listar-mandatos' },
+    ]);
     // const containsStringOrDate = (value) => {
     //   if (typeof value === 'string') {
     //     const lowerValue = value.toLowerCase();
@@ -235,6 +242,7 @@ export default {
       saveInfo,
       onCancel,
       loading,
+      breadcrumbRoutes,
     };
   },
 };

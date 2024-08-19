@@ -14,6 +14,7 @@ const routes: RouteRecordRaw[] = [
         path: 'code',
         name: 'code',
         component: () => import('pages/code/CodePage.vue'),
+        meta: { requiresAuth: true }, // Requiere autenticación
       },
       {
         path: 'password',
@@ -36,21 +37,25 @@ const routes: RouteRecordRaw[] = [
         path: '',
         name: 'section',
         component: () => import('pages/section/SectionPage.vue'),
+        meta: { requiresAuth: true }, // Requiere autenticación
       },
       {
         path: 'usuarios/:id',
         name: 'UsuariosId',
         component: () => import('src/pages/user/UsersCreate/UsersPage.vue'),
+        meta: { requiresAuth: true }, // Requiere autenticación
       },
       {
         path: 'usuarios',
         name: 'Usuarios',
         component: () => import('src/pages/user/UsersCreate/UsersPage.vue'),
+        meta: { requiresAuth: true }, // Requiere autenticación
       },
       {
         path: 'listar-usuarios',
         name: 'UsuariosList',
         component: () => import('src/pages/user/UsersList/ListPage.vue'),
+        meta: { requiresAuth: true }, // Requiere autenticación
       },
       {
         path: 'validar-information',
@@ -62,11 +67,13 @@ const routes: RouteRecordRaw[] = [
         path: 'listar-mandatos',
         name: 'MandatosList',
         component: () => import('src/pages/mandatos/MandatosList/ListPage.vue'),
+        meta: { requiresAuth: true }, // Requiere autenticación
       },
       {
         path: 'view-mandatos/:id',
         name: 'MandatosView',
         component: () => import('src/pages/mandatos/UploadPage.vue'),
+        meta: { requiresAuth: true }, // Requiere autenticación
       },
     ],
   },

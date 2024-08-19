@@ -32,6 +32,7 @@
         v-if="viewGrid"
       >
         <q-btn
+          v-if="validuser.create"
           class="custom-button"
           no-caps
           unelevated

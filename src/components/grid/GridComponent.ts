@@ -100,10 +100,12 @@ export default {
       if (route.path === '/dashboard/listar-mandatos') {
         viewGrid.value = true;
         columns.value = ListMandatos();
+        validuser.value = isPermission.value.configUser.mandatosPermissions[0];
         await orderGridMandatos();
       } else {
         viewGrid.value = false;
         columns.value = ListUsuario();
+        validuser.value = isPermission.value.configUser.usersPermissions[0];
         await orderGrid();
       }
     };
@@ -200,7 +202,6 @@ export default {
 
     onMounted(async () => {
       await directOptionsValue();
-      validuser.value = isPermission.value.configUser.usersPermissions[0];
     });
 
     const handleSelect = async (

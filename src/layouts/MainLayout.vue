@@ -1,11 +1,11 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <div class="row">
+    <div class="row home-das">
       <div
         class="content-center text-center col-xs-12 col-sm-12 col-md-5"
         style="background-color: #244b5a"
       >
-        <q-img :src="url" width="50%" />
+        <q-img class="img-logo" :src="url" />
       </div>
       <div
         class="col-xs-12 col-sm-12 col-md-7"
@@ -18,7 +18,7 @@
     </div>
   </q-layout>
 </template>
-
+<style scoped src="./DashboardLayout.scss"></style>
 <script setup lang="ts">
 import imgLogo from '../assets/img/logo/6.png';
 

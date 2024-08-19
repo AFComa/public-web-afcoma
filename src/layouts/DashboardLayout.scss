@@ -1,0 +1,13 @@
+.home-das {
+  .img-logo {
+    width: 30%;
+  }
+}
+
+@media (min-width: 768px) {
+  .home-das {
+    .img-logo {
+      width: 50%;
+    }
+  }
+}
