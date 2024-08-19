@@ -99,7 +99,7 @@ const { isAssingMandatos } = mandatosAuth();
 const emits = defineEmits(['confirm', 'cancel', 'select']);
 
 const options = ref(
-  isAssingUser.value.map((item) => ({
+  isAssingUser?.value?.map((item) => ({
     label: `${item.user} ${item.apellidos}`, // Concatenar user y apellidos
     value: item._id, // Usar _id como value
   }))

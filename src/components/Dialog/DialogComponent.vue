@@ -5,7 +5,7 @@
         <img src="../../assets/img/alert.svg" width="100px" height="100px" />
         <p>{{ props.title }}</p>
 
-        <span>{{ props.message }}</span>
+        <span v-html="props.message"></span>
       </q-card-section>
 
       <q-card-actions align="center" class="q-pt-lg">

@@ -77,10 +77,11 @@ export default {
       router.push('/dashboard/usuarios');
     };
 
-    const rouViewPage = (item: string) => {
+    const rouViewPage = async (item: string) => {
       if (item === '1') {
         router.push('/dashboard/validar-information');
       } else {
+        await orderGridMandatos();
         dialogVisible.value = true;
       }
     };
@@ -89,9 +90,9 @@ export default {
       uid.value = rows._id;
       estatus.value = rows.estatus == 'Activo' ? 'Inactivo' : 'Activo';
       if (rows.estatus === 'Activo') {
-        MessageDialog.value = `Esta seguro que desea Desactivar el usuario ${rows.user} ${rows.apellidos}`;
+        MessageDialog.value = `Esta seguro que desea Desactivar el usuario <strong> ${rows.user} ${rows.apellidos} </strong>`;
       } else {
-        MessageDialog.value = `Esta seguro que desea Activar el usuario ${rows.user} ${rows.apellidos}`;
+        MessageDialog.value = `Esta seguro que desea Activar el usuario <strong> ${rows.user} ${rows.apellidos} </strong>`;
       }
       warningDialog.value = true;
     };
