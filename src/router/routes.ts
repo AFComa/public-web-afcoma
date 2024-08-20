@@ -62,6 +62,7 @@ const routes: RouteRecordRaw[] = [
         name: 'ValidInformation',
         component: () =>
           import('src/pages/mandatos/Information/ValidInformationPage.vue'),
+        meta: { requiresAuth: true }, // Requiere autenticación
       },
       {
         path: 'listar-mandatos',

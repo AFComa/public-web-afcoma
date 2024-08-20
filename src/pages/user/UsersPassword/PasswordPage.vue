@@ -111,8 +111,7 @@ export default {
     const $q = useQuasar();
     const { CreatePass, ValidToken, ResetPassComplete } = useAuth();
     const passwordRegex =
-      /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&.])[A-Za-z\d@$!%*#?&.]{8,}$/;
-
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&.])[A-Za-z\d@$!%*#?&.]{8,}$/;
     const router = useRouter();
     const route = useRoute();
     const passwordRules = [
