@@ -1,6 +1,6 @@
 <template>
   <div class="row q-pt-md justify-center">
-    <div class="col-lg-8">
+    <div class="col-xs-12 col-md-8 col-lg-8">
       <q-uploader
         v-model="files"
         label="Favor de cargar el contrato"
@@ -11,7 +11,7 @@
       />
     </div>
 
-    <div class="col-lg-4 file-list">
+    <div class="col-xs-12 col-md-4 col-lg-4 file-list">
       <div
         v-for="(file, index) in displayedFiles"
         :key="index"

@@ -113,7 +113,7 @@ export default {
       setTimeout(async () => {
         const response = await updateUsers(data);
         if (response.ok) {
-          routers.push('/dashboard/listar-usuarios');
+          routers.push('/dashboard');
           $q.notify({
             type: 'positive',
             message: 'El usuario se actualizo correctamente.',

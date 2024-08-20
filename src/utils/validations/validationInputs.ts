@@ -5,7 +5,7 @@ export const isValidEmail = (val: string): boolean | string => {
 };
 export const isPassword = (val: string): boolean | string => {
   const passwordRegex =
-    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&.])[A-Za-z\d@$!%*#?&.]{8,}$/;
+    /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&.])[A-Za-z\d@$!%*#?&.]{8,}$/;
   return (
     passwordRegex.test(val) ||
     'La contraseña debe contener 8 characteres, letras, números y carácter especial.'
