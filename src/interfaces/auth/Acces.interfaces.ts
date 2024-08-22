@@ -57,3 +57,9 @@ export interface opcionAssingI {
   idmandato: string;
   userid: string;
 }
+
+export interface proyectgetI {
+  nombre: string;
+  apellido: string;
+  perfil: string;
+}

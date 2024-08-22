@@ -11,8 +11,20 @@
       name="viewport"
       content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width<% if (ctx.mode.cordova || ctx.mode.capacitor) { %>, viewport-fit=cover<% } %>"
     />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self' https://apolo.afcoma.com.mx https://api.ipify.org;
+      img-src 'self' https://apolo.afcoma.com.mx https://api.ipify.org data: gap: content:;
+      style-src 'self' https://apolo.afcoma.com.mx https://fonts.googleapis.com https://api.ipify.org 'unsafe-inline'; 
+      script-src 'self' https://apolo.afcoma.com.mx http://unpkg.com https://api.ipify.org 'unsafe-eval'; 
+      script-src-attr 'self' https://apolo.afcoma.com.mx https://api.ipify.org;
+      font-src 'self' https://apolo.afcoma.com.mx https://fonts.gstatic.com https://api.ipify.org; 
+      frame-src 'self' blob: data: gap:;
+      connect-src 'self' https://apolo.afcoma.com.mx https://api.ipify.org"
+      always;
+    />
 
-    <link
+    <!-- <link
       rel="icon"
       type="image/png"
       sizes="128x128"
@@ -35,7 +47,7 @@
       type="image/png"
       sizes="16x16"
       href="icons/favicon-16x16.png"
-    />
+    /> -->
     <link rel="icon" type="image/ico" href="favicon.ico" />
   </head>
   <body>

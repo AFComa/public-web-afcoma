@@ -31,7 +31,7 @@
         <q-select
           dense
           v-model="selectedItem"
-          :options="selectedData.data"
+          :options="filteredData"
           label="Seleccione un elemento"
           :option-label="dynamicLabel"
           :option-value="dynamicValue"
@@ -129,6 +129,7 @@ export default {
     const nameMandato = ref();
     const breadcrumbRoutes = ref([
       { label: 'Listar Mandatos', path: '/dashboard/listar-mandatos' },
+      { label: 'Mandatos', path: '/dashboard/listar-mandatos/Mandatos' },
     ]);
     // const containsStringOrDate = (value) => {
     //   if (typeof value === 'string') {
@@ -203,6 +204,16 @@ export default {
       }, 5000);
     };
 
+    //Computed para filtrar el array excluyendo la última posición
+    const filteredData = computed(() => {
+      if (!selectedData.value || !selectedData.value.data) {
+        return [];
+      }
+      return selectedData.value.data.length === 1
+        ? selectedData.value.data
+        : selectedData.value.data.slice(0, -1);
+    });
+
     function onCancel() {
       // Lógica cuando se cancela
       warningDialog.value = false;
@@ -224,6 +235,7 @@ export default {
     return {
       selectedData,
       selectedItem,
+      filteredData,
       actionBoton,
       dynamicLabel,
       dynamicValue,

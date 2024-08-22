@@ -3,6 +3,7 @@ import { createStore } from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
 import authModule from './user';
 import mandatosModule from './mandatos';
+import sysadocModule from './siadoc';
 
 export interface StateInterface {
   // Define your own store structure, using submodules if needed
@@ -15,6 +16,7 @@ export default createStore({
   modules: {
     auth: authModule,
     mandatos: mandatosModule,
+    sysadoc: sysadocModule,
     // Otros módulos...
   },
   plugins: [

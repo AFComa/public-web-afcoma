@@ -50,7 +50,72 @@ export const ListMandatos = () => {
   ];
 };
 
+export const ListProyects = () => {
+  return [
+    {
+      name: 'NombreProyecto',
+      label: 'Nombre Proyecto',
+      align: 'left',
+      field: 'NombreProyecto',
+    },
+    {
+      name: 'cesion',
+      label: 'Cesión',
+      align: 'center',
+      field: 'cesion',
+    },
+    {
+      name: 'cartera',
+      label: 'Cartera',
+      align: 'left',
+      field: 'cartera',
+    },
+    {
+      name: 'PorcentajeAvance',
+      label: 'Porcentaje de avances',
+      align: 'center',
+      field: 'PorcentajeAvance',
+    },
+    {
+      name: 'AsignadoA',
+      label: 'Asignado A',
+      align: 'left',
+      field: 'AsignadoA',
+    },
+    {
+      name: 'Estatus',
+      label: 'Estatus',
+      align: 'center',
+      field: 'Estatus',
+    },
+
+    { name: 'actions', label: 'Acciones', align: 'center', field: 'actions' },
+  ];
+};
+
 export const ListActionUser = () => {
+  return [
+    { name: 'module', label: 'Módulo', field: 'module', align: 'left' },
+    { name: 'create', label: 'Crear', field: 'create', align: 'center' },
+    { name: 'edit', label: 'Editar', field: 'edit', align: 'center' },
+    { name: 'block', label: 'Bloquear', field: 'block', align: 'center' },
+    { name: 'view', label: 'Consultar', field: 'view', align: 'center' },
+    {
+      name: 'download',
+      label: 'Descarga',
+      field: 'download',
+      align: 'center',
+    },
+    {
+      name: 'opera',
+      label: 'Operador',
+      field: 'opera',
+      align: 'center',
+    },
+  ];
+};
+
+export const ListActionMandatos = () => {
   return [
     { name: 'module', label: 'Módulo', field: 'module', align: 'left' },
     { name: 'create', label: 'Crear', field: 'create', align: 'center' },
@@ -79,7 +144,7 @@ export const ListPermision = () => {
       module: 'Administración',
       create: false,
       edit: false,
-      delete: false,
+      block: false,
       view: false,
       download: false,
       opera: false,

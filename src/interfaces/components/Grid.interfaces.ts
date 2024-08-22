@@ -19,7 +19,7 @@ export interface ColumCreateUserI {
   module: string;
   create: boolean;
   edit: boolean;
-  delete: boolean;
+  block: boolean;
   view: boolean;
   download: boolean;
   opera: boolean;

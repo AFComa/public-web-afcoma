@@ -47,7 +47,7 @@
         >
           <template v-if="isBoolean(value)">
             <q-checkbox
-              v-model="selectedItem[key]"
+              v-model="selectedItem[key].value"
               :label="key"
               class="adaptable-text"
             />
@@ -57,11 +57,13 @@
               class="input-border"
               :dense="dense"
               size="large"
-              v-model="selectedItem[key]"
+              v-model="selectedItem[key].value"
               :label="key"
               filled
               outlined
-              :hint="selectedItem[key].isValid ? selectedItem[key].isValid : ''"
+              :hint="
+                !selectedItem[key].isValid ? selectedItem[key].coments : ''
+              "
             />
           </template>
         </div>
@@ -117,7 +119,7 @@ export default {
     const selectedData = ref(null);
     const selectedItem = ref(null);
     const dense = ref(true);
-    const { setMandatosValid } = mandatosAuth();
+    const { validMandato, setMandatosValid } = mandatosAuth();
 
     // const containsStringOrDate = (value) => {
     //   if (typeof value === 'string') {
@@ -172,6 +174,12 @@ export default {
             }));
 
           setMandatosValid(transInfo.value);
+          const result = await validMandato({
+            idmandato: '',
+            datosmandato: transInfo.value,
+          });
+
+          transInfo.value = result.resultado.datosmandato;
         };
 
         viewFile.value = true;
@@ -217,26 +225,26 @@ export default {
       warningDialog.value = false;
     }
 
-    const dynamicLabel = computed(() => firstKey.value);
-    const dynamicValue = computed(() => firstKey.value);
+    // const dynamicLabel = computed(() => firstKey.value);
+    // const dynamicValue = computed(() => firstKey.value);
 
     // `dynamicLabel` y `dynamicValue` ahora son dinámicos
-    // const dynamicLabel = computed(() => {
-    //   return (option) => {
-    //     const key = firstKey.value;
-    //     return option[key]?.value || '';
-    //   };
-    // });
+    const dynamicLabel = computed(() => {
+      return (option) => {
+        const key = firstKey.value;
+        return option[key]?.value || '';
+      };
+    });
 
-    // const dynamicValue = computed(() => {
-    //   return (option) => {
-    //     const key = firstKey.value;
-    //     return option[key]?.value || '';
-    //   };
-    // });
+    const dynamicValue = computed(() => {
+      return (option) => {
+        const key = firstKey.value;
+        return option[key]?.value || '';
+      };
+    });
 
     const isBoolean = (value) => {
-      return value === true || value === false;
+      return value.value === true || value.value === false;
     };
 
     return {

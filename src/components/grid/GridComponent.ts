@@ -6,7 +6,12 @@ import DialogComponent from '../../components/Dialog/DialogComponent.vue';
 import DialogAssingComponent from '../../components/Dialog/DialogAssingComponent.vue';
 import { useAuth } from 'src/composables/userAuth';
 import { mandatosAuth } from 'src/composables/mandatosAuth';
-import { ListMandatos, ListUsuario } from '../../utils/users/usersColums';
+import { sysadocAuth } from 'src/composables/sysadocAuth';
+import {
+  ListMandatos,
+  ListUsuario,
+  ListProyects,
+} from '../../utils/users/usersColums';
 import type {
   ListUserI,
   ColumI,
@@ -27,11 +32,12 @@ export default {
     const loading = ref(false);
     const { resetPass, getUser, getUserId, UpdateStatus, isPermission } =
       useAuth();
-    const { allMandatos, mandatoId } = mandatosAuth();
-    const { asignMandatos } = mandatosAuth();
+    const { allMandatos, mandatoId, asignMandatos } = mandatosAuth();
+    const { allProyects } = sysadocAuth();
     const $q = useQuasar();
     const warningDialog = ref(false);
     const viewGrid = ref(false);
+    const viewMandatoSysadoc = ref(false);
     const dialogVisible = ref(false);
     const MessageDialog = ref('');
     const estatus = ref();
@@ -100,10 +106,18 @@ export default {
     const directOptionsValue = async () => {
       if (route.path === '/dashboard/listar-mandatos') {
         viewGrid.value = true;
+        viewMandatoSysadoc.value = false;
         columns.value = ListMandatos();
         validuser.value = await isPermission.value.configUser
           .mandatosPermissions[0];
         await orderGridMandatos();
+      } else if (route.path === '/dashboard/listar-proyectos') {
+        viewGrid.value = true;
+        viewMandatoSysadoc.value = true;
+        columns.value = ListProyects();
+        validuser.value = await isPermission.value.configUser
+          .sysadocPermission[0];
+        await orderProyects();
       } else {
         viewGrid.value = false;
         columns.value = ListUsuario();
@@ -111,6 +125,22 @@ export default {
           .usersPermissions[0];
         await orderGrid();
       }
+    };
+
+    const orderProyects = async () => {
+      loading.value = true;
+      const proyectsAll = {
+        apellido: isPermission.value.apellidos,
+        nombre: isPermission.value.user,
+        perfil: isPermission.value.configUser.sysadocPermission[0].opera
+          ? 'Administrador'
+          : '',
+      };
+      const resultado = await allProyects(proyectsAll);
+      if (resultado.ok) {
+        rows.value = resultado.token.result ? resultado.token.result : [];
+      }
+      loading.value = false;
     };
 
     const orderGridMandatos = async () => {
@@ -238,7 +268,9 @@ export default {
     return {
       columns,
       directOptionsValue,
+      orderProyects,
       validuser,
+      viewMandatoSysadoc,
       loading,
       rows,
       filteredRows,

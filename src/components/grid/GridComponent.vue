@@ -43,10 +43,22 @@
           <q-menu transition-show="rotate" transition-hide="rotate">
             <q-list style="min-width: 100px">
               <q-item clickable @click="rouViewPage('1')">
-                <q-item-section>Creación Mandatos</q-item-section>
+                <q-item-section>
+                  {{
+                    viewMandatoSysadoc
+                      ? 'Creación Proyectos'
+                      : 'Creación Mandatos'
+                  }}
+                </q-item-section>
               </q-item>
               <q-item clickable @click="rouViewPage('2')">
-                <q-item-section>Asignación de Mandatos</q-item-section>
+                <q-item-section>
+                  {{
+                    viewMandatoSysadoc
+                      ? 'Asignación de Proyectos'
+                      : 'Asignación de Mandato'
+                  }}
+                </q-item-section>
               </q-item>
             </q-list>
           </q-menu>
@@ -97,6 +109,15 @@
             round
             dense
             icon="edit"
+            color="green"
+            @click="editRow(props.row)"
+          />
+          <q-btn
+            v-if="validuser.delete && viewMandatoSysadoc"
+            flat
+            round
+            dense
+            icon="delete"
             color="green"
             @click="editRow(props.row)"
           />
