@@ -22,7 +22,7 @@ export default createStore({
   plugins: [
     createPersistedState({
       key: 'my-app', // Puedes cambiar el nombre de la clave si lo deseas
-      paths: ['auth', 'mandatos'], // Especifica los módulos que deseas persistir
+      paths: ['auth', 'mandatos', 'sysadoc'], // Especifica los módulos que deseas persistir
     }),
   ],
 });

@@ -4,7 +4,7 @@
       <q-form
         @submit.prevent="onSubmit"
         @reset="onReset"
-        class="q-gutter-sm col-xs-12 col-sm-7 col-md-7 q-pt-xl"
+        class="q-gutter-sm col-xs-12 col-sm-7 col-md-7 q-pt-md"
       >
         <div class="row">
           <p>Iniciar sesión</p>

@@ -85,7 +85,20 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'listar-proyectos',
         name: 'ProyectosList',
-        component: () => import('src/pages/sisadoc/DocList/ListPage.vue'),
+        component: () =>
+          import('src/pages/sisadoc/DocListProyect/ListPage.vue'),
+        meta: { requiresAuth: true }, // Requiere autenticación
+      },
+      {
+        path: 'proyectos',
+        name: 'ProyectosCreate',
+        component: () => import('src/pages/sisadoc/DocCreate/ProyectPage.vue'),
+        meta: { requiresAuth: true }, // Requiere autenticación
+      },
+      {
+        path: 'proyectos/:id',
+        name: 'ProyectosEdit',
+        component: () => import('src/pages/sisadoc/DocCreate/ProyectPage.vue'),
         meta: { requiresAuth: true }, // Requiere autenticación
       },
     ],

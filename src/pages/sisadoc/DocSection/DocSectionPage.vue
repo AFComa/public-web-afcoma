@@ -1,7 +1,7 @@
 <template>
   <div class="sections q-pt-lg q-pa-md">
     <div class="justify-center row text-center">
-      <div class="col-xs-12 col-sm-6 col-md-11">
+      <div class="col-xs-12 col-sm-11 col-md-11">
         <BreadCrumb :routes="breadcrumbRoutes" />
       </div>
       <div class="col-xs-6 col-sm-6 col-md-6">

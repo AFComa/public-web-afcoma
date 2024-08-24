@@ -63,3 +63,11 @@ export interface proyectgetI {
   apellido: string;
   perfil: string;
 }
+
+export interface CartProyectI {
+  name: string;
+  email: string;
+  telefono: string;
+  reporteoApi: string;
+  incidenciaApi: string;
+}

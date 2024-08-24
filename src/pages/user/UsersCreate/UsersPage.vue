@@ -7,7 +7,7 @@
         </div>
       </div>
 
-      <div class="justify-center q-col-gutter-md row">
+      <div class="justify-center q-col-gutter-sm row">
         <!-- <div class="col-xs-12 col-sm-6 col-md-12"> -->
         <div class="col-xs-12 col-sm-6 col-md-3">
           <q-input

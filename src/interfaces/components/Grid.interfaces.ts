@@ -47,3 +47,36 @@ export interface CreateGUI {
   phone: string;
   configUser: UnionColumnI;
 }
+
+export interface CreateProyectI {
+  identificador: string;
+  originador: string;
+  fondeador: string;
+  institucion_bancaria: string;
+  administrador_primario: string;
+  administrador_maestro: string;
+  despacho_juridico: string;
+  representante_comun: string;
+  calificadora: string;
+  despacho_auditores: string;
+  nombre_contacto: string;
+  correo_contacto: string;
+  telefono_contacto: string;
+  url_reporte: string;
+  url_incidencia: string;
+  _id?: string | string[];
+}
+
+export interface DeleteProyectI {
+  id: string;
+  cartera: string;
+  cesion: string;
+  NombreProyecto: string;
+}
+
+export interface DeleteProyectActionsI {
+  id: string;
+  cartera: string;
+  cesion: string;
+  proyect: string;
+}

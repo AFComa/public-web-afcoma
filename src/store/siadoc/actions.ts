@@ -1,23 +1,17 @@
 // src/store/modules/auth/actions.ts
 import { ActionTree } from 'vuex';
 import { api } from '../../boot/axios';
-import type {
-  LoginSuccess,
-  LoginError,
-} from '../../interfaces/auth/Acces.interfaces';
+import type { LoginSuccess } from '../../interfaces/auth/Acces.interfaces';
 
 export const actions: ActionTree<LoginSuccess, unknown> = {
   async getProyects({ commit }) {
     try {
-      const { data } = await api.post<LoginSuccess | LoginError>(
-        'SA/proyectos/get',
-        {
-          nombre: 'Luis',
-          apellido: 'Hernandez',
-          perfil: 'Administrador',
-        }
-      );
-      commit('data');
+      const { data } = await api.post('SA/proyectos/get', {
+        nombre: 'Luis',
+        apellido: 'Hernandez',
+        perfil: 'Administrador',
+      });
+      commit('SET_LIST_PROYECT', data.result);
       return {
         ok: true,
         token: data,
@@ -63,7 +57,7 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
   async getProyectsId({ commit }, item) {
     try {
       const { data } = await api.post('SA/proyectos/getbyid', { _id: item });
-      commit('SET_VIEW_MANDATOS', data);
+      commit('SET_VIEW_PROYECT', data.result);
       return {
         ok: true,
         token: data,
@@ -75,33 +69,50 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
       };
     }
   },
-  async byMandatoUpdate({ commit }, item) {
+  async byProyectDelete({ commit }, item) {
     try {
-      const { data } = await api.post('mandato/editbyid', item);
+      const { data } = await api.post('SA/proyectos/deleteProyectById', item);
+      console.log('data: ', data);
+
       commit('data');
       return {
         ok: true,
-        resultado: data.msg,
+        resultado: data.mensaje,
       };
     } catch (error) {
       return {
         ok: false,
-        message: 'Ocurrio un error al actualizar el mandato.',
+        message: 'Ocurrio un error al eliminar el proyecto.',
       };
     }
   },
-  async validMandatos({ commit }, item) {
+  async MandatoCreate({ commit }, item) {
     try {
-      const { data } = await api.post('mandato/validate', item);
+      const { data } = await api.post('SA/proyectos/createproyect', item);
       commit('data');
       return {
         ok: true,
-        resultado: data,
+        resultado: data.mensaje,
       };
     } catch (error) {
       return {
         ok: false,
-        message: 'Ocurrio un error al actualizar el mandato.',
+        message: 'Ocurrio un error al crear un proyecto.',
+      };
+    }
+  },
+  async updateProduct({ commit }, item) {
+    try {
+      const { data } = await api.post('SA/proyectos/saveproyect', item);
+      commit('data');
+      return {
+        ok: true,
+        resultado: data.mensaje,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        message: 'Ocurrio un error al actualizar el Producto.',
       };
     }
   },

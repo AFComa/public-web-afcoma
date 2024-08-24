@@ -28,7 +28,7 @@
             </q-select>
           </div>
           <div class="col-xs-12 col-sm-6 col-md-6 col-lg-5">
-            <label for="user">Selecciona un Mandato:</label>
+            <label for="user">Selecciona una opción:</label>
             <q-select
               class="q-pt-md"
               filled
@@ -82,6 +82,8 @@
 import { ref, defineEmits } from 'vue';
 import { useAuth } from 'src/composables/userAuth';
 import { mandatosAuth } from 'src/composables/mandatosAuth';
+import { sysadocAuth } from 'src/composables/sysadocAuth';
+import { useRoute } from 'vue-router';
 
 const props = defineProps({
   title: {
@@ -90,11 +92,13 @@ const props = defineProps({
   },
 });
 
+const router = useRoute();
 const visible = ref(true);
 const model = ref(null);
 const model2 = ref(null);
 const { isAssingUser } = useAuth();
 const { isAssingMandatos } = mandatosAuth();
+const { isListProyects } = sysadocAuth();
 
 const emits = defineEmits(['confirm', 'cancel', 'select']);
 
@@ -105,11 +109,18 @@ const options = ref(
   }))
 );
 
+console.log('isListProyects: ', isListProyects.value);
+
 const options2 = ref(
-  isAssingMandatos?.value?.map((item) => ({
-    label: item.idmandato, // Concatenar user y apellidos
-    value: item._id, // Usar _id como value
-  }))
+  router.path === '/dashboard/listar-proyectos'
+    ? isListProyects?.value?.map((item) => ({
+        label: item.NombreProyecto, // Concatenar user y apellidos
+        value: item.id, // Usar _id como value
+      }))
+    : isAssingMandatos?.value?.map((item) => ({
+        label: item.idmandato, // Concatenar user y apellidos
+        value: item._id, // Usar _id como value
+      }))
 );
 
 // Función de filtrado
@@ -128,12 +139,19 @@ const filterFn = (val, update) => {
 const filterFn2 = (val, update) => {
   const needle = val.toLowerCase();
   update(() => {
-    options2.value = isAssingMandatos.value
-      .map((item) => ({
-        label: item.idmandato, // Concatenar user y apellidos
-        value: item._id, // Usar _id como value
-      }))
-      .filter((option) => option.label.toLowerCase().includes(needle));
+    router.path === '/dashboard/listar-proyectos'
+      ? (options2.value = isListProyects.value
+          .map((item) => ({
+            label: item.NombreProyecto, // Concatenar user y apellidos
+            value: item.id, // Usar _id como value
+          }))
+          .filter((option) => option.label.toLowerCase().includes(needle)))
+      : (options2.value = isAssingMandatos.value
+          .map((item) => ({
+            label: item.idmandato, // Concatenar user y apellidos
+            value: item._id, // Usar _id como value
+          }))
+          .filter((option) => option.label.toLowerCase().includes(needle)));
   });
 };
 

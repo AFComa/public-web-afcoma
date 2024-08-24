@@ -1,11 +1,22 @@
 .modal-general {
-  width: 800px !important;
   border-radius: 24px;
+
   .tam-moda {
     width: 700px;
     max-width: 80vw;
     border-radius: 24px;
   }
+  .modal-tex {
+    text-align: center;
+    p {
+      text-align: center;
+      font-size: 32px;
+      font-weight: 375;
+      line-height: 44px;
+      color: #244b5a;
+    }
+  }
+
   .modal-content-sesion {
     text-align: center;
     p {

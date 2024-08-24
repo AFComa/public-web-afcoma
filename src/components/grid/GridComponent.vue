@@ -119,7 +119,7 @@
             dense
             icon="delete"
             color="green"
-            @click="editRow(props.row)"
+            @click="deletRow(props.row)"
           />
           <q-btn
             v-if="!viewGrid"
@@ -143,7 +143,7 @@
     />
     <DialogAssingComponent
       v-if="dialogVisible"
-      :title="'Asignación de Mandatos'"
+      :title="'Asignación de Proyectos'"
       @select="handleSelect"
       @cancel="onCancel"
     />
