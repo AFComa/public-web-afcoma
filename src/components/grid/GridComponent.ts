@@ -1,9 +1,13 @@
 import { computed, onMounted, ref } from 'vue';
+import * as XLSX from 'xlsx';
 import { useRouter, useRoute } from 'vue-router';
 import { useQuasar } from 'quasar';
 
 import DialogComponent from '../../components/Dialog/DialogComponent.vue';
 import DialogAssingComponent from '../../components/Dialog/DialogAssingComponent.vue';
+import DialogFileComponent from '../Dialog/DialogFileCompontent.vue';
+import DialogConfigComponent from '../Dialog/DialogConfLayoutComponent.vue';
+import DialogManualComponent from '../Dialog/DialogConfManualComponent.vue';
 import { useAuth } from 'src/composables/userAuth';
 import { mandatosAuth } from 'src/composables/mandatosAuth';
 import { sysadocAuth } from 'src/composables/sysadocAuth';
@@ -11,11 +15,14 @@ import {
   ListMandatos,
   ListUsuario,
   ListProyects,
+  ListConfigProyects,
 } from '../../utils/users/usersColums';
 import type {
   ListUserI,
   ColumI,
   DeleteProyectI,
+  CargaDatosProyectobyIdI,
+  cargDatosExcelI,
 } from '../../interfaces/components/Grid.interfaces';
 import LoadingComponentBasic from '../../components/Loading/LoadingBasicComponent.vue';
 import { filterSelectI } from 'src/interfaces/auth/Acces.interfaces';
@@ -26,6 +33,9 @@ export default {
     LoadingComponentBasic,
     DialogComponent,
     DialogAssingComponent,
+    DialogFileComponent,
+    DialogConfigComponent,
+    DialogManualComponent,
   },
   setup() {
     const router = useRouter();
@@ -34,12 +44,26 @@ export default {
     const { resetPass, getUser, getUserId, UpdateStatus, isPermission } =
       useAuth();
     const { allMandatos, mandatoId, asignMandatos } = mandatosAuth();
-    const { allProyects, DeleteProyects, getIdProyects } = sysadocAuth();
+    const {
+      allProyects,
+      DeleteProyects,
+      getIdProyects,
+      AssingProyects,
+      allProyectLayout,
+      DeletProyect,
+      DowloadPr,
+      DatosProyectobyId,
+      AssingProyectobyId,
+    } = sysadocAuth();
     const $q = useQuasar();
     const warningDialog = ref(false);
     const viewGrid = ref(false);
+    const viewConfig = ref(false);
     const viewMandatoSysadoc = ref(false);
     const dialogVisible = ref(false);
+    const dialogVisibleDoc = ref(false);
+    const dialogVisibleConfig = ref(false);
+    const dialogVisibleConfigM = ref(false);
     const MessageDialog = ref('');
     const estatus = ref();
     const uid = ref();
@@ -89,13 +113,19 @@ export default {
       if (item === '1') {
         if (route.path === '/dashboard/listar-mandatos') {
           router.push('/dashboard/validar-information');
+        } else if (route.path === '/dashboard/config') {
+          dialogVisibleConfigM.value = true;
         } else {
           router.push('/dashboard/proyectos');
           localStorage.removeItem('actionuser');
         }
       } else {
-        await orderGrid();
-        dialogVisible.value = true;
+        if (route.path === '/dashboard/config') {
+          dialogVisibleConfig.value = true;
+        } else {
+          await orderGrid();
+          dialogVisible.value = true;
+        }
       }
     };
 
@@ -125,6 +155,14 @@ export default {
         validuser.value = await isPermission.value.configUser
           .sysadocPermission[0];
         await orderProyects();
+      } else if (route.path === '/dashboard/config') {
+        viewGrid.value = true;
+        viewMandatoSysadoc.value = true;
+        viewConfig.value = true;
+        columns.value = ListConfigProyects();
+        validuser.value = await isPermission.value.configUser
+          .sysadocPermission[0];
+        await orderConfigProyects();
       } else {
         viewGrid.value = false;
         columns.value = ListUsuario();
@@ -133,7 +171,15 @@ export default {
         await orderGrid();
       }
     };
+    const orderConfigProyects = async () => {
+      loading.value = true;
+      const resultado = await allProyectLayout();
 
+      if (resultado.ok) {
+        rows.value = resultado.resultado ? resultado.resultado : [];
+      }
+      loading.value = false;
+    };
     const orderProyects = async () => {
       loading.value = true;
       const proyectsAll = {
@@ -183,6 +229,12 @@ export default {
         router.push({ name: 'UsuariosId', params: { id: row._id } });
       }
     };
+
+    const uploadFiles = async (row: ListUserI & DeleteProyectI) => {
+      uid.value = row.id;
+      dialogVisibleDoc.value = true;
+    };
+
     const editRow = async (row: ListUserI & DeleteProyectI) => {
       if (viewGrid.value) {
         loading.value = true;
@@ -202,6 +254,7 @@ export default {
         router.push({ name: 'UsuariosId', params: { id: row._id } });
       }
     };
+
     const blockUser = async (row: ListUserI) => {
       const response = await resetPass(row._id);
       if (response.ok) {
@@ -221,7 +274,41 @@ export default {
     const deletRow = async (row: DeleteProyectI) => {
       infoDelete.value = row;
       warningDialog.value = true;
-      MessageDialog.value = `Al borrar el proyecto <strong> ${row.NombreProyecto} </strong> se limpiará todos los registros de esté en el sistema`;
+      MessageDialog.value = viewConfig.value
+        ? `Al borrar la configuración <strong> ${row.id} </strong> se tendrá que configurar nuevamente para realizar cargas de información nuevamente en el proyecto.`
+        : `Al borrar el proyecto <strong> ${row.NombreProyecto} </strong> se limpiará todos los registros de esté en el sistema`;
+    };
+
+    const dowloadPro = async (row: DeleteProyectI) => {
+      loading.value = true;
+      const response = await DowloadPr(row.id);
+      if (response.ok) {
+        const configuracionesdata = XLSX.utils.json_to_sheet(
+          response.resultado?.configuraciones
+        );
+        const operacionesdata = XLSX.utils.json_to_sheet(
+          response.resultado?.operaciones
+        );
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(
+          workbook,
+          configuracionesdata,
+          'configuraciones'
+        );
+        XLSX.utils.book_append_sheet(workbook, operacionesdata, 'operaciones');
+
+        XLSX.writeFile(workbook, `Configuración del proyecto ${row.id}.xlsx`);
+        $q.notify({
+          type: 'positive',
+          message: response.resultado.mensaje,
+        });
+      } else {
+        $q.notify({
+          type: 'negative',
+          message: response.message,
+        });
+      }
+      loading.value = false;
     };
 
     const onConfirm = async () => {
@@ -245,6 +332,20 @@ export default {
           });
         }
         orderGrid();
+      } else if (route.path === '/dashboard/config') {
+        const response = await DeletProyect(infoDelete.value.id);
+        if (response.ok) {
+          await orderConfigProyects();
+          $q.notify({
+            type: 'positive',
+            message: response.resultado,
+          });
+        } else {
+          $q.notify({
+            type: 'negative',
+            message: response.message,
+          });
+        }
       } else {
         const response = await DeleteProyects({
           id: infoDelete.value.id,
@@ -271,6 +372,9 @@ export default {
     function onCancel() {
       warningDialog.value = false;
       dialogVisible.value = false;
+      dialogVisibleDoc.value = false;
+      dialogVisibleConfig.value = false;
+      dialogVisibleConfigM.value = false;
     }
 
     const orderGrid = async () => {
@@ -290,30 +394,91 @@ export default {
       await directOptionsValue();
     });
 
+    const handleValue = async (value: CargaDatosProyectobyIdI) => {
+      loading.value = true;
+      const data = {
+        cartera: value.cartera,
+        cesion: value.cesion,
+        data: value.data,
+        id: uid.value,
+      };
+      const response = await DatosProyectobyId(data);
+      if (!response.ok) {
+        $q.notify({
+          type: 'positive',
+          message: response.resultado,
+        });
+      } else {
+        $q.notify({
+          type: 'negative',
+          message: response.resultado,
+        });
+      }
+      loading.value = false;
+    };
+    const handleValueExcel = async (value: cargDatosExcelI) => {
+      loading.value = true;
+      const response = await AssingProyectobyId(value);
+
+      if (!response.ok) {
+        $q.notify({
+          type: 'positive',
+          message: response.resultado,
+        });
+      } else {
+        $q.notify({
+          type: 'negative',
+          message: response.resultado,
+        });
+      }
+      loading.value = false;
+    };
+
     const handleSelect = async (
       selectedValue: filterSelectI,
       mandatosValue: filterSelectI
     ) => {
       loading.value = true;
-      const data = {
-        idmandato: mandatosValue.value,
-        userid: selectedValue.value,
-      };
-
-      const response = await asignMandatos(data);
-      if (response.ok) {
-        $q.notify({
-          type: 'positive',
-          message: 'La asignación del mandato al usuario fue correctamente.',
-        });
+      if (route.path === '/dashboard/listar-proyectos') {
+        const data = {
+          asignado_a: selectedValue.label,
+          _id: mandatosValue.value,
+        };
+        const response = await AssingProyects(data);
+        if (response.ok) {
+          $q.notify({
+            type: 'positive',
+            message: 'La asignación al usuario fue correctamente.',
+          });
+        } else {
+          $q.notify({
+            type: 'negative',
+            message: response.message,
+          });
+        }
+        await orderProyects();
       } else {
-        $q.notify({
-          type: 'negative',
-          message: response.message,
-        });
+        const data = {
+          idmandato: mandatosValue.value,
+          userid: selectedValue.value,
+        };
+
+        const response = await asignMandatos(data);
+        if (response.ok) {
+          $q.notify({
+            type: 'positive',
+            message: 'La asignación al usuario fue correctamente.',
+          });
+        } else {
+          $q.notify({
+            type: 'negative',
+            message: response.message,
+          });
+        }
+        await orderGridMandatos();
       }
+
       loading.value = false;
-      await orderGridMandatos();
     };
 
     return {
@@ -321,9 +486,15 @@ export default {
       directOptionsValue,
       orderProyects,
       deletRow,
+      dialogVisibleConfig,
+      orderConfigProyects,
+      uploadFiles,
+      dowloadPro,
       validuser,
       viewMandatoSysadoc,
+      dialogVisibleConfigM,
       loading,
+      viewConfig,
       rows,
       filteredRows,
       search,
@@ -332,10 +503,12 @@ export default {
       handleSelect,
       viewGrid,
       dialogVisible,
+      dialogVisibleDoc,
       rouViewPage,
       onConfirm,
       onCancel,
       active,
+      handleValueExcel,
       orderGrid,
       rouView,
       viewRow,
@@ -343,6 +516,7 @@ export default {
       blockUser,
       capitalizeFirstLetter,
       capitalizeUserData,
+      handleValue,
     };
   },
 };

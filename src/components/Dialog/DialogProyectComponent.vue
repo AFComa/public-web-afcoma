@@ -159,7 +159,6 @@ const onSubmit = () => {
   closeDialog();
 };
 onMounted(() => {
-  console.log('isViewProyects: ', isViewProyects);
   actionBoton.value = localStorage.getItem('actionuser');
   if (router.params.id) {
     ContratForm.value.name = isViewProyects.value[0].NombreContacto;

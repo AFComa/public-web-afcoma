@@ -45,8 +45,10 @@
               <q-item clickable @click="rouViewPage('1')">
                 <q-item-section>
                   {{
-                    viewMandatoSysadoc
+                    viewMandatoSysadoc && !viewConfig
                       ? 'Creación Proyectos'
+                      : viewConfig
+                      ? 'Config. layout de proyecto manual'
                       : 'Creación Mandatos'
                   }}
                 </q-item-section>
@@ -54,8 +56,10 @@
               <q-item clickable @click="rouViewPage('2')">
                 <q-item-section>
                   {{
-                    viewMandatoSysadoc
+                    viewMandatoSysadoc && !viewConfig
                       ? 'Asignación de Proyectos'
+                      : viewConfig
+                      ? 'Config. layout de proyecto por excel'
                       : 'Asignación de Mandato'
                   }}
                 </q-item-section>
@@ -96,7 +100,25 @@
         <q-td :props="props">
           <q-btn
             flat
-            v-if="validuser.view"
+            v-if="validuser.view && viewConfig"
+            color="blue"
+            round
+            dense
+            icon="attach_file"
+            @click="uploadFiles(props.row)"
+          />
+          <q-btn
+            v-if="validuser.edit && viewConfig"
+            flat
+            round
+            dense
+            icon="cloud_download"
+            color="purple"
+            @click="dowloadPro(props.row)"
+          />
+          <q-btn
+            flat
+            v-if="validuser.view && !viewConfig"
             color="blue"
             round
             dense
@@ -104,7 +126,7 @@
             @click="viewRow(props.row)"
           />
           <q-btn
-            v-if="validuser.edit"
+            v-if="validuser.edit && !viewConfig"
             flat
             round
             dense
@@ -139,6 +161,24 @@
       :title="'¡Atención!'"
       :message="MessageDialog"
       @confirm="onConfirm"
+      @cancel="onCancel"
+    />
+    <DialogFileComponent
+      v-if="dialogVisibleDoc"
+      :title="'Carga de Archivos del Contrato del Proyecto'"
+      @select="handleValue"
+      @cancel="onCancel"
+    />
+    <DialogConfigComponent
+      v-if="dialogVisibleConfig"
+      :title="'Configuración Layout por Excel'"
+      @select="handleValueExcel"
+      @cancel="onCancel"
+    />
+    <DialogManualComponent
+      v-if="dialogVisibleConfigM"
+      :title="'Configuración de layout del proyecto nuevo'"
+      @select="handleValueExcel"
       @cancel="onCancel"
     />
     <DialogAssingComponent

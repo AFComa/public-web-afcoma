@@ -74,9 +74,29 @@ export interface DeleteProyectI {
   NombreProyecto: string;
 }
 
+export interface AssingProyectI {
+  asignado_a: string;
+  _id: string;
+}
+
 export interface DeleteProyectActionsI {
   id: string;
   cartera: string;
   cesion: string;
   proyect: string;
+}
+
+export interface CargaDatosProyectobyIdI {
+  id: string;
+  cartera: string;
+  cesion: string;
+  data: string | string[];
+}
+
+export interface cargDatosExcelI {
+  proyect: string;
+  created_at: string;
+  created_by: string;
+  layout: string | string[];
+  layout_spetial: string | string[];
 }

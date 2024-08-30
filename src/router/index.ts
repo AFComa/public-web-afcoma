@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import routes from './routes'; // Importa tus rutas
-import { useAuth } from 'src/composables/userAuth';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -8,11 +7,14 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const { isToken } = useAuth();
-  const isAuthenticated = isToken.value;
+  const isAuthenticated = !!!!localStorage.getItem('token');
 
-  if (to.meta.requiresAuth && !isAuthenticated) {
+  console.log('isAuthenticated: ', isAuthenticated);
+  console.log('o.meta.requiresAuth: ', to.name);
+
+  if (to.name !== 'login' && !isAuthenticated) {
     next({ name: 'login' });
+    next(false);
   } else {
     next();
   }

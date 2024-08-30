@@ -109,8 +109,6 @@ const options = ref(
   }))
 );
 
-console.log('isListProyects: ', isListProyects.value);
-
 const options2 = ref(
   router.path === '/dashboard/listar-proyectos'
     ? isListProyects?.value?.map((item) => ({

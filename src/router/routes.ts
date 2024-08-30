@@ -101,6 +101,13 @@ const routes: RouteRecordRaw[] = [
         component: () => import('src/pages/sisadoc/DocCreate/ProyectPage.vue'),
         meta: { requiresAuth: true }, // Requiere autenticación
       },
+      {
+        path: 'config',
+        name: 'ConfigUser',
+        component: () =>
+          import('src/pages/sisadoc/DocListProyect/ListPage.vue'),
+        meta: { requiresAuth: true }, // Requiere autenticación
+      },
     ],
   },
   // Always leave this as last one,

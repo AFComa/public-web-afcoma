@@ -49,7 +49,7 @@
             label="Correo"
             lazy-rules
             v-model="userForm.email"
-            :disable="actionBoton === 'view'"
+            :disable="actionBoton === 'view' || actionBoton === 'edit'"
             no-error-icon
             :rules="[
             (val: any) => (val && val.length > 0) || 'Este campo es obligatorio',

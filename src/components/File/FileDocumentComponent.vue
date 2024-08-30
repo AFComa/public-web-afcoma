@@ -112,7 +112,7 @@ const uploadFiles = async () => {
         },
       }
     );
-    console.log('Archivos subidos con éxito:', response.data);
+    console.log(response);
   } catch (error) {
     console.error('Error al subir archivos:', error);
   }

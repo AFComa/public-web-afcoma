@@ -11,7 +11,7 @@
         <p>Proyectos</p>
       </div>
       <div class="col-xs-6 col-sm-6 col-md-6">
-        <router-link to="dashboard/listar-mandatos">
+        <router-link to="/dashboard/config">
           <q-img src="../../../assets/img/Report.png" width="20%" />
         </router-link>
         <p>Configuración</p>

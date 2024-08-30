@@ -4,13 +4,9 @@ import { api } from '../../boot/axios';
 import type { LoginSuccess } from '../../interfaces/auth/Acces.interfaces';
 
 export const actions: ActionTree<LoginSuccess, unknown> = {
-  async getProyects({ commit }) {
+  async getProyects({ commit }, item) {
     try {
-      const { data } = await api.post('SA/proyectos/get', {
-        nombre: 'Luis',
-        apellido: 'Hernandez',
-        perfil: 'Administrador',
-      });
+      const { data } = await api.post('SA/proyectos/get', item);
       commit('SET_LIST_PROYECT', data.result);
       return {
         ok: true,
@@ -72,7 +68,6 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
   async byProyectDelete({ commit }, item) {
     try {
       const { data } = await api.post('SA/proyectos/deleteProyectById', item);
-      console.log('data: ', data);
 
       commit('data');
       return {
@@ -113,6 +108,128 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
       return {
         ok: false,
         message: 'Ocurrio un error al actualizar el Producto.',
+      };
+    }
+  },
+  async allProyectLayout({ commit }) {
+    try {
+      const { data } = await api.get('SA/proyectos/getproyectlayout');
+
+      commit('data');
+      return {
+        ok: true,
+        resultado: data.result,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        message: 'Ocurrio un error al obtener los usuarios.',
+      };
+    }
+  },
+  async DeleteProyect({ commit }, item) {
+    try {
+      const { data } = await api.post('SA/proyectos/deleteConfigProyectById', {
+        id: item,
+      });
+
+      commit('data');
+      return {
+        ok: true,
+        resultado: data.mensaje,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        message: 'Ocurrio un error al eliminar el registro.',
+      };
+    }
+  },
+  async DowloadPr({ commit }, item) {
+    try {
+      const { data } = await api.post('SA/proyectos/getconfigbyid', {
+        proyect: item,
+      });
+
+      commit('data');
+      return {
+        ok: true,
+        resultado: data,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        message: 'Ocurrio un error al descargar el registro.',
+      };
+    }
+  },
+  async getProyectsAll({ commit }) {
+    try {
+      const { data } = await api.get('SA/proyectos/getproyects');
+
+      commit('data');
+      return {
+        ok: true,
+        resultado: data.result,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        message: 'Ocurrio un error al obtener los usuarios.',
+      };
+    }
+  },
+  async DatosProyectobyId({ commit }, item) {
+    try {
+      const { data } = await api.post(
+        'SA/proyectos/cargaDatosProyectobyId',
+        item
+      );
+
+      commit('data');
+      return {
+        ok: data.error,
+        resultado: data.mensaje,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        message: 'Ocurrio un error al descargar el registro.',
+      };
+    }
+  },
+  async AssingProyectobyId({ commit }, item) {
+    try {
+      const { data } = await api.post(
+        'SA/proyectos/assiguserproyectlayout',
+        item
+      );
+
+      commit('data');
+      return {
+        ok: data.error,
+        resultado: data.mensaje,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        message: 'Ocurrio un error al descargar el registro.',
+      };
+    }
+  },
+  async getProyectsGeneralAll({ commit }) {
+    try {
+      const { data } = await api.get('SA/proyectos/getlayoutGeneral');
+
+      commit('data');
+      return {
+        ok: true,
+        resultado: data.result,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        message: 'Ocurrio un error al obtener los usuarios.',
       };
     }
   },

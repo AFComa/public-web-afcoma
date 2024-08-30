@@ -93,6 +93,30 @@ export const ListProyects = () => {
   ];
 };
 
+export const ListConfigProyects = () => {
+  return [
+    {
+      name: 'id',
+      label: 'ID Proyecto',
+      align: 'left',
+      field: 'id',
+    },
+    {
+      name: 'created_at',
+      label: 'Fecha de creación',
+      align: 'left',
+      field: 'created_at',
+    },
+    {
+      name: 'created_by',
+      label: 'Creado por',
+      align: 'left',
+      field: 'created_by',
+    },
+    { name: 'actions', label: 'Acciones', align: 'center', field: 'actions' },
+  ];
+};
+
 export const ListActionUser = () => {
   return [
     { name: 'module', label: 'Módulo', field: 'module', align: 'left' },

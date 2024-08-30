@@ -78,7 +78,6 @@ export default {
           : '',
         _id: router.params.id ? router.params.id : undefined,
       };
-      console.log('pryectForm: ', pryectForm.value);
 
       actionBoton.value === 'view'
         ? routers.push('/dashboard//listar-proyectos')
@@ -89,7 +88,6 @@ export default {
 
     const save = (data: CreateProyectI) => {
       loading.value = true;
-      console.log('cartProyect: ', cartProyect.value?.name);
 
       setTimeout(async () => {
         const response = await CreateProyects(data);
@@ -134,13 +132,9 @@ export default {
     }
 
     const handleSelect = async (selectedValue: CartProyectI) => {
-      console.log('selectedValue: ', selectedValue);
       cartProyect.value = selectedValue;
-      console.log('cartProyect: ', cartProyect);
     };
     onMounted(() => {
-      console.log('isViewProyects: ', isViewProyects);
-
       actionBoton.value = localStorage.getItem('actionuser');
       if (router.params.id) {
         pryectForm.value.identificador = isViewProyects.value[0].Identificador;

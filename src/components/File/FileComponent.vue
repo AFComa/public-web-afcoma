@@ -154,6 +154,7 @@ export default {
         reader.onload = async (e) => {
           const data = new Uint8Array(e.target.result);
           const workbook = XLSX.read(data, { type: 'array' });
+
           sheets.value = workbook.SheetNames.map((sheetName) => ({
             name: sheetName,
             data: XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {
@@ -161,18 +162,30 @@ export default {
               defval: '',
             }),
           }));
+
           transInfo.value = sheets.value
             .filter((item) => item.name !== 'Glosario_Opciones')
-            .map((sheet) => ({
-              name: sheet.name,
-              data: sheet.data.slice(1).map((row) => {
-                return sheet.data[0].reduce((acc, field, index) => {
-                  acc[field] = convertSiNoToBoolean(row[index]);
+            .map((sheet) => {
+              const headers = sheet.data[0];
+              const types = sheet.data[sheet.data.length - 1];
+              const values = sheet.data.slice(1, -1);
+              const transformedData = values.map((row) => {
+                return headers.reduce((acc, header, index) => {
+                  acc[header] = {
+                    value: convertSiNoToBoolean(row[index]),
+                    type: types[index] || 'String',
+                    isValid: true,
+                    coments: '',
+                  };
                   return acc;
                 }, {});
-              }),
-            }));
+              });
 
+              return {
+                name: sheet.name,
+                data: transformedData,
+              };
+            });
           setMandatosValid(transInfo.value);
           const result = await validMandato({
             idmandato: '',
@@ -180,12 +193,11 @@ export default {
           });
 
           transInfo.value = result.resultado.datosmandato;
+          viewFile.value = true;
+          loading.value = false;
         };
 
-        viewFile.value = true;
         reader.readAsArrayBuffer(file);
-
-        loading.value = false;
       }, 5000);
     };
 
@@ -196,7 +208,6 @@ export default {
       selectedItem.value = null;
     };
 
-    //Computed para filtrar el array excluyendo la última posición
     const filteredData = computed(() => {
       if (!selectedData.value || !selectedData.value.data) {
         return [];
@@ -216,19 +227,16 @@ export default {
     };
 
     function onConfirm() {
-      // Lógica cuando se confirma
       warningDialog.value = false;
     }
 
     function onCancel() {
-      // Lógica cuando se cancela
       warningDialog.value = false;
     }
 
     // const dynamicLabel = computed(() => firstKey.value);
     // const dynamicValue = computed(() => firstKey.value);
 
-    // `dynamicLabel` y `dynamicValue` ahora son dinámicos
     const dynamicLabel = computed(() => {
       return (option) => {
         const key = firstKey.value;
@@ -254,6 +262,7 @@ export default {
       dynamicValue,
       selectedCategory,
       firstKey,
+
       files,
       sheets,
       transInfo,
