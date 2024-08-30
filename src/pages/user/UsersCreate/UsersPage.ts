@@ -99,7 +99,7 @@ export default {
       loading.value = true;
       const data = {
         _id: router.params.id,
-        email: userForm.value.email,
+        email: isTablePermission.value.email,
         nombre: userForm.value.nombre,
         apellido: userForm.value.apellido,
         phone: userForm.value.phone,
