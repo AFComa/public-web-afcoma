@@ -28,7 +28,7 @@
         <q-select
           :dense="dense"
           v-model="selectedItem"
-          :options="filteredData"
+          :options="selectedData.data"
           label="Seleccione un elemento"
           :option-label="dynamicLabel"
           :option-value="dynamicValue"
@@ -208,12 +208,12 @@ export default {
       selectedItem.value = null;
     };
 
-    const filteredData = computed(() => {
-      if (!selectedData.value || !selectedData.value.data) {
-        return [];
-      }
-      return selectedData.value.data.slice(0, -1);
-    });
+    // const filteredData = computed(() => {
+    //   if (!selectedData.value || !selectedData.value.data) {
+    //     return [];
+    //   }
+    //   return selectedData.value.data.slice(0, -1);
+    // });
 
     const firstKey = computed(() => {
       if (selectedData.value && selectedData.value.data.length > 0) {
@@ -275,7 +275,7 @@ export default {
       isBoolean,
       saveInfo,
       onCancel,
-      filteredData,
+
       loading,
       dense,
     };
