@@ -41,14 +41,14 @@
     <div v-if="selectedData">
       <div v-if="selectedItem" class="row q-mt-md q-col-gutter-lg q-px-xl">
         <div
-          v-for="(value, key) in selectedItem"
-          :key="key"
+          v-for="(field, index) in selectedItem"
+          :key="index"
           class="col-xs-12 col-sm-6 col-md-3 q-mb-xs"
         >
-          <template v-if="isBoolean(value)">
+          <template v-if="isBoolean(field)">
             <q-checkbox
-              v-model="selectedItem[key].value"
-              :label="key"
+              v-model="field.value"
+              :label="field.key"
               class="adaptable-text"
             />
           </template>
@@ -57,29 +57,16 @@
               class="input-border"
               :dense="dense"
               size="large"
-              v-model="selectedItem[key].value"
-              :label="key"
+              v-model="field.value"
+              :label="field.key"
               filled
               outlined
-              :hint="
-                !selectedItem[key].isValid ? selectedItem[key].coments : ''
-              "
+              :hint="!field.isValid ? field.coments : ''"
             />
           </template>
         </div>
       </div>
     </div>
-    <!-- <div class="row q-pt-lg justify-center" v-if="selectedData">
-      <q-btn
-        class="custom-button"
-        no-caps
-        unelevated
-        rounded
-        size="lg"
-        label="Guardar"
-        @click="saveInfo"
-      />
-    </div> -->
     <LoadingOver
       v-if="loading"
       :messageOne="'Espere un momento estamos cargando la información...'"
@@ -121,20 +108,6 @@ export default {
     const dense = ref(true);
     const { validMandato, setMandatosValid } = mandatosAuth();
 
-    // const containsStringOrDate = (value) => {
-    //   if (typeof value === 'string') {
-    //     const lowerValue = value.toLowerCase();
-    //     return lowerValue === 'string' || lowerValue === 'date';
-    //   }
-    //   return false;
-    // };
-
-    // const filterOutStringOrDateRecords = (data) => {
-    //   return data.filter((row) => {
-    //     return !Object.values(row).some((value) => containsStringOrDate(value));
-    //   });
-    // };
-
     const convertSiNoToBoolean = (value) => {
       if (typeof value === 'string') {
         const lowerValue = value.toLowerCase();
@@ -170,15 +143,13 @@ export default {
               const types = sheet.data[sheet.data.length - 1];
               const values = sheet.data.slice(1, -1);
               const transformedData = values.map((row) => {
-                return headers.reduce((acc, header, index) => {
-                  acc[header] = {
-                    value: convertSiNoToBoolean(row[index]),
-                    type: types[index] || 'String',
-                    isValid: true,
-                    coments: '',
-                  };
-                  return acc;
-                }, {});
+                return headers.map((header, index) => ({
+                  key: header,
+                  value: convertSiNoToBoolean(row[index]),
+                  type: types[index] || 'String',
+                  isValid: true,
+                  coments: '',
+                }));
               });
 
               return {
@@ -186,13 +157,14 @@ export default {
                 data: transformedData,
               };
             });
-          setMandatosValid(transInfo.value);
+
           const result = await validMandato({
             idmandato: '',
             datosmandato: transInfo.value,
           });
 
           transInfo.value = result.resultado.datosmandato;
+          setMandatosValid(transInfo.value);
           viewFile.value = true;
           loading.value = false;
         };
@@ -205,15 +177,18 @@ export default {
       selectedData.value = transInfo.value.find(
         (category) => category.name === selectedCategory.value.name
       );
+
+      if (selectedData.value) {
+        selectedData.value.data = selectedData.value.data.map((item, index) => {
+          return {
+            ...item,
+            order: index + 1,
+          };
+        });
+      }
+
       selectedItem.value = null;
     };
-
-    // const filteredData = computed(() => {
-    //   if (!selectedData.value || !selectedData.value.data) {
-    //     return [];
-    //   }
-    //   return selectedData.value.data.slice(0, -1);
-    // });
 
     const firstKey = computed(() => {
       if (selectedData.value && selectedData.value.data.length > 0) {
@@ -233,23 +208,32 @@ export default {
     function onCancel() {
       warningDialog.value = false;
     }
-
-    // const dynamicLabel = computed(() => firstKey.value);
-    // const dynamicValue = computed(() => firstKey.value);
-
     const dynamicLabel = computed(() => {
       return (option) => {
         const key = firstKey.value;
-        return option[key]?.value || '';
+        return `${option.order}. ${option[key]?.value || ''}`;
       };
     });
 
     const dynamicValue = computed(() => {
       return (option) => {
-        const key = firstKey.value;
-        return option[key]?.value || '';
+        return option.order;
       };
     });
+
+    // const dynamicLabel = computed(() => {
+    //   return (option) => {
+    //     const key = firstKey.value;
+    //     return option[key]?.value || '';
+    //   };
+    // });
+
+    // const dynamicValue = computed(() => {
+    //   return (option) => {
+    //     const key = firstKey.value;
+    //     return option[key]?.value || '';
+    //   };
+    // });
 
     const isBoolean = (value) => {
       return value.value === true || value.value === false;
@@ -262,7 +246,6 @@ export default {
       dynamicValue,
       selectedCategory,
       firstKey,
-
       files,
       sheets,
       transInfo,

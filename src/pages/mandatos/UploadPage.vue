@@ -31,7 +31,7 @@
         <q-select
           dense
           v-model="selectedItem"
-          :options="filteredData"
+          :options="selectedData.data"
           label="Seleccione un elemento"
           :option-label="dynamicLabel"
           :option-value="dynamicValue"
@@ -44,27 +44,29 @@
     <div v-if="selectedData">
       <div v-if="selectedItem" class="row q-mt-md q-col-gutter-lg q-px-xl">
         <div
-          v-for="(value, key) in selectedItem"
-          :key="key"
-          class="col-xs-12 col-sm-6 col-md-3"
+          v-for="(field, index) in selectedItem"
+          :key="index"
+          class="col-xs-12 col-sm-6 col-md-3 q-mb-xs"
         >
-          <template v-if="isBoolean(value)">
+          <template v-if="isBoolean(field)">
             <q-checkbox
-              dense
+              v-model="field.value"
+              :label="field.key"
               :disable="actionBoton === 'view'"
-              v-model="selectedItem[key]"
-              :label="key"
               class="adaptable-text"
             />
           </template>
           <template v-else>
             <q-input
-              :disable="actionBoton === 'view'"
+              class="input-border"
               dense
-              v-model="selectedItem[key]"
-              :label="key"
+              :disable="actionBoton === 'view'"
+              size="large"
+              v-model="field.value"
+              :label="field.key"
               filled
               outlined
+              :hint="!field.isValid ? field.coments : ''"
             />
           </template>
         </div>
@@ -131,33 +133,19 @@ export default {
       { label: 'Listar Mandatos', path: '/dashboard/listar-mandatos' },
       { label: 'Mandatos', path: '/dashboard/listar-mandatos/Mandatos' },
     ]);
-    // const containsStringOrDate = (value) => {
-    //   if (typeof value === 'string') {
-    //     const lowerValue = value.toLowerCase();
-    //     return lowerValue === 'string' || lowerValue === 'date';
-    //   }
-    //   return false;
-    // };
-
-    // const filterOutStringOrDateRecords = (data) => {
-    //   return data.filter((row) => {
-    //     return !Object.values(row).some((value) => containsStringOrDate(value));
-    //   });
-    // };
-
-    // const convertSiNoToBoolean = (value) => {
-    //   if (typeof value === 'string') {
-    //     const lowerValue = value.toLowerCase();
-    //     if (lowerValue === 'si') return true;
-    //     if (lowerValue === 'no') return false;
-    //   }
-    //   return value;
-    // };
-
     const handleSelection = () => {
       selectedData.value = transInfo.value.find(
         (category) => category.name === selectedCategory.value.name
       );
+
+      if (selectedData.value) {
+        selectedData.value.data = selectedData.value.data.map((item, index) => {
+          return {
+            ...item,
+            order: index + 1,
+          };
+        });
+      }
 
       selectedItem.value = null;
     };
@@ -204,30 +192,29 @@ export default {
       }, 5000);
     };
 
-    //Computed para filtrar el array excluyendo la última posición
-    const filteredData = computed(() => {
-      if (!selectedData.value || !selectedData.value.data) {
-        return [];
-      }
-      return selectedData.value.data.length === 1
-        ? selectedData.value.data
-        : selectedData.value.data.slice(0, -1);
-    });
-
     function onCancel() {
       // Lógica cuando se cancela
       warningDialog.value = false;
     }
 
-    const dynamicLabel = computed(() => firstKey.value);
-    const dynamicValue = computed(() => firstKey.value);
+    const dynamicLabel = computed(() => {
+      return (option) => {
+        const key = firstKey.value;
+        return `${option.order}. ${option[key]?.value || ''}`;
+      };
+    });
+
+    const dynamicValue = computed(() => {
+      return (option) => {
+        return option.order;
+      };
+    });
 
     const isBoolean = (value) => {
-      return value === true || value === false;
+      return value.value === true || value.value === false;
     };
     onMounted(async () => {
       actionBoton.value = localStorage.getItem('actionuser');
-
       nameMandato.value = await isViewMandatos.value.idmandato;
       transInfo.value = await isViewMandatos.value.datosmandato;
     });
@@ -235,7 +222,6 @@ export default {
     return {
       selectedData,
       selectedItem,
-      filteredData,
       actionBoton,
       dynamicLabel,
       dynamicValue,

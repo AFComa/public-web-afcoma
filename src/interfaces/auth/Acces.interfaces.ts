@@ -71,3 +71,8 @@ export interface CartProyectI {
   reporteoApi: string;
   incidenciaApi: string;
 }
+
+export interface LogoutI {
+  token: string | null;
+  _id: string;
+}

@@ -5,7 +5,7 @@
         v-model="files"
         label="Favor de cargar el contrato"
         multiple
-        accept=".pdf"
+        accept=".pdf, .xlsx"
         @added="handleFileUpload"
         :disable="files.length > 0"
       />
@@ -34,7 +34,7 @@
             ></iframe>
           </div>
           <div
-            v-else-if="currentFile.type === 'word'"
+            v-else-if="currentFile.type === 'xlsx'"
             v-html="currentFile.content"
           ></div>
         </q-card-section>

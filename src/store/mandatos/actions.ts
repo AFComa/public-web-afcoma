@@ -102,4 +102,19 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
       };
     }
   },
+  async logout({ commit }, item) {
+    try {
+      const { data } = await api.post('login/logout', item);
+      commit('data');
+      return {
+        ok: true,
+        resultado: data,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        message: 'Ocurrio un error al cerrar sesión.',
+      };
+    }
+  },
 };

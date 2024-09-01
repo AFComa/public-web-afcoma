@@ -38,18 +38,28 @@
 </template>
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import imgLogoNavbar from '../../assets/img/logo/1.png';
 import { useAuth } from 'src/composables/userAuth';
+import { mandatosAuth } from 'src/composables/mandatosAuth';
 
 defineOptions({
   name: 'HeroComponent',
 });
+const router = useRouter();
 const avatar = ref('');
 const nombre = ref('');
 const { isAcces } = useAuth();
+const { logout } = mandatosAuth();
 
-const cerrar = () => {
+const cerrar = async () => {
+  await logout({
+    token: localStorage.getItem('token'),
+    _id: isAcces.value.ID,
+  });
+
   localStorage.clear();
+  router.push('/');
 };
 
 onMounted(async () => {

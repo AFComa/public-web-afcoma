@@ -431,6 +431,7 @@ export default {
           message: response.resultado,
         });
       }
+      await orderConfigProyects();
       loading.value = false;
     };
 

@@ -52,6 +52,9 @@ export default {
     };
 
     onMounted(async () => {
+      if (localStorage.getItem('token')) {
+        router.push('dashboard');
+      }
       userForm.value.ip = await getIp();
     });
 
