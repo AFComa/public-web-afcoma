@@ -3,7 +3,7 @@ version: '3.6'
 services:
   public-afcoma-prod:
     container_name: public-afcoma-prod
-    image: public-afcoma-prod:v0.0.19-prod
+    image: public-afcoma-prod:v0.0.20-prod
     restart: always
     environment:
       - ENV=prod

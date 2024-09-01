@@ -2,9 +2,9 @@
 import { ActionTree } from 'vuex';
 import axios from 'axios';
 import { api } from '../../boot/axios';
+import { isAxiosError } from 'axios';
 import type {
   LoginSuccess,
-  LoginError,
   AccesUserI,
 } from '../../interfaces/auth/Acces.interfaces';
 
@@ -14,10 +14,7 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
     credentials: { usuario: string; password: string; ip: string }
   ) {
     try {
-      const { headers } = await api.post<LoginSuccess | LoginError>(
-        'login/user',
-        credentials
-      );
+      const { headers } = await api.post('login/user', credentials);
       localStorage.setItem('token', headers.token);
       commit('SET_LOGIN_DATA', { ok: true, token: headers.token });
       return {
@@ -25,10 +22,12 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
         token: headers.token,
       };
     } catch (error) {
-      return {
-        ok: false,
-        message: 'Usuario o contraseña incorrectos',
-      };
+      if (isAxiosError(error)) {
+        return {
+          ok: false,
+          message: error.response?.data.detail,
+        };
+      }
     }
   },
 
