@@ -179,15 +179,6 @@
             label="Contacto"
             @click="showProyect"
           />
-          &nbsp;
-          <q-btn
-            class="custom-button-se"
-            no-caps
-            unelevated
-            rounded
-            size="lg"
-            label="Contratos del proyectos"
-          />
         </div>
         <div class="col-xs-11 col-sm-12 col-md-12 col-lg-1">
           <q-btn

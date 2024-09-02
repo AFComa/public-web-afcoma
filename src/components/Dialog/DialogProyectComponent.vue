@@ -67,10 +67,6 @@
                 lazy-rules
                 :disable="actionBoton === 'view'"
                 no-error-icon
-                :rules="[
-                  (val) =>
-                    (val && val.length > 0) || 'Este campo es obligatorio',
-                ]"
               />
             </div>
             <div class="col-xs-12 col-md-10 col-lg-10">
@@ -83,10 +79,6 @@
                 label="Url de incidencias por API*"
                 lazy-rules
                 no-error-icon
-                :rules="[
-                  (val) =>
-                    (val && val.length > 0) || 'Este campo es obligatorio',
-                ]"
               />
             </div>
           </div>

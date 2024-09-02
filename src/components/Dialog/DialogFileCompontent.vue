@@ -82,9 +82,8 @@
 </template>
 <style scoped src="./DialogComponent.scss"></style>
 <script setup>
-import { ref, defineEmits, onMounted } from 'vue';
+import { ref, defineEmits } from 'vue';
 import * as XLSX from 'xlsx';
-import { sysadocAuth } from 'src/composables/sysadocAuth';
 
 const props = defineProps({
   title: {
@@ -96,7 +95,6 @@ const props = defineProps({
 const visible = ref(true);
 const actionBoton = ref();
 const fileName = ref(null);
-const { isViewProyects } = sysadocAuth();
 const FileForm = ref({
   cartera: '',
   cesion: '',
@@ -131,7 +129,4 @@ const onSubmit = () => {
   emits('select', FileForm.value);
   closeDialog();
 };
-onMounted(() => {
-  console.log('isViewProyects: ', isViewProyects);
-});
 </script>
