@@ -108,6 +108,20 @@ const routes: RouteRecordRaw[] = [
           import('src/pages/sisadoc/DocListProyect/ListPage.vue'),
         meta: { requiresAuth: true }, // Requiere autenticación
       },
+      {
+        path: 'registro-proyecto/:id/:cesion/:name',
+        name: 'RegisterProyect',
+        component: () =>
+          import('src/pages/sisadoc/RegisterProyect/RegisterProyectPage.vue'),
+        meta: { requiresAuth: true }, // Requiere autenticación
+      },
+      {
+        path: 'valid-proyecto/:id/:uid/:cartera/:cesion',
+        name: 'ValidProyect',
+        component: () =>
+          import('src/pages/sisadoc/ValidProyect/ValidProyectPage.vue'),
+        meta: { requiresAuth: true }, // Requiere autenticación
+      },
     ],
   },
   // Always leave this as last one,

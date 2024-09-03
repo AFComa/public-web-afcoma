@@ -7,6 +7,8 @@ import {
   DeleteProyectActionsI,
   CargaDatosProyectobyIdI,
   cargDatosExcelI,
+  RegisterProyectI,
+  ReportIncI,
 } from 'src/interfaces/components/Grid.interfaces';
 
 export const sysadocAuth = () => {
@@ -43,5 +45,15 @@ export const sysadocAuth = () => {
       store.dispatch('sysadoc/AssingProyectobyId', data),
     getProyectsGeneralAll: () =>
       store.dispatch('sysadoc/getProyectsGeneralAll'),
+    RegisterProyecto: (data: RegisterProyectI) =>
+      store.dispatch('sysadoc/RegisterProyecto', data),
+    ReportInc: (data: ReportIncI) => store.dispatch('sysadoc/ReportInc', data),
+    ReportIncTotal: (data: ReportIncI) =>
+      store.dispatch('sysadoc/ReportIncTotal', data),
+    ReportProyectID: (data: string) =>
+      store.dispatch('sysadoc/ReportProyectID', data),
+    CheckFiles: (data: string) => store.dispatch('sysadoc/CheckFiles', data),
+    UpdateInformation: (data: string) =>
+      store.dispatch('sysadoc/UpdateInformation', data),
   };
 };

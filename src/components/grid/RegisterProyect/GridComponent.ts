@@ -3,39 +3,25 @@ import * as XLSX from 'xlsx';
 import { useRouter, useRoute } from 'vue-router';
 import { useQuasar } from 'quasar';
 
-import DialogComponent from '../../components/Dialog/DialogComponent.vue';
-import DialogAssingComponent from '../../components/Dialog/DialogAssingComponent.vue';
-import DialogFileComponent from '../Dialog/DialogFileCompontent.vue';
-import DialogConfigComponent from '../Dialog/DialogConfLayoutComponent.vue';
-import DialogManualComponent from '../Dialog/DialogConfManualComponent.vue';
 import { useAuth } from 'src/composables/userAuth';
 import { mandatosAuth } from 'src/composables/mandatosAuth';
 import { sysadocAuth } from 'src/composables/sysadocAuth';
-import {
-  ListMandatos,
-  ListUsuario,
-  ListProyects,
-  ListConfigProyects,
-} from '../../utils/users/usersColums';
+
 import type {
   ListUserI,
   ColumI,
   DeleteProyectI,
   CargaDatosProyectobyIdI,
   cargDatosExcelI,
-} from '../../interfaces/components/Grid.interfaces';
-import LoadingComponentBasic from '../../components/Loading/LoadingBasicComponent.vue';
+} from '../../../interfaces/components/Grid.interfaces';
+import { ListRegisterProyects } from '../../../utils/users/usersColums';
+import LoadingComponentBasic from '../../../components/Loading/LoadingBasicComponent.vue';
 import { filterSelectI } from 'src/interfaces/auth/Acces.interfaces';
 
 export default {
   name: 'GridComponent',
   components: {
     LoadingComponentBasic,
-    DialogComponent,
-    DialogAssingComponent,
-    DialogFileComponent,
-    DialogConfigComponent,
-    DialogManualComponent,
   },
   setup() {
     const router = useRouter();
@@ -54,6 +40,9 @@ export default {
       DowloadPr,
       DatosProyectobyId,
       AssingProyectobyId,
+      RegisterProyecto,
+      ReportInc,
+      ReportIncTotal,
     } = sysadocAuth();
     const $q = useQuasar();
     const warningDialog = ref(false);
@@ -78,10 +67,13 @@ export default {
       download: false,
       opera: false,
     });
+    const d = new Date();
+    const myDate = d.toUTCString();
 
     const search = ref('');
     const columns = ref<ColumI[]>([]);
     const rows = ref<ListUserI[]>([]);
+    const nameProyect = ref(route.params.name);
 
     const filteredRows = computed(() => {
       const searchLower = search.value.toLowerCase();
@@ -107,6 +99,50 @@ export default {
     const rouView = () => {
       localStorage.removeItem('actionuser');
       router.push('/dashboard/usuarios');
+    };
+
+    const ReportIncDowload = async () => {
+      loading.value = true;
+      const data = {
+        cartera: route.params.id,
+        cesion: route.params.cesion,
+        proyect: route.params.name,
+      };
+      const result = await ReportInc(data);
+
+      if (!result.ok) {
+        const link = document.createElement('a');
+        const file = new Blob([result.resultado.result], {
+          type: 'text/plain',
+        });
+        link.href = URL.createObjectURL(file);
+        link.download = `reporte_${route.params.name}_${myDate}.csv`;
+        link.click();
+        URL.revokeObjectURL(link.href);
+      }
+      loading.value = false;
+    };
+
+    const ReportIncTotalDowload = async () => {
+      loading.value = true;
+      const data = {
+        cartera: route.params.id,
+        cesion: route.params.cesion,
+        proyect: route.params.name,
+      };
+      const result = await ReportIncTotal(data);
+
+      if (!result.ok) {
+        const link = document.createElement('a');
+        const file = new Blob([result.resultado.result], {
+          type: 'text/plain',
+        });
+        link.href = URL.createObjectURL(file);
+        link.download = `reporte_Total_Proyecto_${route.params.name}_${myDate}.csv`;
+        link.click();
+        URL.revokeObjectURL(link.href);
+      }
+      loading.value = false;
     };
 
     const rouViewPage = async (item: string) => {
@@ -141,34 +177,16 @@ export default {
     };
 
     const directOptionsValue = async () => {
-      if (route.path === '/dashboard/listar-mandatos') {
-        viewGrid.value = true;
-        viewMandatoSysadoc.value = false;
-        columns.value = ListMandatos();
-        validuser.value = await isPermission.value.configUser
-          .mandatosPermissions[0];
-        await orderGridMandatos();
-      } else if (route.path === '/dashboard/listar-proyectos') {
-        viewGrid.value = true;
-        viewMandatoSysadoc.value = true;
-        columns.value = ListProyects();
-        validuser.value = await isPermission.value.configUser
-          .sysadocPermission[0];
-        await orderProyects();
-      } else if (route.path === '/dashboard/config') {
-        viewGrid.value = true;
-        viewMandatoSysadoc.value = true;
-        viewConfig.value = true;
-        columns.value = ListConfigProyects();
-        validuser.value = await isPermission.value.configUser
-          .sysadocPermission[0];
-        await orderConfigProyects();
-      } else {
-        viewGrid.value = false;
-        columns.value = ListUsuario();
-        validuser.value = await isPermission.value.configUser
-          .usersPermissions[0];
-        await orderGrid();
+      const data = {
+        id: route.params.id,
+        cartera: route.params.name,
+        cesion: route.params.cesion,
+      };
+
+      const result = await RegisterProyecto(data);
+      if (!result.ok) {
+        columns.value = ListRegisterProyects();
+        rows.value = result.resultado.result.Rows;
       }
     };
     const orderConfigProyects = async () => {
@@ -211,35 +229,33 @@ export default {
     };
 
     const viewRow = async (row: ListUserI & DeleteProyectI) => {
-      if (viewGrid.value) {
-        loading.value = true;
-        (await viewMandatoSysadoc.value)
-          ? await getIdProyects(row.id)
-          : await mandatoId(row._id);
+      router.push({
+        name: 'ValidProyect',
+        params: {
+          id: row.id,
+          uid: row._id,
+          cartera: row.cartera,
+          cesion: row.cesion,
+        },
+      });
 
-        localStorage.setItem('actionuser', 'view');
-        if (viewMandatoSysadoc.value) {
-          router.push({
-            name: 'RegisterProyect',
-            params: {
-              id: row.cartera,
-              cesion: row.cesion,
-              name: row.NombreProyecto,
-            },
-          });
-        } else {
-          router.push({
-            name: 'MandatosView',
-            params: { id: row._id },
-          });
-        }
+      // if (viewGrid.value) {
+      //   loading.value = true;
+      //   (await viewMandatoSysadoc.value)
+      //     ? await getIdProyects(row.id)
+      //     : await mandatoId(row._id);
 
-        loading.value = false;
-      } else {
-        localStorage.setItem('actionuser', 'view');
-        await getUserId({ id: row._id, opc: 2 });
-        router.push({ name: 'UsuariosId', params: { id: row._id } });
-      }
+      //   localStorage.setItem('actionuser', 'view');
+      //   router.push({
+      //     name: viewMandatoSysadoc.value ? 'ProyectosEdit' : 'MandatosView',
+      //     params: { id: viewMandatoSysadoc.value ? row.id : row._id },
+      //   });
+      //   loading.value = false;
+      // } else {
+      //   localStorage.setItem('actionuser', 'view');
+      //   await getUserId({ id: row._id, opc: 2 });
+      //   router.push({ name: 'UsuariosId', params: { id: row._id } });
+      // }
     };
 
     const uploadFiles = async (row: ListUserI & DeleteProyectI) => {
@@ -501,6 +517,7 @@ export default {
       deletRow,
       dialogVisibleConfig,
       orderConfigProyects,
+      ReportIncTotalDowload,
       uploadFiles,
       dowloadPro,
       validuser,
@@ -514,9 +531,11 @@ export default {
       warningDialog,
       MessageDialog,
       handleSelect,
+      nameProyect,
       viewGrid,
       dialogVisible,
       dialogVisibleDoc,
+      ReportIncDowload,
       rouViewPage,
       onConfirm,
       onCancel,

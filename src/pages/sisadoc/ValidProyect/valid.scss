@@ -1,0 +1,60 @@
+.modal-general {
+  border-radius: 24px;
+
+  .tam-moda {
+    width: 700px;
+    max-width: 80vw;
+    border-radius: 24px;
+  }
+  .modal-tex {
+    text-align: center;
+    p {
+      text-align: center;
+      font-size: 32px;
+      font-weight: 375;
+      line-height: 44px;
+      color: #244b5a;
+    }
+  }
+
+  .modal-content-sesion {
+    text-align: center;
+    p {
+      text-align: center;
+      font-size: 32px;
+      font-weight: 375;
+      line-height: 44px;
+      color: #244b5a;
+    }
+
+    label {
+      font-size: 17px;
+      font-weight: 400;
+      line-height: 24px;
+      color: #244b5a;
+    }
+
+    span {
+      font-size: 17px;
+      font-weight: 400;
+      line-height: 24px;
+      color: #244b5a;
+    }
+
+    .container_button_modal {
+      display: flex;
+      justify-content: center;
+      margin: 30px 0 6px;
+    }
+  }
+}
+@media (min-width: 768px) {
+  .modal-general {
+    border-radius: 24px;
+    .tam-moda {
+      width: 700px;
+      max-width: 47vw;
+      border-radius: 24px;
+    }
+  }
+}

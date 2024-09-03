@@ -233,4 +233,106 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
       };
     }
   },
+  async RegisterProyecto({ commit }, item) {
+    try {
+      const { data } = await api.post('SA/proyectos/getProyectById', item);
+
+      commit('data');
+      return {
+        ok: data.error,
+        resultado: data,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        message: 'Ocurrio un error al descargar el registro.',
+      };
+    }
+  },
+  async ReportInc({ commit }, item) {
+    try {
+      const { data } = await api.post('SA/proyectos/getReportInc', item);
+
+      commit('data');
+      return {
+        ok: data.error,
+        resultado: data,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        message: 'Ocurrio un error al descargar el registro.',
+      };
+    }
+  },
+  async ReportIncTotal({ commit }, item) {
+    try {
+      const { data } = await api.post('SA/proyectos/getReportTotal', item);
+
+      commit('data');
+      return {
+        ok: data.error,
+        resultado: data,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        message: 'Ocurrio un error al descargar el registro.',
+      };
+    }
+  },
+  async ReportProyectID({ commit }, item) {
+    try {
+      const { data } = await api.post(
+        'SA/proyectos/getInformationRowProyectById',
+        item
+      );
+
+      commit('data');
+      return {
+        ok: data.error,
+        resultado: data,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        message: 'Ocurrio un error al descargar el registro.',
+      };
+    }
+  },
+  async CheckFiles({ commit }, item) {
+    try {
+      const { data } = await api.post('SA/onedrive/checkFiles', item);
+
+      commit('data');
+      return {
+        ok: data.error,
+        resultado: data.result,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        message: 'Ocurrio un error al descargar el registro.',
+      };
+    }
+  },
+  async UpdateInformation({ commit }, item) {
+    try {
+      const { data } = await api.post(
+        'SA/proyectos/updateValidationsProyect',
+        item
+      );
+
+      commit('data');
+      return {
+        ok: data.error,
+        resultado: data.mensaje,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        message: 'Ocurrio un error al descargar el registro.',
+      };
+    }
+  },
 };

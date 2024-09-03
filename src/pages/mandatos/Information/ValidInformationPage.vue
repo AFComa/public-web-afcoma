@@ -140,8 +140,6 @@ export default {
     setMandatosValid([]);
 
     const loadingResult = async (st) => {
-      console.log('st: ', st);
-      console.log('local: ', localStorage.getItem('fileView'));
       if (st === 1 && isValidMandatos.value.length > 0) {
         return true;
       } else if (st === 2 && localStorage.getItem('fileView') === 'true') {

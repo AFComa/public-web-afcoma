@@ -85,6 +85,17 @@ export interface DeleteProyectActionsI {
   cesion: string;
   proyect: string;
 }
+export interface RegisterProyectI {
+  id: string | string[];
+  cartera: string | string[];
+  cesion: string | string[];
+}
+
+export interface ReportIncI {
+  cartera: string | string[];
+  cesion: string | string[];
+  proyect: string | string[];
+}
 
 export interface CargaDatosProyectobyIdI {
   id: string;

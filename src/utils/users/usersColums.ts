@@ -93,6 +93,60 @@ export const ListProyects = () => {
   ];
 };
 
+export const ListRegisterProyects = () => {
+  return [
+    {
+      name: 'C',
+      label: 'C',
+      align: 'left',
+      field: 'C',
+    },
+    {
+      name: 'CARTERA',
+      label: 'Cartera',
+      align: 'center',
+      field: 'CARTERA',
+    },
+    {
+      name: 'NO_DE_CREDITO_O_CONTRATO',
+      label: 'No de Credito o Contrato',
+      align: 'left',
+      field: 'NO_DE_CREDITO_O_CONTRATO',
+    },
+    {
+      name: 'NOMBRE_COMPLETO',
+      label: 'Nombre Completo',
+      align: 'center',
+      field: 'NOMBRE_COMPLETO',
+    },
+    {
+      name: 'DIRECCION',
+      label: 'Dirección',
+      align: 'left',
+      field: 'DIRECCION',
+    },
+    {
+      name: 'ANALISTA_ASIGNADO',
+      label: 'Analista Asignado',
+      align: 'center',
+      field: 'ANALISTA_ASIGNADO',
+    },
+    {
+      name: 'VALIDAR_NOMBRE_Y_FIRMA_EN_SOLICITUD_Y_PAGARE',
+      label: 'Validar Nombre y Firmar en Solicitud y Pagare',
+      align: 'center',
+      field: 'VALIDAR_NOMBRE_Y_FIRMA_EN_SOLICITUD_Y_PAGARE',
+    },
+    {
+      name: 'finalizado',
+      label: 'Finalizado',
+      align: 'center',
+      field: 'finalizado',
+    },
+    { name: 'actions', label: 'Acciones', align: 'center', field: 'actions' },
+  ];
+};
+
 export const ListConfigProyects = () => {
   return [
     {
