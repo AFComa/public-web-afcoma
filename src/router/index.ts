@@ -9,7 +9,12 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const isAuthenticated = !!!!localStorage.getItem('token');
 
-  if (to.name !== 'login' && !isAuthenticated) {
+  if (
+    to.name !== 'login' &&
+    !isAuthenticated &&
+    to.name !== 'password' &&
+    to.name !== 'reset-password'
+  ) {
     next({ name: 'login' });
     next(false);
   } else {
