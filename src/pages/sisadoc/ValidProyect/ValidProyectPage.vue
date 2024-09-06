@@ -1,25 +1,8 @@
 <template>
   <div class="q-pt-lg q-pa-md">
     <div class="justify-center row">
-      <div class="col-xs-11 col-sm-10 col-md-8">
+      <div class="col-xs-11 col-sm-10 col-md-11">
         <BreadCrumb :routes="breadcrumbRoutes" />
-      </div>
-      <div class="col-xs-11 col-sm-10 col-md-3">
-        <q-list>
-          <q-item
-            v-for="(item, index) in links"
-            :key="index"
-            clickable
-            @click="openLink(item.link)"
-          >
-            <q-item-section avatar>
-              <q-icon name="open_in_new" />
-            </q-item-section>
-            <q-item-section>
-              {{ item.name }}
-            </q-item-section>
-          </q-item>
-        </q-list>
       </div>
     </div>
     <div
@@ -35,7 +18,7 @@
           :label="item.name"
           outlined
           dense
-          :readonly="finalizar || item.value !== 'CAPTURAR'"
+          :readonly="finalizar || !item?.edit"
         />
       </div>
       <div class="col-xs-11 col-sm-1 col-md-1"></div>
@@ -78,6 +61,7 @@
         @click="saveInformation"
         class="custom-button-se"
       />
+      <DialogLinkComponent></DialogLinkComponent>
     </div>
   </div>
 
@@ -197,24 +181,32 @@ import { useQuasar } from 'quasar';
 import { useRoute, useRouter } from 'vue-router';
 import BreadCrumb from '../../../components/breadcrumb/integretView.vue';
 import { sysadocAuth } from 'src/composables/sysadocAuth';
+import { useAuth } from 'src/composables/userAuth';
 import DialogComponent from '../../../components/Dialog/DialogFinalizarComponent.vue';
-components: BreadCrumb, DialogComponent;
+import DialogLinkComponent from '../../../components/Dialog/DialogDowloadFilesComponent.vue';
+components: BreadCrumb, DialogComponent, DialogLinkComponent;
 
 const $q = useQuasar();
+const route = useRoute();
+const router = useRouter();
 const breadcrumbRoutes = ref([
   { label: 'Sys@Doc', path: '/dashboard/view-doc' },
   { label: 'Listar Proyectos', path: '/dashboard/listar-proyectos' },
   {
+    label: 'Registrar Proyectos',
+    path: `/dashboard/registro-proyecto/${route.params.cartera}/${route.params.cesion}/${route.params.name}`,
+  },
+  {
     label: 'Validar Proyectos',
   },
 ]);
-const links = ref([]);
+
 const warningDialog = ref(false);
 const MessageDialog = ref('');
 
-const { ReportProyectID, CheckFiles, UpdateInformation } = sysadocAuth();
-const route = useRoute();
-const router = useRouter();
+const { ReportProyectID, UpdateInformation } = sysadocAuth();
+const { isAcces } = useAuth();
+
 const items = ref([]);
 
 const incidenciasDialog = ref(false);
@@ -223,6 +215,10 @@ const finalizar = ref(false);
 const selectedItem = ref(null);
 const newIncidencia = ref('');
 const newInformacion = ref('');
+
+// Fecha asignada para incidencias e información adicional desde sisadoc
+const d = new Date();
+const myDate = d.toUTCString();
 
 const openIncidenciasDialog = (item) => {
   selectedItem.value = item;
@@ -238,16 +234,14 @@ const openInformacionDialog = (item) => {
 
 const saveIncidencia = () => {
   if (newIncidencia.value.trim()) {
-    const timestamp = new Date().toUTCString();
-    selectedItem.value.incidencias += ` [${timestamp}] Incidencia registrada: ${newIncidencia.value}`;
+    selectedItem.value.incidencias += ` [ ${isAcces.value.username} ${isAcces.value.apellidos} ${myDate}] Incidencia registrada: ${newIncidencia.value}`;
     incidenciasDialog.value = false;
   }
 };
 
 const saveInformacionAdicional = () => {
   if (newInformacion.value.trim()) {
-    const timestamp = new Date().toUTCString();
-    selectedItem.value.informacion_adicional += ` [${timestamp}] Comentario registrado: ${newInformacion.value}`;
+    selectedItem.value.informacion_adicional += ` [ ${isAcces.value.username} ${isAcces.value.apellidos} ${myDate}] Comentario registrada: ${newInformacion.value}`;
     informacionDialog.value = false;
   }
 };
@@ -263,7 +257,7 @@ const saveInformation = () => {
       params: {
         id: route.params.cartera,
         cesion: route.params.cesion,
-        name: route.params.cartera,
+        name: route.params.name,
       },
     });
   }
@@ -276,9 +270,9 @@ function onCancel() {
 const onConfirm = async (value) => {
   warningDialog.value = false;
   const data = {
-    datos: items.value,
+    datos: removeEditFlag(),
     finalizado: value,
-    proyect: route.params.cartera,
+    proyect: route.params.name,
     _id: route.params.uid,
   };
   const result = await UpdateInformation(data);
@@ -292,7 +286,7 @@ const onConfirm = async (value) => {
       params: {
         id: route.params.cartera,
         cesion: route.params.cesion,
-        name: route.params.cartera,
+        name: route.params.name,
       },
     });
   } else {
@@ -302,30 +296,40 @@ const onConfirm = async (value) => {
     });
   }
 };
+const removeEditFlag = () => {
+  return items.value.map((item) => {
+    const { edit, ...rest } = item;
+    console.log(edit);
+    return rest;
+  });
+};
 
 onMounted(async () => {
   const result = await ReportProyectID({
-    db: route.params.cartera,
+    db: route.params.name,
     id: route.params.id,
     _id: route.params.uid,
   });
 
   if (!result.ok) {
     finalizar.value = result.resultado.finalizado;
-    items.value = result.resultado.result;
-  }
 
-  const response = await CheckFiles({
-    proyecto: route.params.cartera,
-    id: route.params.id,
-  });
+    items.value = await result.resultado.result.map((item) => {
+      if (typeof item.value === 'string') {
+        item.value = item.value.replace(/(CAPTURAR)\s+/gi, '$1');
+      }
+      return item;
+    });
 
-  if (!result.ok) {
-    links.value = response.resultado;
+    items.value.map((item) => {
+      const isEditable =
+        typeof item.value === 'string' &&
+        item.value.toLowerCase().includes('capturar');
+      return {
+        ...item,
+        editable: isEditable,
+      };
+    });
   }
 });
-
-const openLink = (url) => {
-  window.open(url, '_blank');
-};
 </script>

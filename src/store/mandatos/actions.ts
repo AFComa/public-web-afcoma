@@ -117,4 +117,21 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
       };
     }
   },
+  async getReportMandatos({ commit }, item) {
+    try {
+      const { data } = await api.post('SA/onedrive/checkFilesMandato', {
+        identificador: item,
+      });
+      commit('data');
+      return {
+        ok: data.error,
+        resultado: data.result,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        message: 'Ocurrio un error al actualizar el mandato.',
+      };
+    }
+  },
 };

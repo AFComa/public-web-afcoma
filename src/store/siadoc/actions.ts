@@ -335,4 +335,20 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
       };
     }
   },
+  async enableFinalizadoEstatus({ commit }, item) {
+    try {
+      const { data } = await api.post('SA/proyectos/enablefinalizado', item);
+
+      commit('data');
+      return {
+        ok: data.error,
+        resultado: data.mensaje,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        message: 'Ocurrio un error al descargar el registro.',
+      };
+    }
+  },
 };

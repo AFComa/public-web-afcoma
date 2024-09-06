@@ -34,5 +34,7 @@ export const mandatosAuth = () => {
     validMandato: (data: string) =>
       store.dispatch('mandatos/validMandatos', data),
     logout: (data: LogoutI) => store.dispatch('mandatos/logout', data),
+    getReportMandatos: (data: string) =>
+      store.dispatch('mandatos/getReportMandatos', data),
   };
 };

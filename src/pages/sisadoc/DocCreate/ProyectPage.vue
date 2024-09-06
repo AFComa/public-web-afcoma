@@ -169,7 +169,7 @@
         <!-- </div> -->
       </div>
       <div class="justify-center q-pt-lg row">
-        <div class="col-xs-11 col-sm-12 col-md-12 col-lg-10">
+        <div class="col-xs-11 col-sm-11 col-md-11 text-right q-gutter-sm">
           <q-btn
             class="custom-button-se"
             no-caps
@@ -179,8 +179,6 @@
             label="Contacto"
             @click="showProyect"
           />
-        </div>
-        <div class="col-xs-11 col-sm-12 col-md-12 col-lg-1">
           <q-btn
             class="custom-button"
             no-caps

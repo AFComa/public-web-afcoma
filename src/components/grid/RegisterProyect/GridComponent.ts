@@ -4,7 +4,6 @@ import { useRouter, useRoute } from 'vue-router';
 import { useQuasar } from 'quasar';
 
 import { useAuth } from 'src/composables/userAuth';
-import { mandatosAuth } from 'src/composables/mandatosAuth';
 import { sysadocAuth } from 'src/composables/sysadocAuth';
 
 import type {
@@ -12,49 +11,41 @@ import type {
   ColumI,
   DeleteProyectI,
   CargaDatosProyectobyIdI,
-  cargDatosExcelI,
 } from '../../../interfaces/components/Grid.interfaces';
-import { ListRegisterProyects } from '../../../utils/users/usersColums';
 import LoadingComponentBasic from '../../../components/Loading/LoadingBasicComponent.vue';
-import { filterSelectI } from 'src/interfaces/auth/Acces.interfaces';
+import DialogComponent from '../../../components/Dialog/DialogComponent.vue';
 
 export default {
   name: 'GridComponent',
   components: {
     LoadingComponentBasic,
+    DialogComponent,
   },
   setup() {
     const router = useRouter();
     const route = useRoute();
     const loading = ref(false);
-    const { resetPass, getUser, getUserId, UpdateStatus, isPermission } =
-      useAuth();
-    const { allMandatos, mandatoId, asignMandatos } = mandatosAuth();
+    const { resetPass, getUser, isPermission } = useAuth();
     const {
       allProyects,
-      DeleteProyects,
-      getIdProyects,
-      AssingProyects,
+
       allProyectLayout,
-      DeletProyect,
+
       DowloadPr,
       DatosProyectobyId,
-      AssingProyectobyId,
       RegisterProyecto,
       ReportInc,
       ReportIncTotal,
+      enableFinalizadoEstatus,
     } = sysadocAuth();
     const $q = useQuasar();
     const warningDialog = ref(false);
+    const EditEstatus = ref();
     const viewGrid = ref(false);
     const viewConfig = ref(false);
     const viewMandatoSysadoc = ref(false);
-    const dialogVisible = ref(false);
-    const dialogVisibleDoc = ref(false);
-    const dialogVisibleConfig = ref(false);
-    const dialogVisibleConfigM = ref(false);
     const MessageDialog = ref('');
-    const estatus = ref();
+
     const uid = ref();
     const infoDelete = ref();
     const validuser = ref({
@@ -145,47 +136,22 @@ export default {
       loading.value = false;
     };
 
-    const rouViewPage = async (item: string) => {
-      if (item === '1') {
-        if (route.path === '/dashboard/listar-mandatos') {
-          router.push('/dashboard/validar-information');
-        } else if (route.path === '/dashboard/config') {
-          dialogVisibleConfigM.value = true;
-        } else {
-          router.push('/dashboard/proyectos');
-          localStorage.removeItem('actionuser');
-        }
-      } else {
-        if (route.path === '/dashboard/config') {
-          dialogVisibleConfig.value = true;
-        } else {
-          await orderGrid();
-          dialogVisible.value = true;
-        }
-      }
-    };
-
     const active = (rows: ListUserI) => {
-      uid.value = rows._id;
-      estatus.value = rows.estatus == 'Activo' ? 'Inactivo' : 'Activo';
-      if (rows.estatus === 'Activo') {
-        MessageDialog.value = `Esta seguro que desea Desactivar el usuario <strong> ${rows.user} ${rows.apellidos} </strong>`;
-      } else {
-        MessageDialog.value = `Esta seguro que desea Activar el usuario <strong> ${rows.user} ${rows.apellidos} </strong>`;
-      }
+      MessageDialog.value = `Esta seguro que desea Activar el usuario <strong> ${rows.user} ${rows.apellidos} </strong>`;
+
       warningDialog.value = true;
     };
 
     const directOptionsValue = async () => {
       const data = {
-        id: route.params.id,
-        cartera: route.params.name,
+        id: route.params.name,
+        cartera: route.params.id,
         cesion: route.params.cesion,
       };
 
       const result = await RegisterProyecto(data);
       if (!result.ok) {
-        columns.value = ListRegisterProyects();
+        columns.value = result.resultado.result.Columns;
         rows.value = result.resultado.result.Rows;
       }
     };
@@ -214,20 +180,6 @@ export default {
       loading.value = false;
     };
 
-    const orderGridMandatos = async () => {
-      loading.value = true;
-      const mandatAll = {
-        is_operator: isPermission.value.configUser.mandatosPermissions[0].opera,
-        userid: isPermission.value._id,
-      };
-      const resultado = await allMandatos(mandatAll);
-
-      if (resultado.ok) {
-        rows.value = resultado.resultado ? resultado.resultado : [];
-      }
-      loading.value = false;
-    };
-
     const viewRow = async (row: ListUserI & DeleteProyectI) => {
       router.push({
         name: 'ValidProyect',
@@ -236,51 +188,20 @@ export default {
           uid: row._id,
           cartera: row.cartera,
           cesion: row.cesion,
+          name: route.params.name,
         },
       });
-
-      // if (viewGrid.value) {
-      //   loading.value = true;
-      //   (await viewMandatoSysadoc.value)
-      //     ? await getIdProyects(row.id)
-      //     : await mandatoId(row._id);
-
-      //   localStorage.setItem('actionuser', 'view');
-      //   router.push({
-      //     name: viewMandatoSysadoc.value ? 'ProyectosEdit' : 'MandatosView',
-      //     params: { id: viewMandatoSysadoc.value ? row.id : row._id },
-      //   });
-      //   loading.value = false;
-      // } else {
-      //   localStorage.setItem('actionuser', 'view');
-      //   await getUserId({ id: row._id, opc: 2 });
-      //   router.push({ name: 'UsuariosId', params: { id: row._id } });
-      // }
-    };
-
-    const uploadFiles = async (row: ListUserI & DeleteProyectI) => {
-      uid.value = row.id;
-      dialogVisibleDoc.value = true;
     };
 
     const editRow = async (row: ListUserI & DeleteProyectI) => {
-      if (viewGrid.value) {
-        loading.value = true;
-        (await viewMandatoSysadoc.value)
-          ? await getIdProyects(row.id)
-          : await mandatoId(row._id);
+      MessageDialog.value =
+        'Esta seguro que desea cambiar el estatus del proyecto.';
 
-        localStorage.setItem('actionuser', 'edit');
-        router.push({
-          name: viewMandatoSysadoc.value ? 'ProyectosEdit' : 'MandatosView',
-          params: { id: viewMandatoSysadoc.value ? row.id : row._id },
-        });
-        loading.value = false;
-      } else {
-        localStorage.setItem('actionuser', 'edit');
-        await getUserId({ id: row._id, opc: 2 });
-        router.push({ name: 'UsuariosId', params: { id: row._id } });
-      }
+      EditEstatus.value = {
+        proyect: route.params.name,
+        _id: row._id,
+      };
+      warningDialog.value = true;
     };
 
     const blockUser = async (row: ListUserI) => {
@@ -342,67 +263,24 @@ export default {
     const onConfirm = async () => {
       loading.value = true;
       warningDialog.value = false;
-
-      if (route.path === '/dashboard/listar-usuarios') {
-        const response = await UpdateStatus({
-          _id: uid.value,
-          estatus: estatus.value,
+      const result = await enableFinalizadoEstatus(EditEstatus.value);
+      if (!result.ok) {
+        $q.notify({
+          type: 'positive',
+          message: result.resultado,
         });
-        if (response.ok) {
-          $q.notify({
-            type: 'positive',
-            message: 'El estatus del usuario se actualizo correctamente.',
-          });
-        } else {
-          $q.notify({
-            type: 'negative',
-            message: response.message,
-          });
-        }
-        orderGrid();
-      } else if (route.path === '/dashboard/config') {
-        const response = await DeletProyect(infoDelete.value.id);
-        if (response.ok) {
-          await orderConfigProyects();
-          $q.notify({
-            type: 'positive',
-            message: response.resultado,
-          });
-        } else {
-          $q.notify({
-            type: 'negative',
-            message: response.message,
-          });
-        }
       } else {
-        const response = await DeleteProyects({
-          id: infoDelete.value.id,
-          cartera: infoDelete.value.cartera,
-          cesion: infoDelete.value.cesion,
-          proyect: infoDelete.value.NombreProyecto,
+        $q.notify({
+          type: 'negative',
+          message: result.resultado,
         });
-        if (response.ok) {
-          await orderProyects();
-          $q.notify({
-            type: 'positive',
-            message: response.resultado,
-          });
-        } else {
-          $q.notify({
-            type: 'negative',
-            message: response.message,
-          });
-        }
       }
+      await directOptionsValue();
       loading.value = false;
     };
 
     function onCancel() {
       warningDialog.value = false;
-      dialogVisible.value = false;
-      dialogVisibleDoc.value = false;
-      dialogVisibleConfig.value = false;
-      dialogVisibleConfigM.value = false;
     }
 
     const orderGrid = async () => {
@@ -444,85 +322,19 @@ export default {
       }
       loading.value = false;
     };
-    const handleValueExcel = async (value: cargDatosExcelI) => {
-      loading.value = true;
-      const response = await AssingProyectobyId(value);
-
-      if (!response.ok) {
-        $q.notify({
-          type: 'positive',
-          message: response.resultado,
-        });
-      } else {
-        $q.notify({
-          type: 'negative',
-          message: response.resultado,
-        });
-      }
-      await orderConfigProyects();
-      loading.value = false;
-    };
-
-    const handleSelect = async (
-      selectedValue: filterSelectI,
-      mandatosValue: filterSelectI
-    ) => {
-      loading.value = true;
-      if (route.path === '/dashboard/listar-proyectos') {
-        const data = {
-          asignado_a: selectedValue.label,
-          _id: mandatosValue.value,
-        };
-        const response = await AssingProyects(data);
-        if (response.ok) {
-          $q.notify({
-            type: 'positive',
-            message: 'La asignación al usuario fue correctamente.',
-          });
-        } else {
-          $q.notify({
-            type: 'negative',
-            message: response.message,
-          });
-        }
-        await orderProyects();
-      } else {
-        const data = {
-          idmandato: mandatosValue.value,
-          userid: selectedValue.value,
-        };
-
-        const response = await asignMandatos(data);
-        if (response.ok) {
-          $q.notify({
-            type: 'positive',
-            message: 'La asignación al usuario fue correctamente.',
-          });
-        } else {
-          $q.notify({
-            type: 'negative',
-            message: response.message,
-          });
-        }
-        await orderGridMandatos();
-      }
-
-      loading.value = false;
-    };
 
     return {
       columns,
       directOptionsValue,
       orderProyects,
       deletRow,
-      dialogVisibleConfig,
+
       orderConfigProyects,
       ReportIncTotalDowload,
-      uploadFiles,
       dowloadPro,
       validuser,
       viewMandatoSysadoc,
-      dialogVisibleConfigM,
+
       loading,
       viewConfig,
       rows,
@@ -530,17 +342,13 @@ export default {
       search,
       warningDialog,
       MessageDialog,
-      handleSelect,
       nameProyect,
       viewGrid,
-      dialogVisible,
-      dialogVisibleDoc,
+      EditEstatus,
       ReportIncDowload,
-      rouViewPage,
       onConfirm,
       onCancel,
       active,
-      handleValueExcel,
       orderGrid,
       rouView,
       viewRow,

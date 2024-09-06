@@ -25,26 +25,6 @@
       row-key="id"
       :rows-per-page-options="[5, 10, 15]"
     >
-      <template v-slot:body-cell-estatus="props">
-        <q-td :props="props" align="center">
-          <q-btn
-            flat
-            :color="props.row.estatus === 'Activo' ? 'green' : 'red'"
-            round
-            dense
-            :icon="props.row.estatus === 'Activo' ? 'check' : 'close'"
-            @click="active(props.row)"
-          >
-            <q-tooltip
-              :class="props.row.estatus === 'Activo' ? 'bg-green' : 'bg-red'"
-              transition-show="flip-right"
-              transition-hide="flip-left"
-            >
-              {{ props.row.estatus === 'Activo' ? 'Activo' : 'Inactivo' }}
-            </q-tooltip>
-          </q-btn>
-        </q-td>
-      </template>
       <template v-slot:body-cell-actions="props">
         <q-td :props="props">
           <q-btn
@@ -87,6 +67,13 @@
     </div>
 
     <LoadingComponentBasic v-if="loading" />
+    <DialogComponent
+      v-if="warningDialog"
+      :title="'¡Atención!'"
+      :message="MessageDialog"
+      @confirm="onConfirm"
+      @cancel="onCancel"
+    />
   </div>
 </template>
 

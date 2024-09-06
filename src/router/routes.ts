@@ -116,7 +116,7 @@ const routes: RouteRecordRaw[] = [
         meta: { requiresAuth: true }, // Requiere autenticación
       },
       {
-        path: 'valid-proyecto/:id/:uid/:cartera/:cesion',
+        path: 'valid-proyecto/:id/:uid/:cartera/:cesion/:name',
         name: 'ValidProyect',
         component: () =>
           import('src/pages/sisadoc/ValidProyect/ValidProyectPage.vue'),

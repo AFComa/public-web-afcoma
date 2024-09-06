@@ -9,6 +9,7 @@ import {
   cargDatosExcelI,
   RegisterProyectI,
   ReportIncI,
+  habilitProyectI,
 } from 'src/interfaces/components/Grid.interfaces';
 
 export const sysadocAuth = () => {
@@ -55,5 +56,7 @@ export const sysadocAuth = () => {
     CheckFiles: (data: string) => store.dispatch('sysadoc/CheckFiles', data),
     UpdateInformation: (data: string) =>
       store.dispatch('sysadoc/UpdateInformation', data),
+    enableFinalizadoEstatus: (data: habilitProyectI) =>
+      store.dispatch('sysadoc/enableFinalizadoEstatus', data),
   };
 };

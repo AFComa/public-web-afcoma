@@ -111,3 +111,8 @@ export interface cargDatosExcelI {
   layout: string | string[];
   layout_spetial: string | string[];
 }
+
+export interface habilitProyectI {
+  id: string | undefined;
+  proyect: string;
+}

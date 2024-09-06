@@ -95,6 +95,7 @@
       @confirm="onConfirm"
       @cancel="onCancel"
     />
+    <DialogLinkComponent></DialogLinkComponent>
   </div>
 </template>
 
@@ -105,6 +106,7 @@ import { useRouter } from 'vue-router';
 import LoadingOver from '../../components/Loading/LoadingComponent.vue';
 import DialogComponent from '../../components/Dialog/DialogComponent.vue';
 import BreadCrumb from '../../components/breadcrumb/integretView.vue';
+import DialogLinkComponent from '../../components/Dialog/DialogDowloadFilesComponent.vue';
 import { mandatosAuth } from 'src/composables/mandatosAuth';
 export default {
   name: 'AutocompleteForm',
@@ -112,6 +114,7 @@ export default {
     LoadingOver,
     DialogComponent,
     BreadCrumb,
+    DialogLinkComponent,
   },
   setup() {
     const { isViewMandatos, updateMandato } = mandatosAuth();
@@ -164,7 +167,6 @@ export default {
     };
 
     const onConfirm = async () => {
-      // Lógica cuando se confirma
       loading.value = true;
       warningDialog.value = false;
       const data = {
