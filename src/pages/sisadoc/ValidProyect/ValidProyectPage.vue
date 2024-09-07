@@ -37,6 +37,7 @@
         <p>Información a Registrar</p>
         <q-btn
           no-caps
+          rounded
           label="Incidencias"
           :color="item.incidencias === '' ? 'primary' : 'secondary'"
           @click="openIncidenciasDialog(item)"
@@ -44,6 +45,7 @@
         />
         <q-btn
           no-caps
+          rounded
           label="Información Adicional"
           :color="item.informacion_adicional === '' ? 'primary' : 'secondary'"
           @click="openInformacionDialog(item)"

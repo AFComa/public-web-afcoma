@@ -189,7 +189,7 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
       commit('data');
       return {
         ok: data.error,
-        resultado: data.mensaje,
+        resultado: data,
       };
     } catch (error) {
       return {

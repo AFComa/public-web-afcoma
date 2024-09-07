@@ -10,7 +10,6 @@ import type {
   ListUserI,
   ColumI,
   DeleteProyectI,
-  CargaDatosProyectobyIdI,
 } from '../../../interfaces/components/Grid.interfaces';
 import LoadingComponentBasic from '../../../components/Loading/LoadingBasicComponent.vue';
 import DialogComponent from '../../../components/Dialog/DialogComponent.vue';
@@ -28,11 +27,8 @@ export default {
     const { resetPass, getUser, isPermission } = useAuth();
     const {
       allProyects,
-
       allProyectLayout,
-
       DowloadPr,
-      DatosProyectobyId,
       RegisterProyecto,
       ReportInc,
       ReportIncTotal,
@@ -45,8 +41,6 @@ export default {
     const viewConfig = ref(false);
     const viewMandatoSysadoc = ref(false);
     const MessageDialog = ref('');
-
-    const uid = ref();
     const infoDelete = ref();
     const validuser = ref({
       id: '',
@@ -300,29 +294,6 @@ export default {
       await directOptionsValue();
     });
 
-    const handleValue = async (value: CargaDatosProyectobyIdI) => {
-      loading.value = true;
-      const data = {
-        cartera: value.cartera,
-        cesion: value.cesion,
-        data: value.data,
-        id: uid.value,
-      };
-      const response = await DatosProyectobyId(data);
-      if (!response.ok) {
-        $q.notify({
-          type: 'positive',
-          message: response.resultado,
-        });
-      } else {
-        $q.notify({
-          type: 'negative',
-          message: response.resultado,
-        });
-      }
-      loading.value = false;
-    };
-
     return {
       columns,
       directOptionsValue,
@@ -356,7 +327,6 @@ export default {
       blockUser,
       capitalizeFirstLetter,
       capitalizeUserData,
-      handleValue,
     };
   },
 };
