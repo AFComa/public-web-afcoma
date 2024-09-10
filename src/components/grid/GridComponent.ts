@@ -213,12 +213,10 @@ export default {
     const viewRow = async (row: ListUserI & DeleteProyectI) => {
       if (viewGrid.value) {
         loading.value = true;
-        (await viewMandatoSysadoc.value)
-          ? await getIdProyects(row.id)
-          : await mandatoId(row._id);
-
         localStorage.setItem('actionuser', 'view');
         if (viewMandatoSysadoc.value) {
+          await getIdProyects(row.id);
+
           router.push({
             name: 'RegisterProyect',
             params: {
@@ -228,6 +226,8 @@ export default {
             },
           });
         } else {
+          const response = await mandatoId(row._id);
+          localStorage.setItem('mandatoName', response.resultado.idmandato);
           router.push({
             name: 'MandatosView',
             params: { id: row._id },

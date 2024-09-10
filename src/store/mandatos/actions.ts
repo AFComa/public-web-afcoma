@@ -63,7 +63,7 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
       commit('SET_VIEW_MANDATOS', data);
       return {
         ok: true,
-        token: data,
+        resultado: data,
       };
     } catch (error) {
       return {

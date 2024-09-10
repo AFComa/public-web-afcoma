@@ -14,12 +14,40 @@ export interface ColumI {
   field: string | ((row: ListUserI) => string);
 }
 
+export interface ColumUserI {
+  name: string;
+  label: string;
+  field: string | ((row: ListUserI) => string);
+  align: string;
+}
+
 export interface ColumCreateUserI {
   id: number;
   module: string;
   create: boolean;
   edit: boolean;
   block: boolean;
+  view: boolean;
+  download: boolean;
+  opera: boolean;
+}
+
+export interface ColumCreateSisadocI {
+  id: number;
+  module: string;
+  create: boolean;
+  edit: boolean;
+  delete: boolean;
+  view: boolean;
+  download: boolean;
+  opera: boolean;
+}
+
+export interface ColumCreateMandatosI {
+  id: number;
+  module: string;
+  create: boolean;
+  edit: boolean;
   view: boolean;
   download: boolean;
   opera: boolean;

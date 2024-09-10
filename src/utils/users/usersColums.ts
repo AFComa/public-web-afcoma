@@ -193,12 +193,33 @@ export const ListActionUser = () => {
   ];
 };
 
-export const ListActionMandatos = () => {
+export const ListActionSisadoc = () => {
   return [
     { name: 'module', label: 'Módulo', field: 'module', align: 'left' },
     { name: 'create', label: 'Crear', field: 'create', align: 'center' },
     { name: 'edit', label: 'Editar', field: 'edit', align: 'center' },
     { name: 'delete', label: 'Eliminar', field: 'delete', align: 'center' },
+    { name: 'view', label: 'Consultar', field: 'view', align: 'center' },
+    {
+      name: 'download',
+      label: 'Descarga',
+      field: 'download',
+      align: 'center',
+    },
+    {
+      name: 'opera',
+      label: 'Operador',
+      field: 'opera',
+      align: 'center',
+    },
+  ];
+};
+
+export const ListActionMandatos = () => {
+  return [
+    { name: 'module', label: 'Módulo', field: 'module', align: 'left' },
+    { name: 'create', label: 'Crear', field: 'create', align: 'center' },
+    { name: 'edit', label: 'Editar', field: 'edit', align: 'center' },
     { name: 'view', label: 'Consultar', field: 'view', align: 'center' },
     {
       name: 'download',
@@ -223,6 +244,34 @@ export const ListPermision = () => {
       create: false,
       edit: false,
       block: false,
+      view: false,
+      download: false,
+      opera: false,
+    },
+  ];
+};
+
+export const ListPermisionSisadoc = () => {
+  return [
+    {
+      id: 1,
+      module: 'Administración',
+      create: false,
+      edit: false,
+      delete: false,
+      view: false,
+      download: false,
+      opera: false,
+    },
+  ];
+};
+export const ListPermisionMandatos = () => {
+  return [
+    {
+      id: 1,
+      module: 'Administración',
+      create: false,
+      edit: false,
       view: false,
       download: false,
       opera: false,

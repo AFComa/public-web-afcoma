@@ -2,6 +2,8 @@ import { computed } from 'vue';
 import { useStore } from 'vuex';
 import type { UserI } from '../interfaces/auth/Acces.interfaces';
 import {
+  ColumCreateMandatosI,
+  ColumCreateSisadocI,
   ColumCreateUserI,
   CreateGUI,
   EstatusI,
@@ -22,12 +24,15 @@ export const useAuth = () => {
     isAssingUser: computed(() => store.state.auth.assingUser),
 
     // Mutations
-    setPermissionUser: (item: ColumCreateUserI[]) =>
-      store.commit('auth/SET_USERS_PERMIS', item),
-    setPermissionSysad: (item: ColumCreateUserI[]) =>
-      store.commit('auth/SET_SYSAD_PERMIS', item),
-    setPermissionMandat: (item: ColumCreateUserI[]) =>
-      store.commit('auth/SET_MANDAT_PERMIS', item),
+    setPermissionUser: (
+      item: ColumCreateUserI | ColumCreateSisadocI | ColumCreateMandatosI[]
+    ) => store.commit('auth/SET_USERS_PERMIS', item),
+    setPermissionSysad: (
+      item: ColumCreateUserI | ColumCreateSisadocI | ColumCreateMandatosI[]
+    ) => store.commit('auth/SET_SYSAD_PERMIS', item),
+    setPermissionMandat: (
+      item: ColumCreateUserI | ColumCreateSisadocI | ColumCreateMandatosI[]
+    ) => store.commit('auth/SET_MANDAT_PERMIS', item),
 
     // Getters
     isLogged: computed(() => store.getters['auth/isLogged']),

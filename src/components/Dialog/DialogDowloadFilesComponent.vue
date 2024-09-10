@@ -83,7 +83,7 @@ onMounted(async () => {
       links.value = response.resultado;
     }
   } else {
-    const result = await getReportMandatos('ISSTEY');
+    const result = await getReportMandatos(localStorage.getItem('mandatoName'));
     if (!result.ok) {
       links.value = result.resultado;
     }

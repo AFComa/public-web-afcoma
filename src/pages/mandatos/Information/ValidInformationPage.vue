@@ -143,42 +143,6 @@ export default {
       if (st === 1 && isValidMandatos.value.length > 0) {
         return true;
       } else if (st === 2 && localStorage.getItem('fileView') === 'true') {
-        loading.value = true;
-        const formData = new FormData();
-
-        file1.value ? formData.append('contratomaestro', file1.value) : '';
-        file2.value ? formData.append('factoraje', file2.value) : '';
-        file3.value
-          ? formData.append('administracionmaestra', file3.value)
-          : '';
-        file4.value ? formData.append('DocumentoAnexo1', file4.value) : '';
-        file5.value ? formData.append('DocumentoAnexo2', file5.value) : '';
-        file6.value ? formData.append('DocumentoAnexo3', file6.value) : '';
-
-        const token = localStorage.getItem('token');
-        try {
-          const result = await axios.post(
-            'https://apolo.afcoma.com.mx/v1/SA/onedrive/chargeFilesMandato',
-            formData,
-            {
-              headers: {
-                'Content-Type': 'multipart/form-data',
-                Authorization: `Bearer ${token}`,
-                'x-api-key': 'cls[ty-5JDrkzE1HFN9v',
-                identificador: 'ISSTEY',
-              },
-            }
-          );
-          if (result.data.error) {
-            $q.notify({
-              type: 'negative',
-              message: result.data.mensaje,
-            });
-          }
-        } catch (error) {
-          console.error(error);
-        }
-        loading.value = false;
         return true;
       } else {
         return false;
@@ -219,6 +183,7 @@ export default {
         idmandato: name.value,
         datosmandato: isValidMandatos.value,
       };
+      await saveDocuments();
       const resolve = await saveMandatos(data);
       if (resolve.ok) {
         $q.notify({
@@ -231,6 +196,43 @@ export default {
           type: 'negative',
           message: resolve.message,
         });
+      }
+      loading.value = false;
+    };
+
+    const saveDocuments = async () => {
+      loading.value = true;
+      const formData = new FormData();
+
+      file1.value ? formData.append('contratomaestro', file1.value) : '';
+      file2.value ? formData.append('factoraje', file2.value) : '';
+      file3.value ? formData.append('administracionmaestra', file3.value) : '';
+      file4.value ? formData.append('DocumentoAnexo1', file4.value) : '';
+      file5.value ? formData.append('DocumentoAnexo2', file5.value) : '';
+      file6.value ? formData.append('DocumentoAnexo3', file6.value) : '';
+
+      const token = localStorage.getItem('token');
+      try {
+        const result = await axios.post(
+          'https://apolo.afcoma.com.mx/v1/SA/onedrive/chargeFilesMandato',
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Authorization: `Bearer ${token}`,
+              'x-api-key': 'cls[ty-5JDrkzE1HFN9v',
+              identificador: name.value,
+            },
+          }
+        );
+        if (result.data.error) {
+          $q.notify({
+            type: 'negative',
+            message: result.data.mensaje,
+          });
+        }
+      } catch (error) {
+        console.error(error);
       }
       loading.value = false;
     };
@@ -249,6 +251,7 @@ export default {
     return {
       step: ref(1),
       loading,
+      saveDocuments,
       name,
       notifyM,
       handleValueExcel,

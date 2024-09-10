@@ -1,6 +1,6 @@
 <template>
   <div class="q-pt-xs">
-    <q-table :rows="rows" :columns="columns" row-key="id">
+    <q-table :rows="rows || []" :columns="columns" row-key="id">
       <template v-slot:body-cell="props">
         <q-td :props="props">
           <q-checkbox
@@ -23,8 +23,14 @@ import { useRoute } from 'vue-router';
 import {
   ListActionUser,
   ListPermision,
+  ListActionSisadoc,
+  ListActionMandatos,
+  ListPermisionSisadoc,
+  ListPermisionMandatos,
 } from '../../../utils/users/usersColums';
 import type {
+  ColumCreateMandatosI,
+  ColumCreateSisadocI,
   ColumCreateUserI,
   ColumI,
 } from '../../../interfaces/components/Grid.interfaces';
@@ -43,7 +49,9 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const rows = ref<ColumCreateUserI[]>(ListPermision());
+    const rows = ref<
+      ColumCreateUserI[] | ColumCreateSisadocI[] | ColumCreateMandatosI[]
+    >([]);
     const route = useRoute();
     const columns = ref<ColumI[]>();
     const actionBotonGrid = ref();
@@ -54,48 +62,60 @@ export default defineComponent({
       isTablePermission,
     } = useAuth();
 
-    const loadColums = () => {
-      columns.value = ListActionUser();
-    };
-
     const getDataGrid = () => {
       if (props.section == 1) {
-        setPermissionUser(rows.value);
+        setPermissionUser(rows.value ?? []);
       } else if (props.section == 2) {
-        setPermissionSysad(rows.value);
+        setPermissionSysad(rows.value ?? []);
       } else {
-        setPermissionMandat(rows.value);
+        setPermissionMandat(rows.value ?? []);
+      }
+    };
+
+    const loadColums = () => {
+      if (props.section == 1) {
+        columns.value = ListActionUser();
+        rows.value = ListPermision();
+      } else if (props.section == 2) {
+        columns.value = ListActionSisadoc();
+        rows.value = ListPermisionSisadoc();
+      } else if (props.section == 3) {
+        columns.value = ListActionMandatos();
+        rows.value = ListPermisionMandatos();
       }
     };
 
     onMounted(async () => {
-      await loadColums();
       actionBotonGrid.value = localStorage.getItem('actionuser');
       if (route.params.id) {
         if (props.section == 1) {
-          rows.value = await isTablePermission.value.configUser
-            .usersPermissions;
+          rows.value =
+            (await isTablePermission.value.configUser.usersPermissions) ?? [];
           setPermissionUser(rows.value);
+          columns.value = ListActionUser();
         } else if (props.section == 2) {
-          rows.value = await isTablePermission.value.configUser
-            .sysadocPermission;
+          rows.value =
+            (await isTablePermission.value.configUser.sysadocPermission) ?? [];
           setPermissionSysad(rows.value);
+          columns.value = ListActionSisadoc();
         } else {
-          rows.value = await isTablePermission.value.configUser
-            .mandatosPermissions;
+          rows.value =
+            (await isTablePermission.value.configUser.mandatosPermissions) ??
+            [];
           setPermissionMandat(rows.value);
+          columns.value = ListActionMandatos();
         }
       } else {
-        rows.value = await ref(await ListPermision()).value;
+        loadColums();
       }
     });
 
     return {
       rows,
       columns,
-      loadColums,
       onMounted,
       actionBotonGrid,
+      loadColums,
       getDataGrid,
     };
   },
