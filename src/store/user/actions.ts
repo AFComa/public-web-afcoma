@@ -16,7 +16,7 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
     try {
       const { headers } = await api.post('login/user', credentials);
       localStorage.setItem('token', headers.token);
-      commit('SET_LOGIN_DATA', { ok: true, token: headers.token });
+      commit('data');
       return {
         ok: true,
         token: headers.token,

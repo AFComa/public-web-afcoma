@@ -15,3 +15,33 @@
     justify-content: end !important;
   }
 }
+@media (min-width: 768px) {
+  .Navbar-home {
+    .user-info {
+      display: flex;
+      margin-left: 15px;
+      cursor: pointer;
+      .username {
+        font-weight: bold;
+        color: #244b5a;
+      }
+
+      .email {
+        font-size: 12px;
+        color: gray;
+      }
+
+      .vertical-separator {
+        width: 1px;
+        height: 40px;
+        background-color: gray;
+        margin: 0 10px;
+      }
+
+      .last-access {
+        font-size: 12px;
+        color: gray;
+      }
+    }
+  }
+}

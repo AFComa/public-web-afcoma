@@ -4,13 +4,11 @@ import {
   CreateGUI,
 } from 'src/interfaces/components/Grid.interfaces';
 import type {
-  LoginSuccess,
   AccesUserI,
   UserListAssingI,
 } from '../../interfaces/auth/Acces.interfaces';
 
 export interface State {
-  data: LoginSuccess | null;
   infoAcces: AccesUserI | null;
   permission: CreateGUI | null;
   TablePermission: CreateGUI | null;
@@ -21,7 +19,6 @@ export interface State {
 }
 
 export const state: State = {
-  data: null,
   infoAcces: null,
   permission: null,
   TablePermission: null,

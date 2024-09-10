@@ -1,9 +1,7 @@
 import { computed, onMounted, ref } from 'vue';
-import * as XLSX from 'xlsx';
 import { useRouter, useRoute } from 'vue-router';
 import { useQuasar } from 'quasar';
 
-import { useAuth } from 'src/composables/userAuth';
 import { sysadocAuth } from 'src/composables/sysadocAuth';
 
 import type {
@@ -24,11 +22,7 @@ export default {
     const router = useRouter();
     const route = useRoute();
     const loading = ref(false);
-    const { resetPass, getUser, isPermission } = useAuth();
     const {
-      allProyects,
-      allProyectLayout,
-      DowloadPr,
       RegisterProyecto,
       ReportInc,
       ReportIncTotal,
@@ -42,16 +36,7 @@ export default {
     const viewMandatoSysadoc = ref(false);
     const MessageDialog = ref('');
     const infoDelete = ref();
-    const validuser = ref({
-      id: '',
-      module: '',
-      create: false,
-      edit: false,
-      delete: false,
-      view: false,
-      download: false,
-      opera: false,
-    });
+
     const d = new Date();
     const myDate = d.toUTCString();
 
@@ -149,30 +134,6 @@ export default {
         rows.value = result.resultado.result.Rows;
       }
     };
-    const orderConfigProyects = async () => {
-      loading.value = true;
-      const resultado = await allProyectLayout();
-
-      if (resultado.ok) {
-        rows.value = resultado.resultado ? resultado.resultado : [];
-      }
-      loading.value = false;
-    };
-    const orderProyects = async () => {
-      loading.value = true;
-      const proyectsAll = {
-        apellido: isPermission.value.apellidos,
-        nombre: isPermission.value.user,
-        perfil: isPermission.value.configUser.sysadocPermission[0].opera
-          ? 'Administrador'
-          : '',
-      };
-      const resultado = await allProyects(proyectsAll);
-      if (resultado.ok) {
-        rows.value = resultado.token.result ? resultado.token.result : [];
-      }
-      loading.value = false;
-    };
 
     const viewRow = async (row: ListUserI & DeleteProyectI) => {
       router.push({
@@ -198,60 +159,12 @@ export default {
       warningDialog.value = true;
     };
 
-    const blockUser = async (row: ListUserI) => {
-      const response = await resetPass(row._id);
-      if (response.ok) {
-        $q.notify({
-          type: 'positive',
-          message:
-            'La liga para desbloquear el usuario se envio correctamente.',
-        });
-      } else {
-        $q.notify({
-          type: 'negative',
-          message: response.message,
-        });
-      }
-    };
-
     const deletRow = async (row: DeleteProyectI) => {
       infoDelete.value = row;
       warningDialog.value = true;
       MessageDialog.value = viewConfig.value
         ? `Al borrar la configuración <strong> ${row.id} </strong> se tendrá que configurar nuevamente para realizar cargas de información nuevamente en el proyecto.`
         : `Al borrar el proyecto <strong> ${row.NombreProyecto} </strong> se limpiará todos los registros de esté en el sistema`;
-    };
-
-    const dowloadPro = async (row: DeleteProyectI) => {
-      loading.value = true;
-      const response = await DowloadPr(row.id);
-      if (response.ok) {
-        const configuracionesdata = XLSX.utils.json_to_sheet(
-          response.resultado?.configuraciones
-        );
-        const operacionesdata = XLSX.utils.json_to_sheet(
-          response.resultado?.operaciones
-        );
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(
-          workbook,
-          configuracionesdata,
-          'configuraciones'
-        );
-        XLSX.utils.book_append_sheet(workbook, operacionesdata, 'operaciones');
-
-        XLSX.writeFile(workbook, `Configuración del proyecto ${row.id}.xlsx`);
-        $q.notify({
-          type: 'positive',
-          message: response.resultado.mensaje,
-        });
-      } else {
-        $q.notify({
-          type: 'negative',
-          message: response.message,
-        });
-      }
-      loading.value = false;
     };
 
     const onConfirm = async () => {
@@ -277,19 +190,6 @@ export default {
       warningDialog.value = false;
     }
 
-    const orderGrid = async () => {
-      loading.value = true;
-      const result = await getUser();
-      if (result.ok) {
-        if (route.path === '/dashboard/listar-usuarios') {
-          rows.value = result.resultado.map((item: ListUserI) =>
-            capitalizeUserData(item)
-          );
-        }
-      }
-      loading.value = false;
-    };
-
     onMounted(async () => {
       await directOptionsValue();
     });
@@ -297,15 +197,9 @@ export default {
     return {
       columns,
       directOptionsValue,
-      orderProyects,
       deletRow,
-
-      orderConfigProyects,
       ReportIncTotalDowload,
-      dowloadPro,
-      validuser,
       viewMandatoSysadoc,
-
       loading,
       viewConfig,
       rows,
@@ -320,11 +214,9 @@ export default {
       onConfirm,
       onCancel,
       active,
-      orderGrid,
       rouView,
       viewRow,
       editRow,
-      blockUser,
       capitalizeFirstLetter,
       capitalizeUserData,
     };

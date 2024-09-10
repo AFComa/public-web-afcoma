@@ -215,8 +215,6 @@ export default {
         loading.value = true;
         localStorage.setItem('actionuser', 'view');
         if (viewMandatoSysadoc.value) {
-          await getIdProyects(row.id);
-
           router.push({
             name: 'RegisterProyect',
             params: {

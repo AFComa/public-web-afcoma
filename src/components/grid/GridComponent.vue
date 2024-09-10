@@ -17,7 +17,7 @@
         v-if="!viewGrid"
       >
         <q-btn
-          v-if="validuser.create"
+          v-if="validuser.create && validuser.opera"
           class="custom-button"
           no-caps
           unelevated
@@ -32,7 +32,7 @@
         v-if="viewGrid"
       >
         <q-btn
-          v-if="validuser.create"
+          v-if="validuser.create && validuser.opera"
           class="custom-button"
           no-caps
           unelevated

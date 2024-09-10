@@ -3,7 +3,7 @@
     <div class="col-xs-2 col-sm-4 col-md-8 content-center">
       <q-img :src="url" style="width: 140px" />
     </div>
-    <div class="col-xs-10 col-sm-8 col-md-4 navbar-content">
+    <div class="col-xs-10 col-sm-8 col-md-4 navbar-content" @click="cerrar">
       <q-avatar
         style="
           background-color: #244b5a;
@@ -14,25 +14,18 @@
         "
         >{{ avatar }}</q-avatar
       >
-      &nbsp;&nbsp;
-      <q-btn-dropdown
-        no-caps
-        color="primary"
-        :label="nombre"
-        style="font-size: 10px"
-      >
-        <q-list>
-          <q-item clickable v-close-popup>
-            <q-item-section>
-              <q-item-label>
-                <router-link to="/" @click="cerrar"
-                  >Cerrar sesión</router-link
-                ></q-item-label
-              >
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </q-btn-dropdown>
+      <div class="user-info">
+        <div>
+          <span class="username">{{ nombre }}</span>
+          <br />
+          <span class="email">{{ email }}</span>
+        </div>
+        <div class="vertical-separator"></div>
+        <div class="last-access">
+          Último acceso: <br />
+          {{ ultimoAcceso }}
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -49,7 +42,9 @@ defineOptions({
 const router = useRouter();
 const avatar = ref('');
 const nombre = ref('');
-const { isAcces } = useAuth();
+const email = ref('');
+const ultimoAcceso = ref('');
+const { isAcces, isPermission } = useAuth();
 const { logout } = mandatosAuth();
 
 const cerrar = async () => {
@@ -65,6 +60,10 @@ const cerrar = async () => {
 onMounted(async () => {
   avatar.value = isAcces.value.avatar;
   nombre.value = `${isAcces.value.username} ${isAcces.value.apellidos}`;
+  email.value = isPermission.value.email;
+  ultimoAcceso.value = `${isAcces.value.last_access.split(' ')[0]} ${
+    isAcces.value.last_access.split(' ')[1]
+  }`;
 });
 let url = imgLogoNavbar;
 </script>
