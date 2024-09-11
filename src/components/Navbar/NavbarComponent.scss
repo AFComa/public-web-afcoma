@@ -14,12 +14,32 @@
     align-items: center;
     justify-content: end !important;
   }
+  .user-info {
+    display: none;
+  }
+  .logout-menu {
+    width: 40%;
+    position: absolute;
+    top: 68px;
+    right: 20px;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+
+    a:hover {
+      cursor: pointer;
+    }
+  }
 }
 @media (min-width: 768px) {
   .Navbar-home {
     .user-info {
+      display: block;
       display: flex;
-      margin-left: 15px;
+      margin-left: 12px;
       cursor: pointer;
       .username {
         font-weight: bold;
@@ -42,6 +62,11 @@
         font-size: 12px;
         color: gray;
       }
+    }
+    .logout-menu {
+      width: 17%;
+      top: 60px;
+      right: 110px;
     }
   }
 }

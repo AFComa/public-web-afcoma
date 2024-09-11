@@ -100,7 +100,7 @@
         <q-td :props="props">
           <q-btn
             flat
-            v-if="validuser.view && viewConfig"
+            v-if="validuser.view && viewConfig && validuser.opera"
             color="blue"
             round
             dense
@@ -126,7 +126,7 @@
             @click="viewRow(props.row)"
           />
           <q-btn
-            v-if="validuser.edit && !viewConfig"
+            v-if="validuser.edit && !viewConfig && validuser.opera"
             flat
             round
             dense
@@ -135,7 +135,7 @@
             @click="editRow(props.row)"
           />
           <q-btn
-            v-if="validuser.delete && viewMandatoSysadoc"
+            v-if="validuser.delete && viewMandatoSysadoc && validuser.opera"
             flat
             round
             dense
@@ -144,7 +144,7 @@
             @click="deletRow(props.row)"
           />
           <q-btn
-            v-if="!viewGrid"
+            v-if="!viewGrid && validuser.opera"
             flat
             round
             dense

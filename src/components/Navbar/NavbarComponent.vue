@@ -3,10 +3,11 @@
     <div class="col-xs-2 col-sm-4 col-md-8 content-center">
       <q-img :src="url" style="width: 140px" />
     </div>
-    <div class="col-xs-10 col-sm-8 col-md-4 navbar-content" @click="cerrar">
+    <div class="col-xs-10 col-sm-8 col-md-4 navbar-content" @click="toggleMenu">
       <q-avatar
         style="
           background-color: #244b5a;
+          cursor: pointer;
           width: 45px;
           height: 45px;
           color: white;
@@ -26,11 +27,15 @@
           {{ ultimoAcceso }}
         </div>
       </div>
+      <!-- Dropdown para cerrar sesión -->
+      <div v-if="menuVisible" class="logout-menu">
+        <a @click="cerrar">Cerrar sesión</a>
+      </div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import imgLogoNavbar from '../../assets/img/logo/1.png';
 import { useAuth } from 'src/composables/userAuth';
@@ -44,6 +49,7 @@ const avatar = ref('');
 const nombre = ref('');
 const email = ref('');
 const ultimoAcceso = ref('');
+const menuVisible = ref(false);
 const { isAcces, isPermission } = useAuth();
 const { logout } = mandatosAuth();
 
@@ -52,18 +58,30 @@ const cerrar = async () => {
     token: localStorage.getItem('token'),
     _id: isAcces.value.ID,
   });
-
   localStorage.clear();
   router.push('/');
 };
-
+const handleClickOutside = (event: MouseEvent) => {
+  const menu = document.querySelector('.navbar-content');
+  if (menu && !menu.contains(event.target as Node)) {
+    menuVisible.value = false;
+  }
+};
+const toggleMenu = () => {
+  menuVisible.value = !menuVisible.value;
+};
 onMounted(async () => {
-  avatar.value = isAcces.value.avatar;
+  document.addEventListener('click', handleClickOutside);
+  avatar.value = await isAcces.value.avatar;
   nombre.value = `${isAcces.value.username} ${isAcces.value.apellidos}`;
-  email.value = isPermission.value.email;
+  email.value = await isPermission.value.email;
   ultimoAcceso.value = `${isAcces.value.last_access.split(' ')[0]} ${
     isAcces.value.last_access.split(' ')[1]
   }`;
+});
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside);
 });
 let url = imgLogoNavbar;
 </script>

@@ -3,7 +3,7 @@ import { useRouter, useRoute } from 'vue-router';
 import { useQuasar } from 'quasar';
 
 import { sysadocAuth } from 'src/composables/sysadocAuth';
-
+import { useAuth } from 'src/composables/userAuth';
 import type {
   ListUserI,
   ColumI,
@@ -19,6 +19,7 @@ export default {
     DialogComponent,
   },
   setup() {
+    const { isPermission } = useAuth();
     const router = useRouter();
     const route = useRoute();
     const loading = ref(false);
@@ -36,7 +37,17 @@ export default {
     const viewMandatoSysadoc = ref(false);
     const MessageDialog = ref('');
     const infoDelete = ref();
-
+    const validuser = ref({
+      id: '',
+      module: '',
+      create: false,
+      edit: false,
+      delete: false,
+      view: false,
+      download: false,
+      opera: false,
+      block: false,
+    });
     const d = new Date();
     const myDate = d.toUTCString();
 
@@ -122,6 +133,7 @@ export default {
     };
 
     const directOptionsValue = async () => {
+      loading.value = true;
       const data = {
         id: route.params.name,
         cartera: route.params.id,
@@ -130,9 +142,12 @@ export default {
 
       const result = await RegisterProyecto(data);
       if (!result.ok) {
-        columns.value = result.resultado.result.Columns;
+        columns.value = await result.resultado.result.Columns.filter(
+          (item: { field: string }) => item.field !== '_id'
+        );
         rows.value = result.resultado.result.Rows;
       }
+      loading.value = false;
     };
 
     const viewRow = async (row: ListUserI & DeleteProyectI) => {
@@ -191,6 +206,9 @@ export default {
     }
 
     onMounted(async () => {
+      validuser.value = await isPermission.value.configUser
+        .sysadocPermission[0];
+
       await directOptionsValue();
     });
 
@@ -199,6 +217,7 @@ export default {
       directOptionsValue,
       deletRow,
       ReportIncTotalDowload,
+      validuser,
       viewMandatoSysadoc,
       loading,
       viewConfig,

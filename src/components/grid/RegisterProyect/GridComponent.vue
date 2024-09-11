@@ -39,6 +39,7 @@
             flat
             round
             dense
+            v-if="validuser.opera"
             icon="assignment_turned_in"
             color="green"
             @click="editRow(props.row)"

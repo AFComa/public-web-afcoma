@@ -9,7 +9,29 @@ export default {
   },
   setup() {
     const loading = ref(false);
-    const { getUserId, isAcces } = useAuth();
+    const user = ref({
+      id: '',
+      module: '',
+      create: false,
+      edit: false,
+      delete: false,
+      view: false,
+      download: false,
+      opera: false,
+      block: false,
+    });
+    const mandatos = ref({
+      id: '',
+      module: '',
+      create: false,
+      edit: false,
+      delete: false,
+      view: false,
+      download: false,
+      opera: false,
+      block: false,
+    });
+    const { getUserId, isAcces, isPermission } = useAuth();
 
     const onGetUser = async () => {
       loading.value = true;
@@ -22,11 +44,16 @@ export default {
 
     onMounted(async () => {
       await onGetUser();
+      user.value = await isPermission.value.configUser.usersPermissions[0];
+      mandatos.value = await isPermission.value.configUser
+        .mandatosPermissions[0];
     });
 
     return {
       onGetUser,
       loading,
+      user,
+      mandatos,
     };
   },
 };
