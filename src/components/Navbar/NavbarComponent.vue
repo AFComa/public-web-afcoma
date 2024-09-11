@@ -50,7 +50,7 @@ const nombre = ref('');
 const email = ref('');
 const ultimoAcceso = ref('');
 const menuVisible = ref(false);
-const { isAcces, isPermission } = useAuth();
+const { getUserId, isAcces, isPermission } = useAuth();
 const { logout } = mandatosAuth();
 
 const cerrar = async () => {
@@ -72,9 +72,13 @@ const toggleMenu = () => {
 };
 onMounted(async () => {
   document.addEventListener('click', handleClickOutside);
+  await getUserId({
+    id: isAcces.value.ID,
+    opc: 1,
+  });
+  email.value = await isPermission.value.email;
   avatar.value = await isAcces.value.avatar;
   nombre.value = `${isAcces.value.username} ${isAcces.value.apellidos}`;
-  email.value = await isPermission.value.email;
   ultimoAcceso.value = `${isAcces.value.last_access.split(' ')[0]} ${
     isAcces.value.last_access.split(' ')[1]
   }`;
