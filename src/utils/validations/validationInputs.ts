@@ -29,7 +29,7 @@ export const onlyNumeric = (event: KeyboardEvent) => {
  */
 export const onlyAlphabetic = (event: KeyboardEvent) => {
   const char = String.fromCharCode(event.which);
-  if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ]$/.test(char)) {
+  if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]$/.test(char)) {
     event.preventDefault();
   }
 };
