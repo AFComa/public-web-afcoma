@@ -2,7 +2,7 @@
   <div class="sections q-pa-xl">
     <div class="q-col-gutter-md row text-center">
       <div class="col-xs-6 col-sm-6 col-md-4">
-        <router-link to="dashboard/listar-usuarios" v-if="user.opera">
+        <router-link to="dashboard/listar-usuarios">
           <q-img src="../../assets/img/Users.png" width="20%" />
           <p>Usuarios</p>
         </router-link>
@@ -14,7 +14,7 @@
         </router-link>
       </div>
       <div class="col-xs-6 col-sm-6 col-md-4">
-        <router-link to="dashboard/listar-mandatos" v-if="mandatos.opera">
+        <router-link to="dashboard/listar-mandatos">
           <q-img src="../../assets/img/manda.png" width="20%" />
           <p>Mandatos</p>
         </router-link>
