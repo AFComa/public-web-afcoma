@@ -2,7 +2,7 @@
   <div class="q-pt-lg q-pa-md">
     <q-form @submit="onSubmit" @reset="onReset" dense>
       <div class="justify-center q-col-gutter-md row">
-        <div class="col-xs-12 col-sm-6 col-md-11">
+        <div class="col-xs-12 col-sm-12 col-md-11">
           <BreadCrumb :routes="breadcrumbRoutes" />
         </div>
       </div>
@@ -75,7 +75,7 @@
           />
         </div>
 
-        <div class="col-xs-12 col-sm-6 col-md-11">
+        <div class="col-xs-12 col-sm-12 col-md-11">
           <q-list bordered class="rounded-borders">
             <q-expansion-item
               expand-separator
@@ -94,7 +94,7 @@
             </q-expansion-item>
           </q-list>
         </div>
-        <div class="col-xs-12 col-sm-6 col-md-11 text-right">
+        <div class="col-xs-12 col-sm-12 col-md-11 text-right">
           <q-btn
             class="custom-button"
             no-caps

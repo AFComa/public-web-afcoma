@@ -1,7 +1,7 @@
 <template>
   <div class="q-pt-lg q-pa-md">
     <div class="justify-center row">
-      <div class="col-xs-11 col-sm-10 col-md-11">
+      <div class="col-xs-11 col-sm-11 col-md-11">
         <BreadCrumb :routes="breadcrumbRoutes" />
       </div>
     </div>
@@ -10,7 +10,7 @@
       :key="index"
       class="row justify-center q-pa-md"
     >
-      <div class="col-xs-11 col-sm-6 col-md-3">
+      <div class="col-xs-11 col-sm-3 col-md-3">
         <p>Información por Campo</p>
         <q-input
           rounded
@@ -23,7 +23,7 @@
       </div>
       <div class="col-xs-11 col-sm-1 col-md-1"></div>
 
-      <div class="col-xs-11 col-sm-6 col-md-2">
+      <div class="col-xs-11 col-sm-2 col-md-2">
         <p>¿La Información es Correcta?</p>
         <q-toggle
           v-model="item.is_valid"
@@ -33,7 +33,7 @@
         />
       </div>
       <div class="col-xs-11 col-sm-1 col-md-1"></div>
-      <div class="col-xs-11 col-sm-6 col-md-4 q-gutter-sm">
+      <div class="col-xs-11 col-sm-4 col-md-4 q-gutter-sm">
         <p>Información a Registrar</p>
         <q-btn
           no-caps
