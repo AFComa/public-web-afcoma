@@ -102,9 +102,12 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
       };
     }
   },
-  async logout({ commit }, item) {
+  async logout({ commit }) {
     try {
-      const { data } = await api.post('login/logout', item);
+      const { data } = await api.post('login/logout', {
+        token: localStorage.getItem('token'),
+        _id: localStorage.getItem('identity'),
+      });
       commit('data');
       return {
         ok: true,

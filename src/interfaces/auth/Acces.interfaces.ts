@@ -2,6 +2,7 @@ export interface AccesUserI {
   last_access?: string;
   username?: string;
   avatar?: string;
+  ID: string;
 }
 
 export interface UserI {
@@ -74,5 +75,5 @@ export interface CartProyectI {
 
 export interface LogoutI {
   token: string | null;
-  _id: string;
+  _id: string | null;
 }

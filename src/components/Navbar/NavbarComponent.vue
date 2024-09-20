@@ -54,10 +54,7 @@ const { getUserId, isAcces, isPermission } = useAuth();
 const { logout } = mandatosAuth();
 
 const cerrar = async () => {
-  await logout({
-    token: localStorage.getItem('token'),
-    _id: isAcces.value.ID,
-  });
+  await logout();
   localStorage.clear();
   router.push('/');
 };
@@ -73,7 +70,7 @@ const toggleMenu = () => {
 onMounted(async () => {
   document.addEventListener('click', handleClickOutside);
   await getUserId({
-    id: isAcces.value.ID,
+    id: isAcces.value?.ID,
     opc: 1,
   });
   email.value = await isPermission.value.email;

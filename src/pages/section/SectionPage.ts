@@ -36,7 +36,7 @@ export default {
     const onGetUser = async () => {
       loading.value = true;
       await getUserId({
-        id: isAcces.value.ID,
+        id: isAcces.value?.ID,
         opc: 1,
       });
       loading.value = false;

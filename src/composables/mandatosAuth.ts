@@ -4,7 +4,6 @@ import type {
   UserI,
   GetAllMandatoI,
   opcionAssingI,
-  LogoutI,
 } from '../interfaces/auth/Acces.interfaces';
 
 export const mandatosAuth = () => {
@@ -33,7 +32,7 @@ export const mandatosAuth = () => {
       store.dispatch('mandatos/byMandatoUpdate', data),
     validMandato: (data: string) =>
       store.dispatch('mandatos/validMandatos', data),
-    logout: (data: LogoutI) => store.dispatch('mandatos/logout', data),
+    logout: () => store.dispatch('mandatos/logout'),
     getReportMandatos: (data: string) =>
       store.dispatch('mandatos/getReportMandatos', data),
   };

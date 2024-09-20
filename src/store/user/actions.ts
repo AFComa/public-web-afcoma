@@ -37,6 +37,7 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
         otp,
       });
       localStorage.clear();
+      localStorage.setItem('identity', data.ID);
       localStorage.setItem('token', headers.token);
       commit('SET_ACCES_DATA', data);
       return {
