@@ -45,17 +45,17 @@ export default {
 
     const onSubmit = async () => {
       // Validar que las configUuraciones de permiso no sean nulas
-      if (
-        !isUserPermission.value ||
-        !isSysadocPermission.value ||
-        !isMandatosPermission.value
-      ) {
-        $q.notify({
-          type: 'warning',
-          message: 'Debe asignar permisos antes de continuar.',
-        });
-        return;
-      }
+      // if (
+      //   !isUserPermission.value ||
+      //   !isSysadocPermission.value ||
+      //   !isMandatosPermission.value
+      // ) {
+      //   $q.notify({
+      //     type: 'warning',
+      //     message: 'Debe asignar permisos antes de continuar.',
+      //   });
+      //   return;
+      // }
       actionBoton.value === 'view'
         ? routers.push('/dashboard')
         : actionBoton.value === 'edit'

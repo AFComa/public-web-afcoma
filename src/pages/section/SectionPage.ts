@@ -20,6 +20,17 @@ export default {
       opera: false,
       block: false,
     });
+    const sisadoc = ref({
+      id: '',
+      module: '',
+      create: false,
+      edit: false,
+      delete: false,
+      view: false,
+      download: false,
+      opera: false,
+      block: false,
+    });
     const mandatos = ref({
       id: '',
       module: '',
@@ -47,6 +58,7 @@ export default {
       user.value = await isPermission.value.configUser.usersPermissions[0];
       mandatos.value = await isPermission.value.configUser
         .mandatosPermissions[0];
+      sisadoc.value = await isPermission.value.configUser.sysadocPermission[0];
     });
 
     return {
@@ -54,6 +66,7 @@ export default {
       loading,
       user,
       mandatos,
+      sisadoc,
     };
   },
 };
