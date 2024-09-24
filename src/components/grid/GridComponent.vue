@@ -144,7 +144,7 @@
             @click="deletRow(props.row)"
           />
           <q-btn
-            v-if="!viewGrid && validuser.opera"
+            v-if="!viewGrid && validuser.opera && validuser.block"
             flat
             round
             dense
