@@ -13,7 +13,7 @@ router.beforeEach((to, from, next) => {
     to.name !== 'login' &&
     !isAuthenticated &&
     to.name !== 'password' &&
-    to.name !== 'reset-password'
+    to.name === 'reset-password'
   ) {
     next({ name: 'login' });
     next(false);
