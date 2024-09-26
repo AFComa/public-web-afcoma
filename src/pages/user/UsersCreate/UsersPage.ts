@@ -10,6 +10,12 @@ import {
   onlyNumeric,
   onlyAlphabetic,
 } from '../../../utils/validations/validationInputs';
+import {
+  ListPermision,
+  ListPermisionSisadoc,
+  ListPermisionMandatos,
+} from '../../../utils/users/usersColums';
+
 export default {
   name: 'UsersPage',
   components: {
@@ -33,6 +39,9 @@ export default {
       isSysadocPermission,
       isMandatosPermission,
       isTablePermission,
+      setPermissionUser,
+      setPermissionSysad,
+      setPermissionMandat,
       updateUsers,
     } = useAuth();
     const userForm = ref({
@@ -64,6 +73,8 @@ export default {
     };
 
     const save = () => {
+      console.log('isUserPermission: ', isUserPermission.value.length);
+
       loading.value = true;
       const data = {
         email: userForm.value.email,
@@ -71,12 +82,21 @@ export default {
         apellido: userForm.value.apellido,
         phone: userForm.value.phone,
         configUser: {
-          usersPermissions: isUserPermission.value,
-          sysadocPermission: isSysadocPermission.value,
-          mandatosPermissions: isMandatosPermission.value,
+          usersPermissions:
+            isUserPermission.value.length > 0
+              ? isUserPermission.value
+              : ListPermision(),
+          sysadocPermission:
+            isSysadocPermission.value.length > 0
+              ? isSysadocPermission.value
+              : ListPermisionSisadoc(),
+          mandatosPermissions:
+            isMandatosPermission.value.length > 0
+              ? isMandatosPermission.value
+              : ListPermisionMandatos(),
         },
       };
-
+      ResetStatePermission();
       setTimeout(async () => {
         const response = await createUsers(data);
         if (response.ok) {
@@ -109,7 +129,7 @@ export default {
           mandatosPermissions: isMandatosPermission.value,
         },
       };
-
+      ResetStatePermission();
       setTimeout(async () => {
         const response = await updateUsers(data);
         if (response.ok) {
@@ -126,6 +146,12 @@ export default {
         }
         loading.value = false;
       }, 5000);
+    };
+
+    const ResetStatePermission = () => {
+      setPermissionUser([]);
+      setPermissionSysad([]);
+      setPermissionMandat([]);
     };
     const onReset = () => {
       userForm.value = {
@@ -153,6 +179,7 @@ export default {
       save,
       editUser,
       loading,
+      ResetStatePermission,
       onSubmit,
       onReset,
       isValidEmail,

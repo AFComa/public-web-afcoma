@@ -12,9 +12,9 @@ export interface State {
   infoAcces: AccesUserI | null;
   permission: CreateGUI | null;
   TablePermission: CreateGUI | null;
-  permissionUser: ColumCreateUserI[] | null;
-  permissionSysadoc: ColumCreateUserI[] | null;
-  permissionMandatos: ColumCreateUserI[] | null;
+  permissionUser: ColumCreateUserI[] | [];
+  permissionSysadoc: ColumCreateUserI[] | [];
+  permissionMandatos: ColumCreateUserI[] | [];
   assingUser: UserListAssingI[] | null;
 }
 
@@ -22,8 +22,8 @@ export const state: State = {
   infoAcces: null,
   permission: null,
   TablePermission: null,
-  permissionUser: null,
-  permissionSysadoc: null,
-  permissionMandatos: null,
+  permissionUser: [],
+  permissionSysadoc: [],
+  permissionMandatos: [],
   assingUser: null,
 };
