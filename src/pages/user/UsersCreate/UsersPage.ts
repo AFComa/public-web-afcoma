@@ -73,8 +73,6 @@ export default {
     };
 
     const save = () => {
-      console.log('isUserPermission: ', isUserPermission.value.length);
-
       loading.value = true;
       const data = {
         email: userForm.value.email,
@@ -96,10 +94,11 @@ export default {
               : ListPermisionMandatos(),
         },
       };
-      ResetStatePermission();
+
       setTimeout(async () => {
         const response = await createUsers(data);
         if (response.ok) {
+          ResetStatePermission();
           $q.notify({
             type: 'positive',
             message:
@@ -129,10 +128,10 @@ export default {
           mandatosPermissions: isMandatosPermission.value,
         },
       };
-      ResetStatePermission();
       setTimeout(async () => {
         const response = await updateUsers(data);
         if (response.ok) {
+          ResetStatePermission();
           routers.push('/dashboard');
           $q.notify({
             type: 'positive',
