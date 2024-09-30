@@ -12,7 +12,6 @@ router.beforeEach((to, from, next) => {
   if (to.name !== 'login' && !isAuthenticated && to.name !== 'password') {
     next({ name: 'login' });
   } else {
-    console.log('pasoiii2');
     next();
   }
 });
