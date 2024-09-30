@@ -33,6 +33,7 @@
               :rules="passwordRules"
               maxlength="8"
               rounded
+              no-error-icon
               outlined
               lazy-rules
             >
@@ -53,6 +54,7 @@
               :rules="confirmPasswordRules"
               rounded
               outlined
+              no-error-icon
               lazy-rules
               maxlength="8"
             >

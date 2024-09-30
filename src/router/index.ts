@@ -7,17 +7,12 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = !!!!localStorage.getItem('token');
+  const isAuthenticated = !!localStorage.getItem('token');
 
-  if (
-    to.name !== 'login' &&
-    !isAuthenticated &&
-    to.name !== 'password' &&
-    to.name === 'reset-password'
-  ) {
+  if (to.name !== 'login' && !isAuthenticated && to.name !== 'password') {
     next({ name: 'login' });
-    next(false);
   } else {
+    console.log('pasoiii2');
     next();
   }
 });
