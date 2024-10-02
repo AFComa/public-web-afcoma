@@ -419,14 +419,23 @@ export default {
           message: response.resultado.mensaje,
         });
       } else {
-        const date = new Date().toLocaleDateString();
-        const worksheet = XLSX.utils.json_to_sheet(response.resultado.reporte);
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, 'Resultado de Carga');
-        XLSX.writeFile(
-          workbook,
-          `Resultado de Carga ${uid.value} al ${date}.xlsx`
-        );
+        if (response.resultado.response_server !== 400) {
+          const date = new Date().toLocaleDateString();
+          const worksheet = XLSX.utils.json_to_sheet(
+            response.resultado.reporte
+          );
+          const workbook = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(
+            workbook,
+            worksheet,
+            'Resultado de Carga'
+          );
+          XLSX.writeFile(
+            workbook,
+            `Resultado de Carga ${uid.value} al ${date}.xlsx`
+          );
+        }
+
         $q.notify({
           type: 'negative',
           message: response.resultado.mensaje,
