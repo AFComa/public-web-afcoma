@@ -61,7 +61,11 @@ api.interceptors.response.use(
               console.error('Error al renovar el token', renewError);
             }
           })
-          .onCancel(() => {
+          .onCancel(async () => {
+            await api.post('login/logout', {
+              token: localStorage.getItem('token'),
+              _id: localStorage.getItem('identity'),
+            });
             localStorage.clear();
             window.location.href = '/';
           });
