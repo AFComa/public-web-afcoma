@@ -20,10 +20,11 @@
     </div>
 
     <q-table
+      class="my-sticky-header-table"
       :rows="filteredRows"
       :columns="columns"
       row-key="id"
-      :rows-per-page-options="[5, 10, 15]"
+      :rows-per-page-options="[50, 100, 150, 200]"
     >
       <template v-slot:body-cell-actions="props">
         <q-td :props="props">
@@ -79,3 +80,27 @@
 </template>
 
 <script src="./GridComponent.ts" lang="ts"></script>
+<style lang="sass">
+.my-sticky-header-table
+  /* height or max-height is important */
+  height: 310px
+
+  .q-table__top,
+  thead tr:first-child th
+    /* bg color is important for th; just specify one */
+    background-color:white
+
+  thead tr th
+    position: sticky
+    z-index: 1
+
+  /* this is when the loading indicator appears */
+  &.q-table--loading thead tr:last-child th
+    /* height of all previous header rows */
+    top: 48px
+
+  /* prevent scrolling behind sticky top row on focus */
+  tbody
+    /* height of all previous header rows */
+    scroll-margin-top: 48px
+</style>

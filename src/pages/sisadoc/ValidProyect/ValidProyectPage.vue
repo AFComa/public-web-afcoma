@@ -27,6 +27,7 @@
         <p>¿La Información es Correcta?</p>
         <q-toggle
           v-model="item.is_valid"
+          color="secondary"
           label="Si"
           dense
           :disable="finalizar"
