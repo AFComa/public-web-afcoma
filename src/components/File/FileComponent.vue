@@ -127,12 +127,12 @@ export default {
         reader.onload = async (e) => {
           const data = new Uint8Array(e.target.result);
           const workbook = XLSX.read(data, { type: 'array' });
-
           sheets.value = workbook.SheetNames.map((sheetName) => ({
             name: sheetName,
             data: XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {
               header: 1,
               defval: '',
+              raw: false,
             }),
           }));
 
