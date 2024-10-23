@@ -59,6 +59,7 @@
               size="large"
               v-model="field.value"
               :label="field.key"
+              :type="field.type"
               filled
               outlined
               :hint="!field.isValid ? field.coments : ''"
@@ -135,7 +136,6 @@ export default {
               raw: false,
             }),
           }));
-
           transInfo.value = sheets.value
             .filter((item) => item.name !== 'Glosario_Opciones')
             .map((sheet) => {
@@ -157,7 +157,6 @@ export default {
                 data: transformedData,
               };
             });
-
           const result = await validMandato({
             idmandato: '',
             datosmandato: transInfo.value,
@@ -258,7 +257,6 @@ export default {
       isBoolean,
       saveInfo,
       onCancel,
-
       loading,
       dense,
     };
