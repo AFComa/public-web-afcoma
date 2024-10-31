@@ -5,7 +5,7 @@
         <q-card-section class="modal-tex">
           <p>{{ props.title }}</p>
           <div class="row q-pt-md q-col-gutter-sm justify-center q-pt-xs">
-            <div class="col-xs-12 col-md-5 col-lg-5">
+            <div class="col-xs-12 col-md-5 col-lg-5" v-if="!viewCartera">
               <q-input
                 dense
                 rounded
@@ -21,7 +21,7 @@
                 ]"
               />
             </div>
-            <div class="col-xs-12 col-md-5 col-lg-5">
+            <div class="col-xs-12 col-md-5 col-lg-5" v-if="!viewCartera">
               <q-input
                 dense
                 rounded
@@ -82,7 +82,8 @@
 </template>
 <style scoped src="./DialogComponent.scss"></style>
 <script setup>
-import { ref, defineEmits } from 'vue';
+import { ref, onMounted, defineEmits } from 'vue';
+import { useRoute } from 'vue-router';
 import * as XLSX from 'xlsx';
 
 const props = defineProps({
@@ -91,8 +92,9 @@ const props = defineProps({
     default: 'Mi Diálogo',
   },
 });
-
+const route = useRoute();
 const visible = ref(true);
+const viewCartera = ref(false);
 const actionBoton = ref();
 const fileName = ref(null);
 const FileForm = ref({
@@ -124,6 +126,13 @@ const onFileChange = (e) => {
     reader.readAsArrayBuffer(e.target.files[0]);
   }
 };
+onMounted(async () => {
+  if (route.name === 'CarteraList') {
+    viewCartera.value = true;
+  } else {
+    viewCartera.value = false;
+  }
+});
 
 const onSubmit = () => {
   emits('select', FileForm.value);

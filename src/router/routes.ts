@@ -123,6 +123,26 @@ const routes: RouteRecordRaw[] = [
           import('src/pages/sisadoc/ValidProyect/ValidProyectPage.vue'),
         meta: { requiresAuth: true }, // Requiere autenticación
       },
+      {
+        path: 'listar-cartera',
+        name: 'CarteraList',
+        component: () => import('src/pages/cartera/carteralist/ListPage.vue'),
+        meta: { requiresAuth: true }, // Requiere autenticación
+      },
+      {
+        path: 'configuration-cartera',
+        name: 'CarteraConfig',
+        component: () =>
+          import('src/pages/cartera/configCartera/ConfigCarteraPage.vue'),
+        meta: { requiresAuth: true }, // Requiere autenticación
+      },
+      {
+        path: 'configuration-relation',
+        name: 'RelationConfig',
+        component: () =>
+          import('src/pages/cartera/configRelation/ConfigRelationPage.vue'),
+        meta: { requiresAuth: true }, // Requiere autenticación
+      },
     ],
   },
   // Always leave this as last one,

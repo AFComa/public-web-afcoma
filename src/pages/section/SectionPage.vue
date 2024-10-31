@@ -52,12 +52,18 @@
           <p>Mandatos</p>
         </router-link>
       </div>
-      <!-- <div class="col-xs-6 col-sm-6 col-md-4">
-        <router-link to="dashboard/listar-mandatos">
-          <q-img src="../../assets/img/cartera.svg" width="20%" />
+      <div class="col-xs-6 col-sm-6 col-md-4">
+        <router-link to="dashboard/listar-cartera">
+          <q-img src="../../assets/img/check-paper.png" width="20%" />
           <p>Cartera</p>
         </router-link>
-      </div> -->
+      </div>
+      <div class="col-xs-6 col-sm-6 col-md-4">
+        <router-link to="dashboard/listar-mandatos">
+          <q-img src="../../assets/img/cartera.png" width="20%" />
+          <p>Reportes</p>
+        </router-link>
+      </div>
     </div>
     <LoadingOverBasic v-if="loading" />
   </div>
