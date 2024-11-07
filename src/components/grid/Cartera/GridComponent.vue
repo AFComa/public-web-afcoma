@@ -89,7 +89,7 @@
             @click="uploadFiles(props.row)"
           />
 
-          <q-btn
+          <!-- <q-btn
             flat
             color="blue"
             round
@@ -104,6 +104,14 @@
             icon="edit"
             color="green"
             @click="editRow(props.row)"
+          /> -->
+          <q-btn
+            flat
+            round
+            dense
+            icon="cloud_download"
+            color="purple"
+            @click="dowloand(props.row)"
           />
         </q-td>
       </template>

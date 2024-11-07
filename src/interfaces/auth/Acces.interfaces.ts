@@ -77,3 +77,24 @@ export interface LogoutI {
   token: string | null;
   _id: string | null;
 }
+
+export interface userCatalogo {
+  user_name: string;
+  id_user: string;
+}
+
+export interface CatalogoCreate {
+  user: userCatalogo;
+  nombre: string;
+}
+
+export interface RelationPage {
+  catalogo_general: string;
+  catalogo_cliente: string;
+}
+
+export interface RelationGeneralCatalogo {
+  user: userCatalogo;
+  nombre_mandato: string;
+  relacion: RelationPage;
+}

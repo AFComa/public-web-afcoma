@@ -11,6 +11,7 @@ import DialogManualComponent from '../../Dialog/DialogConfManualComponent.vue';
 import { useAuth } from 'src/composables/userAuth';
 import { mandatosAuth } from 'src/composables/mandatosAuth';
 import { sysadocAuth } from 'src/composables/sysadocAuth';
+import { carteraAuth } from 'src/composables/carteraAuth';
 import { ListMandatos } from '../../../utils/users/usersColums';
 import type {
   ListUserI,
@@ -20,7 +21,10 @@ import type {
   cargDatosExcelI,
 } from '../../../interfaces/components/Grid.interfaces';
 import LoadingComponentBasic from '../../../components/Loading/LoadingBasicComponent.vue';
-import { filterSelectI } from 'src/interfaces/auth/Acces.interfaces';
+import {
+  MandatosAssingI,
+  filterSelectI,
+} from 'src/interfaces/auth/Acces.interfaces';
 
 export default {
   name: 'GridComponent',
@@ -39,6 +43,7 @@ export default {
     const { resetPass, getUser, getUserId, UpdateStatus, isPermission } =
       useAuth();
     const { allMandatos, mandatoId, asignMandatos } = mandatosAuth();
+    const { getReportCartera } = carteraAuth();
     const {
       allProyects,
       DeleteProyects,
@@ -422,6 +427,39 @@ export default {
       loading.value = false;
     };
 
+    const dowloand = async (row: MandatosAssingI) => {
+      loading.value = true;
+      const response = await getReportCartera(row.idmandato);
+      if (response.ok) {
+        const configuracionesdata = XLSX.utils.json_to_sheet(
+          response.resultado?.relacion
+        );
+
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(
+          workbook,
+          configuracionesdata,
+          'configuraciones'
+        );
+
+        XLSX.writeFile(
+          workbook,
+          `Configuración del Layout ${row.idmandato}.xlsx`
+        );
+
+        $q.notify({
+          type: 'positive',
+          message: 'La descarga fue correctamente.',
+        });
+      } else {
+        $q.notify({
+          type: 'negative',
+          message: response.message,
+        });
+      }
+      loading.value = false;
+    };
+
     const handleSelect = async (
       selectedValue: filterSelectI,
       mandatosValue: filterSelectI
@@ -476,6 +514,7 @@ export default {
       deletRow,
       dialogVisibleConfig,
       orderConfigProyects,
+      dowloand,
       uploadFiles,
       dowloadPro,
       validuser,

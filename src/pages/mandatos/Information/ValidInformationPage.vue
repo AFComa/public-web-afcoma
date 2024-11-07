@@ -52,10 +52,7 @@
           </q-step>
 
           <template v-slot:navigation>
-            <q-stepper-navigation
-              style="text-align: center !important"
-              class="q-pt-md"
-            >
+            <q-stepper-navigation style="text-align: center !important">
               <q-btn
                 no-caps
                 size="lg"

@@ -1,10 +1,14 @@
 import { ref, onMounted } from 'vue';
 import { useQuasar } from 'quasar';
 import { useRoute, useRouter } from 'vue-router';
-import LoadingOver from '../../../components/Loading/LoadingComponent.vue';
+import * as XLSX from 'xlsx';
+
+import LoadingComponentBasic from '../../../components/Loading/LoadingBasicComponent.vue';
 import GridComponent from '../../../components/grid/ActionsUsers/GridActionComponent.vue';
 import BreadCrumb from '../../../components/breadcrumb/integretView.vue';
 import { useAuth } from 'src/composables/userAuth';
+import { carteraAuth } from 'src/composables/carteraAuth';
+
 import {
   isValidEmail,
   onlyNumeric,
@@ -19,21 +23,27 @@ import {
 export default {
   name: 'RelationPage',
   components: {
-    LoadingOver,
+    LoadingComponentBasic,
     GridComponent,
     BreadCrumb,
   },
   setup() {
     const loading = ref(false);
     const isPwd = ref(true);
+    const FileExcel = ref();
+    const selectValue = ref({
+      label: '',
+      value: '',
+    });
+    const options = ref([]);
     const actionBoton = ref();
     const $q = useQuasar();
     const router = useRoute();
     const breadcrumbRoutes = ref([
       { label: 'Listar Cartera', path: '/dashboard/listar-cartera' },
       {
-        label: 'Configuración Cartera',
-        path: '/dashboard/configuration-cartera',
+        label: 'Relación Layout Cartera',
+        path: '/dashboard/configuration-relation',
       },
     ]);
     const {
@@ -46,7 +56,11 @@ export default {
       setPermissionSysad,
       setPermissionMandat,
       updateUsers,
+      isAcces,
     } = useAuth();
+
+    const { getCatalogoAssing, relationCatalog } = carteraAuth();
+
     const userForm = ref({
       email: '',
       nombre: '',
@@ -56,23 +70,35 @@ export default {
     const routers = useRouter();
 
     const onSubmit = async () => {
-      // Validar que las configUuraciones de permiso no sean nulas
-      // if (
-      //   !isUserPermission.value ||
-      //   !isSysadocPermission.value ||
-      //   !isMandatosPermission.value
-      // ) {
-      //   $q.notify({
-      //     type: 'warning',
-      //     message: 'Debe asignar permisos antes de continuar.',
-      //   });
-      //   return;
-      // }
-      actionBoton.value === 'view'
-        ? routers.push('/dashboard')
-        : actionBoton.value === 'edit'
-        ? editUser()
-        : save();
+      if (FileExcel.value && selectValue.value.label) {
+        const data = {
+          user: {
+            user_name: `${isAcces.value.username} ${isAcces.value.apellidos}`,
+            id_user: isAcces.value.ID,
+          },
+          nombre_mandato: selectValue.value.label,
+          relacion: FileExcel.value,
+        };
+        const response = await relationCatalog(data);
+        if (response.ok) {
+          routers.push('/dashboard/listar-cartera');
+          $q.notify({
+            type: 'positive',
+            message: response.resultado.msg,
+          });
+        } else {
+          $q.notify({
+            type: 'negative',
+            message: response.message,
+          });
+        }
+      } else {
+        $q.notify({
+          type: 'negative',
+          message:
+            'Los campos son obligatorios, favor de cargar la información',
+        });
+      }
     };
 
     const save = () => {
@@ -164,7 +190,38 @@ export default {
       };
     };
 
-    onMounted(() => {
+    const InfoFormat = async () => {
+      const result = await getCatalogoAssing();
+      options.value = result.resultado.map(
+        (item: { _id: string; idmandato: string }) => ({
+          label: item.idmandato,
+          value: item._id,
+        })
+      );
+    };
+
+    const onFileChange = (e: {
+      preventDefault: () => void;
+      target: { files: Blob[] };
+    }) => {
+      e.preventDefault();
+
+      if (e.target.files) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const data = e.target?.result;
+          const workbook = XLSX.read(data, { type: 'array' });
+          const sheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[sheetName];
+          const CargaRegistros = XLSX.utils.sheet_to_json(worksheet);
+          FileExcel.value = CargaRegistros;
+        };
+        reader.readAsArrayBuffer(e.target.files[0]);
+      }
+    };
+
+    onMounted(async () => {
+      await InfoFormat();
       actionBoton.value = localStorage.getItem('actionuser');
       if (router.params.id) {
         userForm.value.nombre = isTablePermission.value.user;
@@ -177,13 +234,18 @@ export default {
     return {
       userForm,
       isPwd,
+      onFileChange,
+      FileExcel,
       actionBoton,
+      selectValue,
+      InfoFormat,
       save,
       editUser,
       loading,
       ResetStatePermission,
       onSubmit,
       onReset,
+      options,
       isValidEmail,
       onlyNumeric,
       onlyAlphabetic,
