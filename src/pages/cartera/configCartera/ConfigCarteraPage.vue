@@ -80,7 +80,7 @@
         </div>
         <div class="col-xs-12 col-md-12 col-lg-12 q-pt-lg text-center">
           <span>
-            Descargar Ejemplo
+            Descargar la plantilla
             <a @click="dowloadPro" style="color: blue; cursor: pointer">
               <strong>Catálogo general</strong>
             </a>
