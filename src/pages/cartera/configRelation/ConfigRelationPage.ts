@@ -200,12 +200,13 @@ export default {
       );
     };
 
+    const expectedColumns: string[] = ['catalogo_general', 'catalogo_cliente']; // Las columnas que esperas
+
     const onFileChange = (e: {
       preventDefault: () => void;
       target: { files: Blob[] };
     }) => {
       e.preventDefault();
-
       if (e.target.files) {
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -213,8 +214,27 @@ export default {
           const workbook = XLSX.read(data, { type: 'array' });
           const sheetName = workbook.SheetNames[0];
           const worksheet = workbook.Sheets[sheetName];
-          const CargaRegistros = XLSX.utils.sheet_to_json(worksheet);
-          FileExcel.value = CargaRegistros;
+
+          const CargaRegistrosUpload = XLSX.utils.sheet_to_json(worksheet);
+
+          const CargaRegistros: string[][] = XLSX.utils.sheet_to_json(
+            worksheet,
+            { header: 1 }
+          );
+          const firstRow: string[] = CargaRegistros[0];
+          const hasValidColumns = expectedColumns.every((col) =>
+            firstRow.includes(col)
+          );
+
+          if (!hasValidColumns) {
+            $q.notify({
+              type: 'negative',
+              message:
+                'El formato del Layout no cumple con las características',
+            });
+          } else {
+            FileExcel.value = CargaRegistrosUpload;
+          }
         };
         reader.readAsArrayBuffer(e.target.files[0]);
       }
