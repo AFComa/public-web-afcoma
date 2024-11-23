@@ -113,6 +113,14 @@
             color="purple"
             @click="dowloand(props.row)"
           />
+          <q-btn
+            flat
+            round
+            dense
+            icon="delete"
+            color="green"
+            @click="deletRow(props.row)"
+          />
         </q-td>
       </template>
     </q-table>

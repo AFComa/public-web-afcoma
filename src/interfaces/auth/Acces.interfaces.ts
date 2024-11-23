@@ -96,5 +96,5 @@ export interface RelationPage {
 export interface RelationGeneralCatalogo {
   user: userCatalogo;
   nombre_mandato: string;
-  relacion: RelationPage;
+  relacion?: RelationPage;
 }

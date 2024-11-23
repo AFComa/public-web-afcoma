@@ -28,5 +28,7 @@ export const carteraAuth = () => {
     getCatalogoAssing: () => store.dispatch('cartera/listMandatosAssing'),
     getReportCartera: (data: string) =>
       store.dispatch('cartera/reportRelation', data),
+    deleteCartera: (data: RelationGeneralCatalogo) =>
+      store.dispatch('cartera/deleteRelation', data),
   };
 };

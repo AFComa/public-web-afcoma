@@ -146,4 +146,24 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
       throw new Error('No se pudo realizar la petición');
     }
   },
+
+  async deleteRelation({ commit }, items) {
+    try {
+      const { data } = await api.post('relacion-cg-cc/delete', items);
+      commit('data');
+      return {
+        ok: true,
+        resultado: data,
+      };
+    } catch (error) {
+      if (isAxiosError(error) && error.response?.status === 400) {
+        return {
+          ok: false,
+          message: error.response.data.detail,
+        };
+      }
+
+      throw new Error('No se pudo realizar la petición');
+    }
+  },
 };

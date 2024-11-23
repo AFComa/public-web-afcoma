@@ -40,17 +40,14 @@ export default {
     const router = useRouter();
     const route = useRoute();
     const loading = ref(false);
-    const { resetPass, getUser, getUserId, UpdateStatus, isPermission } =
-      useAuth();
+    const { resetPass, getUser, getUserId, isPermission, isAcces } = useAuth();
     const { allMandatos, mandatoId, asignMandatos } = mandatosAuth();
-    const { getReportCartera } = carteraAuth();
+    const { getReportCartera, deleteCartera } = carteraAuth();
     const {
       allProyects,
-      DeleteProyects,
       getIdProyects,
       AssingProyects,
       allProyectLayout,
-      DeletProyect,
       DowloadPr,
       DatosProyectobyId,
       AssingProyectobyId,
@@ -249,9 +246,7 @@ export default {
     const deletRow = async (row: DeleteProyectI) => {
       infoDelete.value = row;
       warningDialog.value = true;
-      MessageDialog.value = viewConfig.value
-        ? `Al borrar la configuración <strong> ${row.id} </strong> se tendrá que configurar nuevamente para realizar cargas de información nuevamente en el proyecto.`
-        : `Al borrar el proyecto <strong> ${row.NombreProyecto} </strong> se limpiará todos los registros de esté en el sistema`;
+      MessageDialog.value = `Al borrar la configuración <strong> ${row.idmandato} </strong> se tendrá que configurar nuevamente para realizar cargas de información en el proyecto.`;
     };
 
     const dowloadPro = async (row: DeleteProyectI) => {
@@ -289,57 +284,24 @@ export default {
     const onConfirm = async () => {
       loading.value = true;
       warningDialog.value = false;
-
-      if (route.path === '/dashboard/listar-usuarios') {
-        const response = await UpdateStatus({
-          _id: uid.value,
-          estatus: estatus.value,
+      const data = {
+        user: {
+          user_name: `${isAcces.value.username} ${isAcces.value.apellidos}`,
+          id_user: isAcces.value.ID,
+        },
+        nombre_mandato: infoDelete.value.idmandato,
+      };
+      const response = await deleteCartera(data);
+      if (response.ok) {
+        $q.notify({
+          type: 'positive',
+          message: response.resultado.msg,
         });
-        if (response.ok) {
-          $q.notify({
-            type: 'positive',
-            message: 'El estatus del usuario se actualizo correctamente.',
-          });
-        } else {
-          $q.notify({
-            type: 'negative',
-            message: response.message,
-          });
-        }
-        orderGrid();
-      } else if (route.path === '/dashboard/config') {
-        const response = await DeletProyect(infoDelete.value.id);
-        if (response.ok) {
-          await orderConfigProyects();
-          $q.notify({
-            type: 'positive',
-            message: response.resultado,
-          });
-        } else {
-          $q.notify({
-            type: 'negative',
-            message: response.message,
-          });
-        }
       } else {
-        const response = await DeleteProyects({
-          id: infoDelete.value.id,
-          cartera: infoDelete.value.cartera,
-          cesion: infoDelete.value.cesion,
-          proyect: infoDelete.value.NombreProyecto,
+        $q.notify({
+          type: 'negative',
+          message: response.message,
         });
-        if (response.ok) {
-          await orderProyects();
-          $q.notify({
-            type: 'positive',
-            message: response.resultado,
-          });
-        } else {
-          $q.notify({
-            type: 'negative',
-            message: response.message,
-          });
-        }
       }
       loading.value = false;
     };

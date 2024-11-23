@@ -100,6 +100,7 @@ export interface DeleteProyectI {
   cartera: string;
   cesion: string;
   NombreProyecto: string;
+  idmandato: string;
 }
 
 export interface AssingProyectI {
