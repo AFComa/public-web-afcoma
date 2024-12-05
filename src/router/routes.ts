@@ -143,6 +143,19 @@ const routes: RouteRecordRaw[] = [
           import('src/pages/cartera/configRelation/ConfigRelationPage.vue'),
         meta: { requiresAuth: true }, // Requiere autenticación
       },
+      {
+        path: 'configuration-carga',
+        name: 'uploadDirect',
+        component: () =>
+          import('src/pages/cartera/cargaDirecta/CarteraConfigPage.vue'),
+        meta: { requiresAuth: true }, // Requiere autenticación
+      },
+      {
+        path: 'reporte-powerby',
+        name: 'power',
+        component: () => import('src/pages/cartera/powerframe/PowerbiPage.vue'),
+        meta: { requiresAuth: true }, // Requiere autenticación
+      },
     ],
   },
   // Always leave this as last one,

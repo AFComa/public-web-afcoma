@@ -166,4 +166,106 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
       throw new Error('No se pudo realizar la petición');
     }
   },
+
+  async vistageneral({ commit }, items) {
+    try {
+      const { data } = await api.post('vistageneral/getbyid', {
+        idmandato: items,
+      });
+      commit('data');
+      return {
+        ok: true,
+        resultado: data,
+      };
+    } catch (error) {
+      if (isAxiosError(error) && error.response?.status === 400) {
+        return {
+          ok: false,
+          message: error.response.data.detail,
+        };
+      }
+
+      throw new Error('No se pudo realizar la petición');
+    }
+  },
+
+  async setLinkPowerBi({ commit }, items) {
+    try {
+      const { data } = await api.post('vistageneral/setlinkpbi', items);
+      commit('data');
+      return {
+        ok: true,
+        resultado: data,
+      };
+    } catch (error) {
+      if (isAxiosError(error) && error.response?.status === 400) {
+        return {
+          ok: false,
+          message: error.response.data.detail,
+        };
+      }
+
+      throw new Error('No se pudo realizar la petición');
+    }
+  },
+
+  async getLinkPowerBi({ commit }, items) {
+    try {
+      const { data } = await api.post('vistageneral/getlinkpbi', {
+        idmandato: items,
+      });
+      commit('data');
+      return {
+        ok: true,
+        resultado: data,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        message: 'El link no fue obtenido correctamente',
+      };
+    }
+  },
+
+  async setReport({ commit }, items) {
+    try {
+      const { data } = await api.post('vistageneral/setreports', items);
+      commit('data');
+      return {
+        ok: true,
+        resultado: data,
+      };
+    } catch (error) {
+      if (isAxiosError(error) && error.response?.status === 400) {
+        return {
+          ok: false,
+          message: error.response.data.detail,
+        };
+      }
+
+      throw new Error('No se pudo realizar la petición');
+    }
+  },
+
+  async getReport({ commit }, items) {
+    try {
+      const { data } = await api.post('vistageneral/getreports', {
+        idmandato: items,
+      });
+      commit('data');
+      return {
+        ok: true,
+        resultado: data,
+      };
+    } catch (error) {
+      if (isAxiosError(error) && error.response?.status === 400) {
+        return {
+          ok: false,
+          message: error.response.data.detail,
+        };
+      }
+
+      throw new Error('No se pudo realizar la petición');
+    }
+  },
 };

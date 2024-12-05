@@ -257,6 +257,7 @@ export default {
           type: 'positive',
           message: response.resultado.msg,
         });
+        await FormatData();
       } else {
         $q.notify({
           type: 'negative',

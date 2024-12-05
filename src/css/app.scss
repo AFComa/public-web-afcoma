@@ -28,7 +28,12 @@ a {
   font-weight: 700;
   font-style: bold;
 }
-
+.button-report {
+  cursor: pointer;
+  font-size: 14;
+  font-weight: 600;
+  padding-top: 9px;
+}
 .custom-button {
   background-color: #f5c80e;
   color: white;

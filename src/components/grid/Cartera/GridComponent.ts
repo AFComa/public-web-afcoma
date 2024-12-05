@@ -173,33 +173,10 @@ export default {
     };
 
     const viewRow = async (row: ListUserI & DeleteProyectI) => {
-      if (viewGrid.value) {
-        loading.value = true;
-        localStorage.setItem('actionuser', 'view');
-        if (viewMandatoSysadoc.value) {
-          router.push({
-            name: 'RegisterProyect',
-            params: {
-              id: row.cartera,
-              cesion: row.cesion,
-              name: row.NombreProyecto,
-            },
-          });
-        } else {
-          const response = await mandatoId(row._id);
-          localStorage.setItem('mandatoName', response.resultado.idmandato);
-          router.push({
-            name: 'MandatosView',
-            params: { id: row._id },
-          });
-        }
+      localStorage.setItem('idmandato', row.idmandato);
+      router.push('/dashboard/configuration-carga');
 
-        loading.value = false;
-      } else {
-        localStorage.setItem('actionuser', 'view');
-        await getUserId({ id: row._id, opc: 2 });
-        router.push({ name: 'UsuariosId', params: { id: row._id } });
-      }
+      loading.value = false;
     };
 
     const uploadFiles = async (row: ListUserI & DeleteProyectI) => {

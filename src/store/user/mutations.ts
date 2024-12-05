@@ -1,9 +1,6 @@
 import { MutationTree } from 'vuex';
 import { State } from './state';
-import type {
-  AccesUserI,
-  UserListAssingI,
-} from '../../interfaces/auth/Acces.interfaces';
+import type { AccesUserI } from '../../interfaces/auth/Acces.interfaces';
 import {
   ColumCreateUserI,
   CreateGUI,
@@ -24,9 +21,6 @@ export const mutations: MutationTree<State> = {
   },
   SET_SYSAD_PERMIS(state, payload: ColumCreateUserI[]) {
     state.permissionSysadoc = payload;
-  },
-  SET_ASSING_USER(state, payload: UserListAssingI[]) {
-    state.assingUser = payload;
   },
   SET_MANDAT_PERMIS(state, payload: ColumCreateUserI[]) {
     state.permissionMandatos = payload;

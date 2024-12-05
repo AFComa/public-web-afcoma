@@ -98,3 +98,9 @@ export interface RelationGeneralCatalogo {
   nombre_mandato: string;
   relacion?: RelationPage;
 }
+
+export interface linkPower {
+  user: userCatalogo;
+  idmandato: string | null;
+  link?: string;
+}

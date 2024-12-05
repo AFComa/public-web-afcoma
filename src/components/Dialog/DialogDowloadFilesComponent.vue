@@ -54,11 +54,13 @@ import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { sysadocAuth } from 'src/composables/sysadocAuth';
 import { mandatosAuth } from 'src/composables/mandatosAuth';
+// import { carteraAuth } from 'src/composables/carteraAuth';
 
 const route = useRoute();
 
 const { CheckFiles } = sysadocAuth();
 const { getReportMandatos } = mandatosAuth();
+// const { getReport } = carteraAuth();
 const viewFiles = ref(true);
 const dialog = ref(false);
 const links = ref([]);
@@ -82,6 +84,10 @@ onMounted(async () => {
     if (!response.ok) {
       links.value = response.resultado;
     }
+  } else if (route.name === 'power') {
+    loadingFiles.value = false;
+    // const result = await getReport('csb-4219');
+    // console.log('result_ ', result);
   } else {
     const result = await getReportMandatos(localStorage.getItem('mandatoName'));
     if (!result.ok) {

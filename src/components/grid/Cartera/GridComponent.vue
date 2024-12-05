@@ -89,7 +89,7 @@
             @click="uploadFiles(props.row)"
           />
 
-          <!-- <q-btn
+          <q-btn
             flat
             color="blue"
             round
@@ -97,6 +97,7 @@
             icon="visibility"
             @click="viewRow(props.row)"
           />
+          <!-- +++
           <q-btn
             flat
             round
@@ -114,6 +115,7 @@
             @click="dowloand(props.row)"
           />
           <q-btn
+            :disable="!props.row.configurado"
             flat
             round
             dense

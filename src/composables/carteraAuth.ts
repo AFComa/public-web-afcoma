@@ -3,6 +3,7 @@ import { useStore } from 'vuex';
 import type {
   CatalogoCreate,
   RelationGeneralCatalogo,
+  linkPower,
 } from '../interfaces/auth/Acces.interfaces';
 
 export const carteraAuth = () => {
@@ -30,5 +31,12 @@ export const carteraAuth = () => {
       store.dispatch('cartera/reportRelation', data),
     deleteCartera: (data: RelationGeneralCatalogo) =>
       store.dispatch('cartera/deleteRelation', data),
+    vistageneral: (data: string | null) =>
+      store.dispatch('cartera/vistageneral', data),
+    setLinkPowerBi: (data: linkPower) =>
+      store.dispatch('cartera/setLinkPowerBi', data),
+    getLinkPowerBi: (data: string) =>
+      store.dispatch('cartera/getLinkPowerBi', data),
+    getReport: (data: string) => store.dispatch('cartera/getReport', data),
   };
 };
