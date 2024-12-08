@@ -152,19 +152,20 @@ export default {
     };
 
     const saveUpload = async (i: string) => {
+      loading.value = true;
       const formData = new FormData();
       formData.append('file', i);
       const token = localStorage.getItem('token');
       try {
         const result = await axios.post(
-          'https://apolo.afcoma.com.mx/v1/vistageneral/setreports',
+          'https://apolo.afcoma.com.mx/v1/SA/onedrive/vistageneral/setreports',
           formData,
           {
             headers: {
               'Content-Type': 'multipart/form-data',
               Authorization: `Bearer ${token}`,
               'x-api-key': 'cls[ty-5JDrkzE1HFN9v',
-              idmandato: 'csb-4219',
+              identificador: localStorage.getItem('idmandato'),
             },
           }
         );
@@ -177,6 +178,7 @@ export default {
       } catch (error) {
         console.error(error);
       }
+      loading.value = false;
     };
 
     const ReportIncTotalDowload = async () => {
@@ -207,7 +209,7 @@ export default {
 
     const directOptionsValue = async () => {
       loading.value = true;
-      const result = await vistageneral('csb-4219');
+      const result = await vistageneral(localStorage.getItem('idmandato'));
       if (result.ok) {
         const data = result.resultado;
         // Setea las filas
@@ -223,6 +225,12 @@ export default {
             sortable: true,
           }));
         }
+      } else {
+        $q.notify({
+          type: 'negative',
+          message: result.message,
+        });
+        router.push('/dashboard/listar-cartera');
       }
       loading.value = false;
     };

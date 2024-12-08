@@ -229,7 +229,10 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
 
   async setReport({ commit }, items) {
     try {
-      const { data } = await api.post('vistageneral/setreports', items);
+      const { data } = await api.post(
+        'SA/onedrive/vistageneral/setreports',
+        items
+      );
       commit('data');
       return {
         ok: true,
@@ -249,8 +252,8 @@ export const actions: ActionTree<LoginSuccess, unknown> = {
 
   async getReport({ commit }, items) {
     try {
-      const { data } = await api.post('vistageneral/getreports', {
-        idmandato: items,
+      const { data } = await api.post('SA/onedrive/vistageneral/getreports', {
+        identificador: items,
       });
       commit('data');
       return {

@@ -1,6 +1,7 @@
 // import { computed } from 'vue';
 import { useStore } from 'vuex';
 import type {
+  CargaDirecta,
   CatalogoCreate,
   RelationGeneralCatalogo,
   linkPower,
@@ -38,5 +39,7 @@ export const carteraAuth = () => {
     getLinkPowerBi: (data: string) =>
       store.dispatch('cartera/getLinkPowerBi', data),
     getReport: (data: string) => store.dispatch('cartera/getReport', data),
+    uploadDirectaConfig: (data: CargaDirecta) =>
+      store.dispatch('cartera/uploadDirectaConfig', data),
   };
 };

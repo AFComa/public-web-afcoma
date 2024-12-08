@@ -42,14 +42,14 @@ export default {
     const loading = ref(false);
     const { resetPass, getUser, getUserId, isPermission, isAcces } = useAuth();
     const { allMandatos, mandatoId, asignMandatos } = mandatosAuth();
-    const { getReportCartera, deleteCartera } = carteraAuth();
+    const { getReportCartera, deleteCartera, uploadDirectaConfig } =
+      carteraAuth();
     const {
       allProyects,
       getIdProyects,
       AssingProyects,
       allProyectLayout,
       DowloadPr,
-      DatosProyectobyId,
       AssingProyectobyId,
     } = sysadocAuth();
     const $q = useQuasar();
@@ -180,7 +180,7 @@ export default {
     };
 
     const uploadFiles = async (row: ListUserI & DeleteProyectI) => {
-      uid.value = row.id;
+      uid.value = row.idmandato;
       dialogVisibleDoc.value = true;
     };
 
@@ -308,43 +308,24 @@ export default {
       await directOptionsValue();
     });
 
+    const convertToByteArray = (data: string | string[]): Uint8Array => {
+      // Combina arrays de strings en un único string o utiliza directamente el string
+      const dataString = Array.isArray(data) ? data.join(',') : data;
+      // Convierte el string a bytes
+      return new TextEncoder().encode(dataString);
+    };
+
     const handleValue = async (value: CargaDatosProyectobyIdI) => {
       loading.value = true;
       const data = {
-        cartera: value.cartera,
-        cesion: value.cesion,
-        data: value.data,
-        id: uid.value,
+        user: {
+          user_name: `${isAcces.value.username} ${isAcces.value.apellidos}`,
+          id_user: isAcces.value.ID,
+        },
+        mandato: uid.value,
+        datos: convertToByteArray(value.data),
       };
-      const response = await DatosProyectobyId(data);
-      if (!response.ok) {
-        $q.notify({
-          type: 'positive',
-          message: response.resultado.mensaje,
-        });
-      } else {
-        if (response.resultado.response_server !== 400) {
-          const date = new Date().toLocaleDateString();
-          const worksheet = XLSX.utils.json_to_sheet(
-            response.resultado.reporte
-          );
-          const workbook = XLSX.utils.book_new();
-          XLSX.utils.book_append_sheet(
-            workbook,
-            worksheet,
-            'Resultado de Carga'
-          );
-          XLSX.writeFile(
-            workbook,
-            `Resultado de Carga ${uid.value} al ${date}.xlsx`
-          );
-        }
-
-        $q.notify({
-          type: 'negative',
-          message: response.resultado.mensaje,
-        });
-      }
+      const result = await uploadDirectaConfig(data);
       loading.value = false;
     };
     const handleValueExcel = async (value: cargDatosExcelI) => {

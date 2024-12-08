@@ -99,6 +99,12 @@ export interface RelationGeneralCatalogo {
   relacion?: RelationPage;
 }
 
+export interface CargaDirecta {
+  user: userCatalogo;
+  mandato: string;
+  datos?: Uint8Array;
+}
+
 export interface linkPower {
   user: userCatalogo;
   idmandato: string | null;
