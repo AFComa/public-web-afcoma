@@ -2,7 +2,7 @@ import { computed, onMounted, ref } from 'vue';
 import * as XLSX from 'xlsx';
 import { useRouter, useRoute } from 'vue-router';
 import { useQuasar } from 'quasar';
-
+import axios from 'axios';
 import DialogComponent from '../../../components/Dialog/DialogComponent.vue';
 import DialogAssingComponent from '../../../components/Dialog/DialogAssingComponent.vue';
 import DialogFileComponent from '../../Dialog/DialogFileCompontent.vue';
@@ -17,7 +17,6 @@ import type {
   ListUserI,
   ColumI,
   DeleteProyectI,
-  CargaDatosProyectobyIdI,
   cargDatosExcelI,
 } from '../../../interfaces/components/Grid.interfaces';
 import LoadingComponentBasic from '../../../components/Loading/LoadingBasicComponent.vue';
@@ -42,8 +41,7 @@ export default {
     const loading = ref(false);
     const { resetPass, getUser, getUserId, isPermission, isAcces } = useAuth();
     const { allMandatos, mandatoId, asignMandatos } = mandatosAuth();
-    const { getReportCartera, deleteCartera, uploadDirectaConfig } =
-      carteraAuth();
+    const { getReportCartera, deleteCartera } = carteraAuth();
     const {
       allProyects,
       getIdProyects,
@@ -308,24 +306,39 @@ export default {
       await directOptionsValue();
     });
 
-    const convertToByteArray = (data: string | string[]): Uint8Array => {
-      // Combina arrays de strings en un único string o utiliza directamente el string
-      const dataString = Array.isArray(data) ? data.join(',') : data;
-      // Convierte el string a bytes
-      return new TextEncoder().encode(dataString);
-    };
-
-    const handleValue = async (value: CargaDatosProyectobyIdI) => {
+    const handleValue = async (value: string) => {
       loading.value = true;
-      const data = {
-        user: {
-          user_name: `${isAcces.value.username} ${isAcces.value.apellidos}`,
-          id_user: isAcces.value.ID,
-        },
-        mandato: uid.value,
-        datos: convertToByteArray(value.data),
-      };
-      const result = await uploadDirectaConfig(data);
+      const formData = new FormData();
+      formData.append('file', value);
+      const token = localStorage.getItem('token');
+      try {
+        const result = await axios.post(
+          'https://apolo.afcoma.com.mx/v1/SA/onedrive/cargadirecta/new',
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Authorization: `Bearer ${token}`,
+              'x-api-key': 'cls[ty-5JDrkzE1HFN9v',
+              identificador: localStorage.getItem('idmandato'),
+            },
+          }
+        );
+        if (result.data.error) {
+          $q.notify({
+            type: 'negative',
+            message: result.data.mensaje,
+          });
+        } else {
+          $q.notify({
+            type: 'positive',
+            message: result.data.mensaje,
+          });
+        }
+      } catch (error) {
+        console.error(error);
+      }
+
       loading.value = false;
     };
     const handleValueExcel = async (value: cargDatosExcelI) => {

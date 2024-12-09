@@ -25,11 +25,11 @@ export default {
   },
   setup() {
     const { isPermission, isAcces } = useAuth();
-    const { vistageneral, setLinkPowerBi } = carteraAuth();
+    const { vistageneral, setLinkPowerBi, getLinkPowerBi } = carteraAuth();
     const router = useRouter();
     const route = useRoute();
     const loading = ref(false);
-    const { ReportInc, enableFinalizadoEstatus } = sysadocAuth();
+    const { ReportInc } = sysadocAuth();
     const $q = useQuasar();
     const warningDialog = ref(false);
     const titleActions = ref('');
@@ -109,7 +109,7 @@ export default {
 
     const rouViewPage = async (item: string) => {
       if (item === '1') {
-        titleActions.value = 'Cargar Url Power By';
+        titleActions.value = 'Cargar Url Power Bi';
         dialogVisibleDoc.value = true;
       } else {
         titleActions.value = 'Cargar Archivo';
@@ -118,7 +118,6 @@ export default {
     };
 
     const handleValue = async (value: string) => {
-      loading.value = true;
       const data = {
         user: {
           user_name: `${isAcces.value.username} ${isAcces.value.apellidos}`,
@@ -132,11 +131,10 @@ export default {
       } else {
         saveLink(data);
       }
-
-      loading.value = false;
     };
 
     const saveLink = async (data: linkPower) => {
+      loading.value = true;
       const result = await setLinkPowerBi(data);
       if (result.ok) {
         $q.notify({
@@ -149,6 +147,7 @@ export default {
           message: result.message,
         });
       }
+      loading.value = false;
     };
 
     const saveUpload = async (i: string) => {
@@ -236,7 +235,21 @@ export default {
     };
     function onCancel() {
       dialogVisibleDoc.value = false;
+      warningDialog.value = false;
     }
+    const viewReportLink = async () => {
+      const response = await getLinkPowerBi(localStorage.getItem('idmandato'));
+
+      if (response.ok && response.resultado.linkpbi !== '') {
+        router.push('/dashboard/reporte-powerbi');
+      } else {
+        MessageDialog.value = `El mandato <strong> ${localStorage.getItem(
+          'idmandato'
+        )} </strong> no cuenta con una liga de power bi asignada, para continuar dar click en aceptar`;
+
+        warningDialog.value = true;
+      }
+    };
     const viewRow = async (row: ListUserI & DeleteProyectI) => {
       router.push({
         name: 'ValidProyect',
@@ -270,22 +283,10 @@ export default {
     };
 
     const onConfirm = async () => {
-      loading.value = true;
       warningDialog.value = false;
-      const result = await enableFinalizadoEstatus(EditEstatus.value);
-      if (!result.ok) {
-        $q.notify({
-          type: 'positive',
-          message: result.resultado,
-        });
-      } else {
-        $q.notify({
-          type: 'negative',
-          message: result.resultado,
-        });
-      }
-      await directOptionsValue();
-      loading.value = false;
+
+      titleActions.value = 'Cargar Url Power Bi';
+      dialogVisibleDoc.value = true;
     };
 
     onMounted(async () => {
@@ -300,6 +301,7 @@ export default {
       filteredRows,
       dialogVisibleDoc,
       saveLink,
+      viewReportLink,
       handleValue,
       saveUpload,
       directOptionsValue,

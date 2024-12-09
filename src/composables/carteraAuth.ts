@@ -36,7 +36,7 @@ export const carteraAuth = () => {
       store.dispatch('cartera/vistageneral', data),
     setLinkPowerBi: (data: linkPower) =>
       store.dispatch('cartera/setLinkPowerBi', data),
-    getLinkPowerBi: (data: string) =>
+    getLinkPowerBi: (data: string | null) =>
       store.dispatch('cartera/getLinkPowerBi', data),
     getReport: (data: string) => store.dispatch('cartera/getReport', data),
     uploadDirectaConfig: (data: CargaDirecta) =>

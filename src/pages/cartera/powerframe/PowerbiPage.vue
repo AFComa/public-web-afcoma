@@ -78,8 +78,8 @@ export default {
         path: '/dashboard/configuration-carga',
       },
       {
-        label: 'Power By',
-        path: '/dashboard/reporte-powerby',
+        label: 'Power Bi',
+        path: '/dashboard/reporte-powerbi',
       },
     ]);
 
@@ -96,7 +96,7 @@ export default {
       } else {
         $q.notify({
           type: 'negative',
-          message: 'El mandato no cuenta con una liga de power by asignada',
+          message: 'El mandato no cuenta con una liga de power bi asignada',
         });
         router.push('/dashboard/configuration-carga');
       }

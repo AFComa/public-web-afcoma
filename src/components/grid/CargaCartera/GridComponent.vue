@@ -12,11 +12,11 @@
         >
         </q-input>
       </div>
-      <div class="col-xs-8 col-sm-6 col-md-5 q-mb-md text-right button-report">
-        <router-link to="/dashboard/reporte-powerby">
-          <q-icon name="summarize" color="primary" size="lg" /> Consultar
-          Reporte
-        </router-link>
+      <div
+        class="col-xs-8 col-sm-6 col-md-5 q-mb-md text-right button-report"
+        @click="viewReportLink"
+      >
+        <q-icon name="summarize" color="primary" size="lg" /> Consultar Reporte
       </div>
       <div class="col-xs-4 col-sm-6 col-md-2 q-mb-md text-right">
         <q-btn
@@ -31,7 +31,7 @@
             <q-list style="min-width: 100px">
               <q-item clickable>
                 <q-item-section @click="rouViewPage('1')"
-                  >Link de Power BY</q-item-section
+                  >Link de Power Bi</q-item-section
                 >
               </q-item>
               <q-item clickable>

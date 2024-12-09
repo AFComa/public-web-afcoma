@@ -45,7 +45,7 @@
                 v-model="fileName"
                 label="Archivo de carga"
                 no-error-icon
-                @input="onFileChange"
+                @input="onFileChange($event)"
               >
                 <template v-slot:prepend>
                   <q-icon name="attach_file" />
@@ -102,6 +102,7 @@ const FileForm = ref({
   cesion: '',
   data: '',
 });
+const report = ref(null);
 
 const emits = defineEmits(['cancel', 'select']);
 
@@ -111,19 +112,24 @@ const closeDialog = () => {
 };
 
 const onFileChange = (e) => {
-  e.preventDefault();
+  if (route.name === 'CarteraList') {
+    report.value = e.target.files[0];
+  } else {
+    e.preventDefault();
 
-  if (e.target.files) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const data = e.target.result;
-      const workbook = XLSX.read(data, { type: 'array' });
-      const sheetName = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[sheetName];
-      const CargaRegistros = XLSX.utils.sheet_to_json(worksheet);
-      FileForm.value.data = CargaRegistros;
-    };
-    reader.readAsArrayBuffer(e.target.files[0]);
+    if (e.target.files) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const data = e.target.result;
+        const workbook = XLSX.read(data, { type: 'array' });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const CargaRegistros = XLSX.utils.sheet_to_json(worksheet);
+        FileForm.value.data = CargaRegistros;
+      };
+
+      reader.readAsArrayBuffer(e.target.files[0]);
+    }
   }
 };
 onMounted(async () => {
@@ -135,7 +141,12 @@ onMounted(async () => {
 });
 
 const onSubmit = () => {
-  emits('select', FileForm.value);
+  if (route.name === 'CarteraList') {
+    emits('select', report.value);
+  } else {
+    emits('select', FileForm.value);
+  }
+
   closeDialog();
 };
 </script>

@@ -90,6 +90,7 @@
           />
 
           <q-btn
+            :disable="!props.row.cargalista"
             flat
             color="blue"
             round

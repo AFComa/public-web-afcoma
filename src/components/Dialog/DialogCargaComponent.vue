@@ -7,14 +7,14 @@
           <div class="row q-pt-md q-col-gutter-sm justify-center q-pt-xs">
             <div
               class="col-xs-12 col-md-5 col-lg-10"
-              v-if="title === 'Cargar Url Power By'"
+              v-if="title === 'Cargar Url Power Bi'"
             >
               <q-input
                 dense
                 rounded
                 v-model="link"
                 outlined
-                label="Agregar Url power by"
+                label="Agregar Url power bi"
                 lazy-rules
                 no-error-icon
                 :rules="[
@@ -104,7 +104,7 @@ const onFileChange = (event) => {
 };
 
 const onSubmit = () => {
-  if (props.title === 'Cargar Url Power By') {
+  if (props.title === 'Cargar Url Power Bi') {
     emits('select', link.value);
   } else {
     emits('select', report.value);

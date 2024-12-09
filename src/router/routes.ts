@@ -151,7 +151,7 @@ const routes: RouteRecordRaw[] = [
         meta: { requiresAuth: true }, // Requiere autenticación
       },
       {
-        path: 'reporte-powerby',
+        path: 'reporte-powerbi',
         name: 'power',
         component: () => import('src/pages/cartera/powerframe/PowerbiPage.vue'),
         meta: { requiresAuth: true }, // Requiere autenticación
