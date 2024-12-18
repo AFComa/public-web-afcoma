@@ -303,6 +303,8 @@ export default {
     };
 
     onMounted(async () => {
+      console.log('isPermission: ', isPermission.value);
+
       await directOptionsValue();
     });
 
@@ -320,7 +322,8 @@ export default {
               'Content-Type': 'multipart/form-data',
               Authorization: `Bearer ${token}`,
               'x-api-key': 'cls[ty-5JDrkzE1HFN9v',
-              identificador: localStorage.getItem('idmandato'),
+              identificador: 'test-em',
+              email: isPermission.value.email,
             },
           }
         );
