@@ -322,7 +322,7 @@ export default {
               'Content-Type': 'multipart/form-data',
               Authorization: `Bearer ${token}`,
               'x-api-key': 'cls[ty-5JDrkzE1HFN9v',
-              identificador: 'test-em',
+              identificador: uid.value,
               email: isPermission.value.email,
             },
           }
